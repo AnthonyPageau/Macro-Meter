@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1000455477510",
+    "project_id": "macro-meter",
+    "storage_bucket": "macro-meter.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1000455477510:android:0482e56d8978424e09e687",
+        "android_client_info": {
+          "package_name": "com.example.macro_meter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAbl2_WW1NuWJn5nHEXbZqwEbjNYx0LXo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
