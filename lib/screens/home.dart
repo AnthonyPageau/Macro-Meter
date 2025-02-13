@@ -7,7 +7,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("FlutterChat"),
+        title: Center(child: const Text("Macro-Meter")),
         actions: [
           IconButton(
               onPressed: () {
