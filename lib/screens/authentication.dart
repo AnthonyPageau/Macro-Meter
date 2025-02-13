@@ -48,6 +48,8 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
 
     try {
       if (_isLogin) {
+        await _firebase.signInWithEmailAndPassword(
+            email: _enteredEmail, password: _enteredPassword);
       } else {
         final userCredentials = await _firebase.createUserWithEmailAndPassword(
             email: _enteredEmail, password: _enteredPassword);
@@ -73,13 +75,15 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
         });
       }
     } on FirebaseAuthException catch (error) {
-      if (error.code == "email-already-in-use") {}
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(error.message ?? "Authentification échoué"),
-        ),
-      );
+      if (error.code == "email-already-in-use") {
+      } else {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Authentification échoué"),
+          ),
+        );
+      }
     }
   }
 
