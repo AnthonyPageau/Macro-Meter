@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:macro_meter/widgets/menu.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -7,18 +7,10 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: const Text("Macro-Meter")),
-        actions: [
-          IconButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              icon: Icon(
-                Icons.exit_to_app,
-                color: Theme.of(context).colorScheme.primary,
-              ))
-        ],
+        title: Center(
+            child: const Text("Macro-Meter", style: TextStyle(fontSize: 40))),
       ),
+      drawer: const Menu(),
       body: const Center(
         child: Text("Logged in!"),
       ),
