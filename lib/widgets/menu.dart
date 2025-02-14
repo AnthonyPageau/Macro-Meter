@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Menu extends StatelessWidget {
-  const Menu({super.key});
+  const Menu({super.key, required this.onSelectScreen});
+
+  final void Function(String identifier) onSelectScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,40 @@ class Menu extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(
+              Icons.home,
+              size: 40,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            title: Text(
+              "Accueil",
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 22),
+            ),
+            minTileHeight: 55,
+            onTap: () {
+              onSelectScreen("Accueil");
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.person,
+              size: 40,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            title: Text(
+              "Compte",
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 22),
+            ),
+            minTileHeight: 55,
+            onTap: () {
+              onSelectScreen("Compte");
+            },
+          ),
+          ListTile(
+            leading: Icon(
               Icons.calendar_month,
               size: 40,
               color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -48,7 +84,7 @@ class Menu extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 22),
             ),
-            minTileHeight: 70,
+            minTileHeight: 55,
             onTap: () {},
           ),
           ListTile(
@@ -63,7 +99,7 @@ class Menu extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 22),
             ),
-            minTileHeight: 70,
+            minTileHeight: 55,
             onTap: () {},
           ),
           ListTile(
@@ -78,7 +114,7 @@ class Menu extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 22),
             ),
-            minTileHeight: 70,
+            minTileHeight: 55,
             onTap: () {},
           ),
           ListTile(
@@ -93,7 +129,7 @@ class Menu extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 22),
             ),
-            minTileHeight: 70,
+            minTileHeight: 55,
             onTap: () {},
           ),
           ListTile(
@@ -108,8 +144,10 @@ class Menu extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 22),
             ),
-            minTileHeight: 70,
-            onTap: () {},
+            minTileHeight: 55,
+            onTap: () {
+              onSelectScreen("Paramètres");
+            },
           ),
           ListTile(
             leading: Icon(
@@ -123,7 +161,7 @@ class Menu extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 22),
             ),
-            minTileHeight: 70,
+            minTileHeight: 55,
             onTap: () {
               FirebaseAuth.instance.signOut();
             },
