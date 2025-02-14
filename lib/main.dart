@@ -57,7 +57,7 @@ class App extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (ctx, snapshot) {
           if (snapshot.hasData) {
-            return const Home();
+            return Home(user: FirebaseAuth.instance.currentUser!);
           }
 
           return const AuthenticationScreen();

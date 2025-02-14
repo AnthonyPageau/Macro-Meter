@@ -72,6 +72,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
           "age": _enteredAge,
           "weight": _enteredWeight,
           "height": _enteredHeight,
+          "objective": _enteredObjectif
         });
       }
     } on FirebaseAuthException catch (error) {
@@ -95,7 +96,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
           gradient: LinearGradient(
             colors: [
               Colors.black,
-              Color.fromARGB(255, 89, 242, 221),
+              Color.fromARGB(255, 17, 127, 112),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -128,6 +129,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                           children: [
                             if (!_isLogin)
                               UserAvatar(
+                                action: "Ajouter",
                                 onPickAvatar: (pickedAvatar) {
                                   _selected_Avatar = pickedAvatar;
                                 },

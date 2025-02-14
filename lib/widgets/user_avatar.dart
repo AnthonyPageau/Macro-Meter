@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserAvatar extends StatefulWidget {
-  const UserAvatar({
-    super.key,
-    required this.onPickAvatar,
-  });
+  UserAvatar(
+      {super.key,
+      required this.onPickAvatar,
+      required this.action,
+      this.avatarUrl});
 
   final void Function(File avatar) onPickAvatar;
+  final action;
+  String? avatarUrl;
 
   @override
   State<StatefulWidget> createState() {
@@ -38,6 +41,13 @@ class _UserAvatarState extends State<UserAvatar> {
     widget.onPickAvatar(_avatarFile!);
   }
 
+  ImageProvider? _setAvatar() {
+    if (_avatarFile != null) {
+      return FileImage(_avatarFile!);
+    }
+    return widget.avatarUrl != null ? NetworkImage(widget.avatarUrl!) : null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -45,12 +55,12 @@ class _UserAvatarState extends State<UserAvatar> {
         CircleAvatar(
           radius: 40,
           backgroundColor: Colors.grey,
-          foregroundImage: _avatarFile != null ? FileImage(_avatarFile!) : null,
+          foregroundImage: _setAvatar(),
         ),
         TextButton.icon(
           onPressed: _addAvatar,
           icon: const Icon(Icons.image),
-          label: Text("Ajouter Avatar",
+          label: Text("${widget.action} Avatar",
               style: TextStyle(
                 color: Theme.of(context).primaryColor,
               )),
