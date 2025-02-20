@@ -1,13 +1,11 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_regex/flutter_regex.dart';
 import 'package:macro_meter/widgets/user_avatar.dart';
-import 'package:macro_meter/widgets/user_create.dart';
 
 final _firebase = FirebaseAuth.instance;
 
@@ -35,12 +33,12 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   var _enteredHeight = "";
   var _enteredObjectif = "Maintient";
 
-  File? _selected_Avatar;
+  File? _selectedAvatar;
 
   void _submit() async {
     final isValid = _form.currentState!.validate();
 
-    if (!isValid || !_isLogin && _selected_Avatar == null) {
+    if (!isValid || !_isLogin && _selectedAvatar == null) {
       return;
     }
 
@@ -59,7 +57,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
             .child("user_images")
             .child("${userCredentials.user!.uid}.jpg");
 
-        await storageRef.putFile(_selected_Avatar!);
+        await storageRef.putFile(_selectedAvatar!);
         final avatarUrl = await storageRef.getDownloadURL();
         await FirebaseFirestore.instance
             .collection("users")
@@ -131,7 +129,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                               UserAvatar(
                                 action: "Ajouter",
                                 onPickAvatar: (pickedAvatar) {
-                                  _selected_Avatar = pickedAvatar;
+                                  _selectedAvatar = pickedAvatar;
                                 },
                               ),
                             TextFormField(

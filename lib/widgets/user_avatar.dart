@@ -11,7 +11,7 @@ class UserAvatar extends StatefulWidget {
       this.avatarUrl});
 
   final void Function(File avatar) onPickAvatar;
-  final action;
+  final String action;
   String? avatarUrl;
 
   @override

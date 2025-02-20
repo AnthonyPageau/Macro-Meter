@@ -2,15 +2,18 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_regex/flutter_regex.dart';
+
+import 'package:flutter/material.dart';
+import 'package:macro_meter/screens/authentication.dart';
+import 'package:macro_meter/screens/home.dart';
+import 'package:macro_meter/widgets/show_alert_dialog.dart';
 import 'package:macro_meter/widgets/user_avatar.dart';
 
 class Account extends StatefulWidget {
   const Account({super.key, required this.user});
 
-  final user;
+  final dynamic user;
 
   @override
   State<StatefulWidget> createState() {
@@ -21,17 +24,19 @@ class Account extends StatefulWidget {
 class _AccountState extends State<Account> {
   final _form = GlobalKey<FormState>();
 
-  var userData;
-  var avatarUrl;
+  dynamic userData;
 
-  var _updatedSurname;
-  var _updatedName;
-  var _updatedAge;
-  var _updatedWeight;
-  var _updatedHeight;
-  var _updatedObjectif;
+  String? avatarUrl;
+  String? _updatedSurname;
+  String? _updatedName;
+  String? _updatedAge;
+  String? _updatedWeight;
+  String? _updatedHeight;
+  String? _updatedObjectif;
 
-  File? _selected_Avatar;
+  var _password;
+
+  File? _selectedAvatar;
 
   @override
   void initState() {
@@ -61,7 +66,7 @@ class _AccountState extends State<Account> {
   void _submit() async {
     final isValid = _form.currentState!.validate();
 
-    if (!isValid && _selected_Avatar == null) {
+    if (!isValid && _selectedAvatar == null) {
       return;
     }
 
@@ -80,7 +85,47 @@ class _AccountState extends State<Account> {
         "height": _updatedHeight,
         "objective": _updatedObjectif
       });
+
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child("user_images")
+          .child("${widget.user!.uid}.jpg");
+
+      await storageRef.putFile(_selectedAvatar!);
+
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Compte modifié"),
+        ),
+      );
     } catch (e) {}
+  }
+
+  Future<void> deleteCurrentUser() async {
+    try {
+      var user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: user.email!, password: _password);
+
+        await user.delete();
+        Navigator.of(context).pop();
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (ctx) => AuthenticationScreen(),
+          ),
+        );
+      } else {}
+    } catch (e) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Mot de passe non valide"),
+        ),
+      );
+    }
   }
 
   @override
@@ -126,7 +171,7 @@ class _AccountState extends State<Account> {
                                     action: "Modifier",
                                     avatarUrl: avatarUrl,
                                     onPickAvatar: (pickedAvatar) {
-                                      _selected_Avatar = pickedAvatar;
+                                      _selectedAvatar = pickedAvatar;
                                     },
                                   ),
                                   TextFormField(
@@ -282,17 +327,41 @@ class _AccountState extends State<Account> {
                                     height: 12,
                                   ),
                                   ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        minimumSize: const Size(170, 40)),
                                     onPressed: () {
                                       _submit();
                                     },
                                     child: Text("Modifier"),
+                                  ),
+                                  const SizedBox(
+                                    height: 12,
+                                  ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red,
+                                        foregroundColor: Colors.white),
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (ctx) => ShowAlertDialog(
+                                          titre:
+                                              "Voulez-vous vraiment supprimer votre compte?",
+                                          action: deleteCurrentUser,
+                                          onPassword: (onPickPassword) {
+                                            _password = onPickPassword;
+                                          },
+                                        ),
+                                      );
+                                    },
+                                    child: Text("Supprimer"),
                                   ),
                                 ],
                               ),
                             ),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
