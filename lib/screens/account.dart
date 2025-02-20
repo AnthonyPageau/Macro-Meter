@@ -91,7 +91,7 @@ class _AccountState extends State<Account> {
           .child("user_images")
           .child("${widget.user!.uid}.jpg");
 
-      await storageRef.putFile(_selectedAvatar!);
+      if (_selectedAvatar != null) await storageRef.putFile(_selectedAvatar!);
 
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(

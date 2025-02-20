@@ -31,12 +31,21 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   var _enteredAge = "";
   var _enteredWeight = "";
   var _enteredHeight = "";
+  var _enteredCalories = "";
   var _enteredObjectif = "Maintient";
+  var _enteredSexe = "Homme";
 
   File? _selectedAvatar;
+  bool _isAvatarChosen = true;
 
   void _submit() async {
     final isValid = _form.currentState!.validate();
+
+    setState(() {
+      if (_selectedAvatar == null) {
+        _isAvatarChosen = false;
+      }
+    });
 
     if (!isValid || !_isLogin && _selectedAvatar == null) {
       return;
@@ -70,7 +79,9 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
           "age": _enteredAge,
           "weight": _enteredWeight,
           "height": _enteredHeight,
-          "objective": _enteredObjectif
+          "objective": _enteredObjectif,
+          "sexe": _enteredSexe,
+          "calories": _enteredCalories
         });
       }
     } on FirebaseAuthException catch (error) {
@@ -84,6 +95,129 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
         );
       }
     }
+  }
+
+  Widget buildAgeField() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: "Âge :"),
+      keyboardType:
+          TextInputType.numberWithOptions(signed: false, decimal: true),
+      autocorrect: false,
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return "L'Âge ne peut pas être vide";
+        }
+        if (int.tryParse(value) == null) {
+          return "L'Âge doit être un nombre entier";
+        }
+        return null;
+      },
+      onSaved: (value) {
+        _enteredAge = value!;
+      },
+    );
+  }
+
+  Widget buildHeightField() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: "Taille (cm):"),
+      keyboardType:
+          TextInputType.numberWithOptions(signed: false, decimal: true),
+      autocorrect: false,
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return "La Taille ne peut pas être vide";
+        }
+        if (int.tryParse(value) == null) {
+          return "La Taille doit être un nombre entier";
+        }
+        return null;
+      },
+      onSaved: (value) {
+        _enteredHeight = value!;
+      },
+    );
+  }
+
+  Widget buildSexeField() {
+    return DropdownButton<String>(
+      hint: Text("Objectif"),
+      value: _enteredSexe,
+      items: <String>["Homme", "Femme", "Autres"].map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      onChanged: (value) {
+        setState(() {
+          _enteredSexe = value!;
+        });
+      },
+    );
+  }
+
+  Widget buildWeightField() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: "Poids (lbs):"),
+      keyboardType:
+          TextInputType.numberWithOptions(signed: false, decimal: true),
+      autocorrect: false,
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return "Le Poids ne peut pas être vide";
+        }
+
+        if (int.tryParse(value) == null) {
+          return "Le poids doit être un nombre entier";
+        }
+        return null;
+      },
+      onSaved: (value) {
+        _enteredWeight = value!;
+      },
+    );
+  }
+
+  Widget buildObjectiveField() {
+    return DropdownButton<String>(
+      hint: Text("Objectif"),
+      value: _enteredObjectif,
+      items: <String>['Maintient', 'Perte de poids', 'Prise de poids']
+          .map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      onChanged: (value) {
+        setState(() {
+          _enteredObjectif = value!;
+        });
+      },
+    );
+  }
+
+  Widget buildCaloriesField() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: "Objectif Calorique :"),
+      keyboardType:
+          TextInputType.numberWithOptions(signed: false, decimal: true),
+      autocorrect: false,
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return "L'objectif ne peut pas être vide";
+        }
+
+        if (int.tryParse(value) == null) {
+          return "L'objectif doit être un nombre entier";
+        }
+        return null;
+      },
+      onSaved: (value) {
+        _enteredCalories = value!;
+      },
+    );
   }
 
   @override
@@ -125,13 +259,23 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            if (!_isLogin)
+                            if (!_isLogin) ...[
                               UserAvatar(
                                 action: "Ajouter",
                                 onPickAvatar: (pickedAvatar) {
                                   _selectedAvatar = pickedAvatar;
+                                  _isAvatarChosen = true;
                                 },
                               ),
+                              if (!_isAvatarChosen)
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 8.0),
+                                  child: Text(
+                                    "Veuillez choisir un avatar",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                            ],
                             TextFormField(
                               decoration:
                                   InputDecoration(labelText: "Courriel :"),
@@ -182,115 +326,95 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                                   _enteredName = value!;
                                 },
                               ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: TextFormField(
-                                      decoration:
-                                          InputDecoration(labelText: "Âge :"),
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(
-                                              signed: false, decimal: true),
-                                      autocorrect: false,
-                                      validator: (value) {
-                                        if (value == null ||
-                                            value.trim().isEmpty) {
-                                          return "L'Âge ne peut pas être vide";
-                                        }
-
-                                        if (int.tryParse(value) == null) {
-                                          return "L'Âge doit être un nombre entier";
-                                        }
-
-                                        return null;
-                                      },
-                                      onSaved: (value) {
-                                        _enteredAge = value!;
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 24,
-                                  ),
-                                  Expanded(
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          labelText: "Taille (cm):"),
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(
-                                              signed: false, decimal: true),
-                                      autocorrect: false,
-                                      validator: (value) {
-                                        if (value == null ||
-                                            value.trim().isEmpty) {
-                                          return "La Taille ne peut pas être vide";
-                                        }
-
-                                        if (int.tryParse(value) == null) {
-                                          return "La Taille doit être un nombre entier";
-                                        }
-                                        return null;
-                                      },
-                                      onSaved: (value) {
-                                        _enteredHeight = value!;
-                                      },
-                                    ),
-                                  )
-                                ],
+                              LayoutBuilder(
+                                builder: (context, constraints) {
+                                  bool isSmallScreen =
+                                      constraints.maxWidth < 300;
+                                  return Column(
+                                    children: [
+                                      if (isSmallScreen)
+                                        Column(
+                                          children: [
+                                            buildAgeField(),
+                                            const SizedBox(height: 12),
+                                            buildHeightField(),
+                                          ],
+                                        )
+                                      else
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(child: buildAgeField()),
+                                            const SizedBox(width: 24),
+                                            Expanded(child: buildHeightField()),
+                                          ],
+                                        ),
+                                    ],
+                                  );
+                                },
                               ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: DropdownButton<String>(
-                                      hint: Text("Objectif"),
-                                      value: _enteredObjectif,
-                                      items: <String>[
-                                        'Maintient',
-                                        'Perte de poids',
-                                        'Prise de poids'
-                                      ].map((String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _enteredObjectif = value!;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 24,
-                                  ),
-                                  Expanded(
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          labelText: "Poids (lbs):"),
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(
-                                              signed: false, decimal: true),
-                                      autocorrect: false,
-                                      validator: (value) {
-                                        if (value == null ||
-                                            value.trim().isEmpty) {
-                                          return "Le Poids ne peut pas être vide";
-                                        }
-
-                                        if (int.tryParse(value) == null) {
-                                          return "Le poids doit être un nombre entier";
-                                        }
-                                        return null;
-                                      },
-                                      onSaved: (value) {
-                                        _enteredWeight = value!;
-                                      },
-                                    ),
-                                  )
-                                ],
+                              LayoutBuilder(
+                                builder: (context, constraints) {
+                                  bool isSmallScreen =
+                                      constraints.maxWidth < 300;
+                                  return Column(
+                                    children: [
+                                      if (isSmallScreen)
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            buildSexeField(),
+                                            const SizedBox(height: 12),
+                                            buildWeightField(),
+                                          ],
+                                        )
+                                      else
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(child: buildSexeField()),
+                                            const SizedBox(width: 24),
+                                            Expanded(child: buildWeightField()),
+                                          ],
+                                        ),
+                                    ],
+                                  );
+                                },
+                              ),
+                              LayoutBuilder(
+                                builder: (context, constraints) {
+                                  bool isSmallScreen =
+                                      constraints.maxWidth < 300;
+                                  return Column(
+                                    children: [
+                                      if (isSmallScreen)
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            buildObjectiveField(),
+                                            const SizedBox(height: 12),
+                                            buildCaloriesField(),
+                                          ],
+                                        )
+                                      else
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                                child: buildObjectiveField()),
+                                            const SizedBox(width: 24),
+                                            Expanded(
+                                                child: buildCaloriesField()),
+                                          ],
+                                        ),
+                                    ],
+                                  );
+                                },
                               ),
                             ],
                             TextFormField(
@@ -337,6 +461,8 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                               onPressed: () {
                                 setState(() {
                                   _isLogin = !_isLogin;
+                                  _form.currentState?.reset();
+                                  _isAvatarChosen = true;
                                 });
                               },
                               child: Text(_isLogin
