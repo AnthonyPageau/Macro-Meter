@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:macro_meter/screens/account.dart';
 import 'package:macro_meter/widgets/menu.dart';
@@ -5,7 +6,7 @@ import 'package:macro_meter/widgets/menu.dart';
 class Home extends StatefulWidget {
   const Home({super.key, required this.user});
 
-  final user;
+  final User user;
 
   @override
   State<StatefulWidget> createState() {

@@ -10,12 +10,12 @@ class UserCreate extends StatefulWidget {
       required this.onPickSurname,
       super.key});
 
-  var enteredSurname;
-  var enteredName;
-  var enteredAge;
-  var enteredHeight;
-  var enteredObjectif;
-  var enteredWeight;
+  String? enteredSurname;
+  String? enteredName;
+  String? enteredAge;
+  String? enteredHeight;
+  String? enteredObjectif;
+  String? enteredWeight;
   final void Function(String enteredSurname) onPickSurname;
 
   @override
