@@ -9,6 +9,7 @@ import 'package:macro_meter/screens/authentication.dart';
 import 'package:macro_meter/screens/home.dart';
 import 'package:macro_meter/widgets/show_alert_dialog.dart';
 import 'package:macro_meter/widgets/user_avatar.dart';
+import 'package:macro_meter/widgets/form_fields.dart';
 
 class Account extends StatefulWidget {
   const Account({super.key, required this.user});
@@ -32,7 +33,9 @@ class _AccountState extends State<Account> {
   String? _updatedAge;
   String? _updatedWeight;
   String? _updatedHeight;
-  String? _updatedObjectif;
+  String? _updatedObjective;
+  String? _updatedSexe;
+  String? _updatedCalories;
 
   var _password;
 
@@ -83,7 +86,9 @@ class _AccountState extends State<Account> {
         "age": _updatedAge,
         "weight": _updatedWeight,
         "height": _updatedHeight,
-        "objective": _updatedObjectif
+        "objective": _updatedObjective ?? userData["objective"],
+        "sexe": _updatedSexe ?? userData["sexe"],
+        "calories": _updatedCalories
       });
 
       final storageRef = FirebaseStorage.instance
@@ -174,154 +179,178 @@ class _AccountState extends State<Account> {
                                       _selectedAvatar = pickedAvatar;
                                     },
                                   ),
-                                  TextFormField(
-                                    decoration:
-                                        InputDecoration(labelText: "Prenom :"),
-                                    autocorrect: false,
-                                    initialValue: userData!["surname"],
-                                    validator: (value) {
-                                      if (value == null ||
-                                          value.trim().isEmpty) {
-                                        return "Le Prenom ne peut pas être vide";
-                                      }
-
-                                      return null;
-                                    },
-                                    onSaved: (value) {
-                                      _updatedSurname = value!;
+                                  buildNameField(_updatedName, userData["name"],
+                                      (value) {
+                                    _updatedName = value!;
+                                  }),
+                                  buildSurnameField(
+                                      _updatedSurname, userData["surname"],
+                                      (value) {
+                                    _updatedSurname = value!;
+                                  }),
+                                  LayoutBuilder(
+                                    builder: (context, constraints) {
+                                      bool isSmallScreen =
+                                          constraints.maxWidth < 300;
+                                      return Column(
+                                        children: [
+                                          if (isSmallScreen)
+                                            Column(
+                                              children: [
+                                                buildAgeField(_updatedAge,
+                                                    userData["age"], (value) {
+                                                  _updatedAge = value!;
+                                                }),
+                                                const SizedBox(height: 12),
+                                                buildHeightField(_updatedHeight,
+                                                    userData["height"],
+                                                    (value) {
+                                                  _updatedHeight = value!;
+                                                }),
+                                              ],
+                                            )
+                                          else
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Expanded(
+                                                  child: buildAgeField(
+                                                      _updatedAge,
+                                                      userData["age"], (value) {
+                                                    _updatedAge = value!;
+                                                  }),
+                                                ),
+                                                const SizedBox(width: 24),
+                                                Expanded(
+                                                  child: buildHeightField(
+                                                      _updatedHeight,
+                                                      userData["height"],
+                                                      (value) {
+                                                    _updatedHeight = value!;
+                                                  }),
+                                                ),
+                                              ],
+                                            ),
+                                        ],
+                                      );
                                     },
                                   ),
-                                  TextFormField(
-                                    decoration:
-                                        InputDecoration(labelText: "Nom :"),
-                                    autocorrect: false,
-                                    initialValue: userData!["name"],
-                                    validator: (value) {
-                                      if (value == null ||
-                                          value.trim().isEmpty) {
-                                        return "Le Nom ne peut pas être vide";
-                                      }
-
-                                      return null;
-                                    },
-                                    onSaved: (value) {
-                                      _updatedName = value!;
+                                  LayoutBuilder(
+                                    builder: (context, constraints) {
+                                      bool isSmallScreen =
+                                          constraints.maxWidth < 300;
+                                      return Column(
+                                        children: [
+                                          if (isSmallScreen)
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                buildSexeField(
+                                                    _updatedSexe ??
+                                                        userData["sexe"],
+                                                    (value) {
+                                                  setState(() {
+                                                    _updatedSexe = value!;
+                                                  });
+                                                }),
+                                                const SizedBox(height: 12),
+                                                buildWeightField(_updatedWeight,
+                                                    userData["weight"],
+                                                    (value) {
+                                                  _updatedWeight = value!;
+                                                }),
+                                              ],
+                                            )
+                                          else
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Expanded(
+                                                  child: buildSexeField(
+                                                      _updatedSexe ??
+                                                          userData["sexe"],
+                                                      (value) {
+                                                    setState(() {
+                                                      _updatedSexe = value!;
+                                                    });
+                                                  }),
+                                                ),
+                                                const SizedBox(width: 24),
+                                                Expanded(
+                                                  child: buildWeightField(
+                                                      _updatedWeight,
+                                                      userData["weight"],
+                                                      (value) {
+                                                    _updatedWeight = value!;
+                                                  }),
+                                                ),
+                                              ],
+                                            ),
+                                        ],
+                                      );
                                     },
                                   ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: TextFormField(
-                                          decoration: InputDecoration(
-                                              labelText: "Âge :"),
-                                          keyboardType:
-                                              TextInputType.numberWithOptions(
-                                                  signed: false, decimal: true),
-                                          autocorrect: false,
-                                          initialValue: userData!["age"],
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.trim().isEmpty) {
-                                              return "L'Âge ne peut pas être vide";
-                                            }
-
-                                            if (int.tryParse(value) == null) {
-                                              return "L'Âge doit être un nombre entier";
-                                            }
-
-                                            return null;
-                                          },
-                                          onSaved: (value) {
-                                            _updatedAge = value!;
-                                          },
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 24,
-                                      ),
-                                      Expanded(
-                                        child: TextFormField(
-                                          decoration: InputDecoration(
-                                              labelText: "Taille (cm):"),
-                                          keyboardType:
-                                              TextInputType.numberWithOptions(
-                                                  signed: false, decimal: true),
-                                          autocorrect: false,
-                                          initialValue: userData!["height"],
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.trim().isEmpty) {
-                                              return "La Taille ne peut pas être vide";
-                                            }
-
-                                            if (int.tryParse(value) == null) {
-                                              return "La Taille doit être un nombre entier";
-                                            }
-                                            return null;
-                                          },
-                                          onSaved: (value) {
-                                            _updatedHeight = value!;
-                                          },
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: DropdownButton<String>(
-                                          value: userData!["objective"],
-                                          hint: Text("Objectif"),
-                                          items: <String>[
-                                            'Maintient',
-                                            'Perte de poids',
-                                            'Prise de poids'
-                                          ].map((String value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: Text(value),
-                                            );
-                                          }).toList(),
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _updatedObjectif = value!;
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 24,
-                                      ),
-                                      Expanded(
-                                        child: TextFormField(
-                                          decoration: InputDecoration(
-                                              labelText: "Poids (lbs):"),
-                                          keyboardType:
-                                              TextInputType.numberWithOptions(
-                                                  signed: false, decimal: true),
-                                          autocorrect: false,
-                                          initialValue: userData!["weight"],
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.trim().isEmpty) {
-                                              return "Le Poids ne peut pas être vide";
-                                            }
-
-                                            if (int.tryParse(value) == null) {
-                                              return "Le poids doit être un nombre entier";
-                                            }
-                                            return null;
-                                          },
-                                          onSaved: (value) {
-                                            _updatedWeight = value!;
-                                          },
-                                        ),
-                                      )
-                                    ],
+                                  LayoutBuilder(
+                                    builder: (context, constraints) {
+                                      bool isSmallScreen =
+                                          constraints.maxWidth < 300;
+                                      return Column(
+                                        children: [
+                                          if (isSmallScreen)
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                buildObjectiveField(
+                                                    _updatedObjective ??
+                                                        userData["objective"],
+                                                    (value) {
+                                                  setState(() {
+                                                    _updatedObjective = value!;
+                                                  });
+                                                }),
+                                                const SizedBox(height: 12),
+                                                buildCaloriesField(
+                                                    _updatedCalories,
+                                                    userData["calories"],
+                                                    (value) {
+                                                  _updatedCalories = value!;
+                                                }),
+                                              ],
+                                            )
+                                          else
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Expanded(
+                                                  child: buildObjectiveField(
+                                                      _updatedObjective ??
+                                                          userData["objective"],
+                                                      (value) {
+                                                    setState(() {
+                                                      _updatedObjective =
+                                                          value!;
+                                                    });
+                                                  }),
+                                                ),
+                                                const SizedBox(width: 24),
+                                                Expanded(
+                                                  child: buildCaloriesField(
+                                                      _updatedCalories,
+                                                      userData["calories"],
+                                                      (value) {
+                                                    _updatedCalories = value!;
+                                                  }),
+                                                ),
+                                              ],
+                                            ),
+                                        ],
+                                      );
+                                    },
                                   ),
                                   const SizedBox(
                                     height: 12,

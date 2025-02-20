@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_regex/flutter_regex.dart';
 import 'package:macro_meter/widgets/user_avatar.dart';
+import 'package:macro_meter/widgets/form_fields.dart';
 
 final _firebase = FirebaseAuth.instance;
 
@@ -97,129 +98,6 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
     }
   }
 
-  Widget buildAgeField() {
-    return TextFormField(
-      decoration: InputDecoration(labelText: "Âge :"),
-      keyboardType:
-          TextInputType.numberWithOptions(signed: false, decimal: true),
-      autocorrect: false,
-      validator: (value) {
-        if (value == null || value.trim().isEmpty) {
-          return "L'Âge ne peut pas être vide";
-        }
-        if (int.tryParse(value) == null) {
-          return "L'Âge doit être un nombre entier";
-        }
-        return null;
-      },
-      onSaved: (value) {
-        _enteredAge = value!;
-      },
-    );
-  }
-
-  Widget buildHeightField() {
-    return TextFormField(
-      decoration: InputDecoration(labelText: "Taille (cm):"),
-      keyboardType:
-          TextInputType.numberWithOptions(signed: false, decimal: true),
-      autocorrect: false,
-      validator: (value) {
-        if (value == null || value.trim().isEmpty) {
-          return "La Taille ne peut pas être vide";
-        }
-        if (int.tryParse(value) == null) {
-          return "La Taille doit être un nombre entier";
-        }
-        return null;
-      },
-      onSaved: (value) {
-        _enteredHeight = value!;
-      },
-    );
-  }
-
-  Widget buildSexeField() {
-    return DropdownButton<String>(
-      hint: Text("Objectif"),
-      value: _enteredSexe,
-      items: <String>["Homme", "Femme", "Autres"].map((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-      onChanged: (value) {
-        setState(() {
-          _enteredSexe = value!;
-        });
-      },
-    );
-  }
-
-  Widget buildWeightField() {
-    return TextFormField(
-      decoration: InputDecoration(labelText: "Poids (lbs):"),
-      keyboardType:
-          TextInputType.numberWithOptions(signed: false, decimal: true),
-      autocorrect: false,
-      validator: (value) {
-        if (value == null || value.trim().isEmpty) {
-          return "Le Poids ne peut pas être vide";
-        }
-
-        if (int.tryParse(value) == null) {
-          return "Le poids doit être un nombre entier";
-        }
-        return null;
-      },
-      onSaved: (value) {
-        _enteredWeight = value!;
-      },
-    );
-  }
-
-  Widget buildObjectiveField() {
-    return DropdownButton<String>(
-      hint: Text("Objectif"),
-      value: _enteredObjectif,
-      items: <String>['Maintient', 'Perte de poids', 'Prise de poids']
-          .map((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-      onChanged: (value) {
-        setState(() {
-          _enteredObjectif = value!;
-        });
-      },
-    );
-  }
-
-  Widget buildCaloriesField() {
-    return TextFormField(
-      decoration: InputDecoration(labelText: "Objectif Calorique :"),
-      keyboardType:
-          TextInputType.numberWithOptions(signed: false, decimal: true),
-      autocorrect: false,
-      validator: (value) {
-        if (value == null || value.trim().isEmpty) {
-          return "L'objectif ne peut pas être vide";
-        }
-
-        if (int.tryParse(value) == null) {
-          return "L'objectif doit être un nombre entier";
-        }
-        return null;
-      },
-      onSaved: (value) {
-        _enteredCalories = value!;
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -276,56 +154,16 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                                   ),
                                 ),
                             ],
-                            TextFormField(
-                              decoration:
-                                  InputDecoration(labelText: "Courriel :"),
-                              keyboardType: TextInputType.emailAddress,
-                              autocorrect: false,
-                              textCapitalization: TextCapitalization.none,
-                              validator: (value) {
-                                if (value == null ||
-                                    value.trim().isEmpty ||
-                                    !value.isEmail(
-                                        supportTopLevelDomain: true)) {
-                                  return "Veuillez rentrer une adresse courielle valide";
-                                }
-
-                                return null;
-                              },
-                              onSaved: (value) {
-                                _enteredEmail = value!;
-                              },
-                            ),
+                            buildEmailField(_enteredEmail, (value) {
+                              _enteredEmail = value!;
+                            }),
                             if (!_isLogin) ...[
-                              TextFormField(
-                                decoration:
-                                    InputDecoration(labelText: "Prenom :"),
-                                autocorrect: false,
-                                validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return "Le Prenom ne peut pas être vide";
-                                  }
-
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  _enteredSurname = value!;
-                                },
-                              ),
-                              TextFormField(
-                                decoration: InputDecoration(labelText: "Nom :"),
-                                autocorrect: false,
-                                validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return "Le Nom ne peut pas être vide";
-                                  }
-
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  _enteredName = value!;
-                                },
-                              ),
+                              buildNameField(_enteredName, null, (value) {
+                                _enteredName = value!;
+                              }),
+                              buildSurnameField(_enteredSurname, null, (value) {
+                                _enteredSurname = value!;
+                              }),
                               LayoutBuilder(
                                 builder: (context, constraints) {
                                   bool isSmallScreen =
@@ -335,9 +173,15 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                                       if (isSmallScreen)
                                         Column(
                                           children: [
-                                            buildAgeField(),
+                                            buildAgeField(_enteredAge, null,
+                                                (value) {
+                                              _enteredAge = value!;
+                                            }),
                                             const SizedBox(height: 12),
-                                            buildHeightField(),
+                                            buildHeightField(
+                                                _enteredHeight, null, (value) {
+                                              _enteredHeight = value!;
+                                            }),
                                           ],
                                         )
                                       else
@@ -345,9 +189,20 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Expanded(child: buildAgeField()),
+                                            Expanded(
+                                              child: buildAgeField(
+                                                  _enteredAge, null, (value) {
+                                                _enteredAge = value!;
+                                              }),
+                                            ),
                                             const SizedBox(width: 24),
-                                            Expanded(child: buildHeightField()),
+                                            Expanded(
+                                              child: buildHeightField(
+                                                  _enteredHeight, null,
+                                                  (value) {
+                                                _enteredHeight = value!;
+                                              }),
+                                            ),
                                           ],
                                         ),
                                     ],
@@ -365,9 +220,17 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            buildSexeField(),
+                                            buildSexeField(_enteredSexe,
+                                                (value) {
+                                              setState(() {
+                                                _enteredSexe = value!;
+                                              });
+                                            }),
                                             const SizedBox(height: 12),
-                                            buildWeightField(),
+                                            buildWeightField(
+                                                _enteredWeight, null, (value) {
+                                              _enteredWeight = value!;
+                                            }),
                                           ],
                                         )
                                       else
@@ -375,9 +238,22 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Expanded(child: buildSexeField()),
+                                            Expanded(
+                                              child: buildSexeField(
+                                                  _enteredSexe, (value) {
+                                                setState(() {
+                                                  _enteredSexe = value!;
+                                                });
+                                              }),
+                                            ),
                                             const SizedBox(width: 24),
-                                            Expanded(child: buildWeightField()),
+                                            Expanded(
+                                              child: buildWeightField(
+                                                  _enteredWeight, null,
+                                                  (value) {
+                                                _enteredWeight = value!;
+                                              }),
+                                            ),
                                           ],
                                         ),
                                     ],
@@ -395,9 +271,18 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            buildObjectiveField(),
+                                            buildObjectiveField(
+                                                _enteredObjectif, (value) {
+                                              setState(() {
+                                                _enteredObjectif = value!;
+                                              });
+                                            }),
                                             const SizedBox(height: 12),
-                                            buildCaloriesField(),
+                                            buildCaloriesField(
+                                                _enteredCalories, null,
+                                                (value) {
+                                              _enteredCalories = value!;
+                                            }),
                                           ],
                                         )
                                       else
@@ -406,10 +291,21 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
-                                                child: buildObjectiveField()),
+                                              child: buildObjectiveField(
+                                                  _enteredObjectif, (value) {
+                                                setState(() {
+                                                  _enteredObjectif = value!;
+                                                });
+                                              }),
+                                            ),
                                             const SizedBox(width: 24),
                                             Expanded(
-                                                child: buildCaloriesField()),
+                                              child: buildCaloriesField(
+                                                  _enteredCalories, null,
+                                                  (value) {
+                                                _enteredCalories = value!;
+                                              }),
+                                            ),
                                           ],
                                         ),
                                     ],
@@ -417,39 +313,16 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                                 },
                               ),
                             ],
-                            TextFormField(
-                              decoration: const InputDecoration(
-                                  labelText: "Mot de Passe"),
-                              obscureText: true,
-                              validator: (value) {
-                                if (value == null || value.trim().length < 6) {
-                                  return "Le mot de passe doit contenir au minimum 6 caractères";
-                                }
-
-                                return null;
-                              },
-                              onChanged: (value) {
-                                _verifyPassword = value;
-                              },
-                              onSaved: (value) {
-                                _enteredPassword = value!;
-                              },
-                            ),
+                            buildPasswordField(_enteredPassword, (value) {
+                              _enteredPassword = value!;
+                            }, (value) {
+                              _verifyPassword = value!;
+                            }),
                             if (!_isLogin)
-                              TextFormField(
-                                decoration: const InputDecoration(
-                                    labelText: "Confirmation Mot de Passe"),
-                                obscureText: true,
-                                validator: (value) {
-                                  if (value != _verifyPassword) {
-                                    return "Les mots de passe doivent être identique";
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  _enteredPassword = value!;
-                                },
-                              ),
+                              buildVerifyPasswordField(
+                                  _enteredPassword, _verifyPassword, (value) {
+                                _enteredPassword = value!;
+                              }),
                             const SizedBox(
                               height: 12,
                             ),
