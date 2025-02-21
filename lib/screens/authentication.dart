@@ -65,6 +65,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
         final storageRef = FirebaseStorage.instance
             .ref()
             .child("user_images")
+            .child("user_avatar")
             .child("${userCredentials.user!.uid}.jpg");
 
         await storageRef.putFile(_selectedAvatar!);
@@ -87,6 +88,12 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
       }
     } on FirebaseAuthException catch (error) {
       if (error.code == "email-already-in-use") {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Le courriel est déjà utilisé"),
+          ),
+        );
       } else {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(

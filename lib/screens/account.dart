@@ -56,6 +56,7 @@ class _AccountState extends State<Account> {
     final storageRef = FirebaseStorage.instance
         .ref()
         .child("user_images")
+        .child("user_avatar")
         .child("${widget.user.uid}.jpg");
 
     final url = await storageRef.getDownloadURL();
@@ -109,20 +110,32 @@ class _AccountState extends State<Account> {
 
   Future<void> deleteCurrentUser() async {
     try {
-      var user = FirebaseAuth.instance.currentUser;
+      final user = FirebaseAuth.instance.currentUser;
 
       if (user != null) {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: user.email!, password: _password);
 
+        final firestoreRef =
+            FirebaseFirestore.instance.collection("users").doc(widget.user.uid);
+
+        final storageRef = FirebaseStorage.instance
+            .ref()
+            .child("user_images")
+            .child("user_avatar")
+            .child("${user.uid}.jpg");
+
+        await firestoreRef.delete();
+        await storageRef.delete();
         await user.delete();
+
         Navigator.of(context).pop();
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (ctx) => AuthenticationScreen(),
           ),
         );
-      } else {}
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
