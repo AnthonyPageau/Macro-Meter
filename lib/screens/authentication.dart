@@ -320,16 +320,39 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                                 },
                               ),
                             ],
-                            buildPasswordField(_enteredPassword, (value) {
-                              _enteredPassword = value!;
-                            }, (value) {
-                              _verifyPassword = value!;
-                            }),
-                            if (!_isLogin)
-                              buildVerifyPasswordField(
-                                  _enteredPassword, _verifyPassword, (value) {
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                  labelText: "Mot de Passe"),
+                              obscureText: true,
+                              validator: (value) {
+                                if (value == null || value.trim().length < 6) {
+                                  return "Le mot de passe doit contenir au minimum 6 caractères";
+                                }
+
+                                return null;
+                              },
+                              onChanged: (value) {
+                                _verifyPassword = value;
+                              },
+                              onSaved: (value) {
                                 _enteredPassword = value!;
-                              }),
+                              },
+                            ),
+                            if (!_isLogin)
+                              TextFormField(
+                                decoration: const InputDecoration(
+                                    labelText: "Confirmation Mot de Passe"),
+                                obscureText: true,
+                                validator: (value) {
+                                  if (value != _verifyPassword) {
+                                    return "Les mots de passe doivent être identique";
+                                  }
+                                  return null;
+                                },
+                                onSaved: (value) {
+                                  _enteredPassword = value!;
+                                },
+                              ),
                             const SizedBox(
                               height: 12,
                             ),
