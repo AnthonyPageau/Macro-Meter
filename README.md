@@ -1,6 +1,6 @@
 # Installation de Flutter et Android Studio
 ## 1. Installer Git
-  [GitHub](https://gitforwindows.org/)
+  [Git](https://gitforwindows.org/)
 
 ## 2. Flutter sur le site officiel
   Installer le fichier compresser de [FLutter](https://docs.flutter.dev/get-started/install/windows/mobile)
