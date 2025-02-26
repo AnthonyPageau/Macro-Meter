@@ -25,7 +25,7 @@ class _UserAvatarState extends State<UserAvatar> {
 
   void _addAvatar() async {
     final avatar = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
+      source: ImageSource.camera,
       imageQuality: 50,
       maxWidth: 150,
     );

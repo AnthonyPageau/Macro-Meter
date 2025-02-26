@@ -6,8 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:macro_meter/screens/authentication.dart';
-import 'package:macro_meter/screens/home.dart';
 import 'package:macro_meter/widgets/show_alert_dialog.dart';
+import 'package:macro_meter/widgets/password_alert_dialog.dart';
 import 'package:macro_meter/widgets/user_avatar.dart';
 import 'package:macro_meter/widgets/form_fields.dart';
 
@@ -374,15 +374,24 @@ class _AccountState extends State<Account> {
                                     onPressed: () {
                                       _submit();
                                     },
-                                    child: Text("Modifier"),
+                                    child: Text("Modifier informations"),
                                   ),
                                   const SizedBox(
-                                    height: 12,
+                                    height: 6,
                                   ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.red,
-                                        foregroundColor: Colors.white),
+                                  TextButton(
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (ctx) => PasswordAlertDialog(
+                                            user: widget.user,
+                                          ),
+                                        );
+                                      },
+                                      child: Text("Modifier mot de passe")),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                        foregroundColor: Colors.red),
                                     onPressed: () {
                                       showDialog(
                                         context: context,
