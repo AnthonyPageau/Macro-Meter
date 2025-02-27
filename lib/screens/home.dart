@@ -36,8 +36,20 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-            child: const Text("Macro-Meter", style: TextStyle(fontSize: 36))),
+        centerTitle: true,
+        title: const Text(
+          "Macro-Meter",
+          style: TextStyle(fontSize: 36),
+        ),
+        flexibleSpace: Center(
+          child: Padding(
+            padding: EdgeInsets.only(right: 56),
+            child: const Text(
+              "Macro-Meter",
+              style: TextStyle(fontSize: 36),
+            ),
+          ),
+        ),
       ),
       drawer: Menu(
         onSelectScreen: _setScreen,

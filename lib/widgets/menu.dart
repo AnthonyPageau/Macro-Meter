@@ -6,167 +6,104 @@ class Menu extends StatelessWidget {
 
   final void Function(String identifier) onSelectScreen;
 
+  Widget buildMenuItem(BuildContext context,
+      {required IconData icon, required String title, VoidCallback? onTap}) {
+    return ListTile(
+      leading: Icon(
+        icon,
+        size: 40,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+      ),
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 22,
+            ),
+      ),
+      minTileHeight: 60,
+      onTap: onTap,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       width: 230,
-      child: Column(
-        children: [
-          DrawerHeader(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
-                Theme.of(context).colorScheme.primaryContainer,
-                // ignore: deprecated_member_use
-                Theme.of(context).colorScheme.primaryContainer.withOpacity(0.8),
-              ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.menu,
-                  size: 48,
-                  color: Theme.of(context).colorScheme.primary,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            DrawerHeader(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.primaryContainer,
+                    Theme.of(context)
+                        .colorScheme
+                        .primaryContainer
+                        .withOpacity(0.8),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-                const SizedBox(width: 18),
-                Text(
-                  "Menu",
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 30),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.menu,
+                    size: 48,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(width: 18),
+                  Text(
+                    "Menu",
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 30,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+            ListBody(
+              children: [
+                buildMenuItem(
+                  context,
+                  icon: Icons.home,
+                  title: "Accueil",
+                  onTap: () => onSelectScreen("Accueil"),
+                ),
+                buildMenuItem(
+                  context,
+                  icon: Icons.person,
+                  title: "Compte",
+                  onTap: () => onSelectScreen("Compte"),
+                ),
+                buildMenuItem(context,
+                    icon: Icons.calendar_month, title: "Plans"),
+                buildMenuItem(context,
+                    icon: Icons.food_bank, title: "Aliments"),
+                buildMenuItem(context,
+                    icon: Icons.bar_chart_sharp, title: "Statistiques"),
+                buildMenuItem(context,
+                    icon: Icons.photo_camera, title: "Photos"),
+                buildMenuItem(
+                  context,
+                  icon: Icons.settings,
+                  title: "Paramètres",
+                  onTap: () => onSelectScreen("Paramètres"),
+                ),
+                buildMenuItem(
+                  context,
+                  icon: Icons.logout,
+                  title: "Déconnexion",
+                  onTap: () => FirebaseAuth.instance.signOut(),
                 ),
               ],
             ),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.home,
-              size: 40,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-            title: Text(
-              "Accueil",
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 22),
-            ),
-            minTileHeight: 55,
-            onTap: () {
-              onSelectScreen("Accueil");
-            },
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.person,
-              size: 40,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-            title: Text(
-              "Compte",
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 22),
-            ),
-            minTileHeight: 55,
-            onTap: () {
-              onSelectScreen("Compte");
-            },
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.calendar_month,
-              size: 40,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-            title: Text(
-              "Plans",
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 22),
-            ),
-            minTileHeight: 55,
-            onTap: () {},
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.food_bank,
-              size: 40,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-            title: Text(
-              "Aliments",
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 22),
-            ),
-            minTileHeight: 55,
-            onTap: () {},
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.bar_chart_sharp,
-              size: 40,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-            title: Text(
-              "Statistiques",
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 22),
-            ),
-            minTileHeight: 55,
-            onTap: () {},
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.photo_camera,
-              size: 40,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-            title: Text(
-              "Photos",
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 22),
-            ),
-            minTileHeight: 55,
-            onTap: () {},
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.settings,
-              size: 40,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-            title: Text(
-              "Paramètres",
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 22),
-            ),
-            minTileHeight: 55,
-            onTap: () {
-              onSelectScreen("Paramètres");
-            },
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.logout,
-              size: 40,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-            title: Text(
-              "Déconnexion",
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 22),
-            ),
-            minTileHeight: 55,
-            onTap: () {
-              FirebaseAuth.instance.signOut();
-            },
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
