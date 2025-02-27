@@ -84,12 +84,12 @@ class _AccountState extends State<Account> {
         "avatar": avatarUrl,
         "surname": _updatedSurname,
         "name": _updatedName,
-        "age": _updatedAge,
-        "weight": _updatedWeight,
-        "height": _updatedHeight,
+        "age": int.parse(_updatedAge!),
+        "weight": int.parse(_updatedWeight!),
+        "height": int.parse(_updatedHeight!),
         "objective": _updatedObjective ?? userData["objective"],
         "sexe": _updatedSexe ?? userData["sexe"],
-        "calories": _updatedCalories
+        "calories": int.parse(_updatedCalories!)
       });
 
       final storageRef = FirebaseStorage.instance
@@ -150,10 +150,18 @@ class _AccountState extends State<Account> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(
-          child: Text(
-            "Compte",
-            style: TextStyle(fontSize: 36),
+        centerTitle: true,
+        title: const Text(
+          "Compte",
+          style: TextStyle(fontSize: 36),
+        ),
+        flexibleSpace: Center(
+          child: Padding(
+            padding: EdgeInsets.only(right: 56),
+            child: const Text(
+              "Compte",
+              style: TextStyle(fontSize: 36),
+            ),
           ),
         ),
       ),
@@ -211,13 +219,15 @@ class _AccountState extends State<Account> {
                                             Column(
                                               children: [
                                                 buildAgeField(_updatedAge,
-                                                    userData["age"], (value) {
+                                                    userData["age"].toString(),
+                                                    (value) {
                                                   _updatedAge = value!;
                                                 }),
                                                 const SizedBox(height: 12),
-                                                buildHeightField(_updatedHeight,
-                                                    userData["height"],
-                                                    (value) {
+                                                buildHeightField(
+                                                    _updatedHeight,
+                                                    userData["height"]
+                                                        .toString(), (value) {
                                                   _updatedHeight = value!;
                                                 }),
                                               ],
@@ -230,7 +240,8 @@ class _AccountState extends State<Account> {
                                                 Expanded(
                                                   child: buildAgeField(
                                                       _updatedAge,
-                                                      userData["age"], (value) {
+                                                      userData["age"]
+                                                          .toString(), (value) {
                                                     _updatedAge = value!;
                                                   }),
                                                 ),
@@ -238,8 +249,8 @@ class _AccountState extends State<Account> {
                                                 Expanded(
                                                   child: buildHeightField(
                                                       _updatedHeight,
-                                                      userData["height"],
-                                                      (value) {
+                                                      userData["height"]
+                                                          .toString(), (value) {
                                                     _updatedHeight = value!;
                                                   }),
                                                 ),
@@ -269,9 +280,10 @@ class _AccountState extends State<Account> {
                                                   });
                                                 }),
                                                 const SizedBox(height: 12),
-                                                buildWeightField(_updatedWeight,
-                                                    userData["weight"],
-                                                    (value) {
+                                                buildWeightField(
+                                                    _updatedWeight,
+                                                    userData["weight"]
+                                                        .toString(), (value) {
                                                   _updatedWeight = value!;
                                                 }),
                                               ],
@@ -295,8 +307,8 @@ class _AccountState extends State<Account> {
                                                 Expanded(
                                                   child: buildWeightField(
                                                       _updatedWeight,
-                                                      userData["weight"],
-                                                      (value) {
+                                                      userData["weight"]
+                                                          .toString(), (value) {
                                                     _updatedWeight = value!;
                                                   }),
                                                 ),
@@ -328,8 +340,8 @@ class _AccountState extends State<Account> {
                                                 const SizedBox(height: 12),
                                                 buildCaloriesField(
                                                     _updatedCalories,
-                                                    userData["calories"],
-                                                    (value) {
+                                                    userData["calories"]
+                                                        .toString(), (value) {
                                                   _updatedCalories = value!;
                                                 }),
                                               ],
@@ -354,8 +366,8 @@ class _AccountState extends State<Account> {
                                                 Expanded(
                                                   child: buildCaloriesField(
                                                       _updatedCalories,
-                                                      userData["calories"],
-                                                      (value) {
+                                                      userData["calories"]
+                                                          .toString(), (value) {
                                                     _updatedCalories = value!;
                                                   }),
                                                 ),

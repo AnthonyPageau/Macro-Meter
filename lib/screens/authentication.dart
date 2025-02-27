@@ -78,12 +78,12 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
           "email": _enteredEmail,
           "surname": _enteredSurname,
           "name": _enteredName,
-          "age": _enteredAge,
-          "weight": _enteredWeight,
-          "height": _enteredHeight,
+          "age": int.parse(_enteredAge),
+          "weight": int.parse(_enteredWeight),
+          "height": int.parse(_enteredHeight),
           "objective": _enteredObjectif,
           "sexe": _enteredSexe,
-          "calories": _enteredCalories
+          "calories": int.parse(_enteredCalories)
         });
       }
     } on FirebaseAuthException catch (error) {
