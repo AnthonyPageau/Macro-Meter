@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserAvatar extends StatefulWidget {
-  UserAvatar(
+  const UserAvatar(
       {super.key,
       required this.onPickAvatar,
       required this.action,
@@ -12,7 +12,7 @@ class UserAvatar extends StatefulWidget {
 
   final void Function(File avatar) onPickAvatar;
   final String action;
-  String? avatarUrl;
+  final String? avatarUrl;
 
   @override
   State<StatefulWidget> createState() {

@@ -16,7 +16,7 @@ class ShowAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _form = GlobalKey<FormState>();
+    final form = GlobalKey<FormState>();
 
     Widget cancelButton = ElevatedButton(
       child: Text("Cancel"),
@@ -27,7 +27,7 @@ class ShowAlertDialog extends StatelessWidget {
     Widget continueButton = ElevatedButton(
       child: Text("Supprimer"),
       onPressed: () {
-        _form.currentState!.save();
+        form.currentState!.save();
         onPassword(_password);
         action();
       },
@@ -36,7 +36,7 @@ class ShowAlertDialog extends StatelessWidget {
     return AlertDialog(
       title: Text(titre),
       content: Form(
-        key: _form,
+        key: form,
         child: TextFormField(
           obscureText: true,
           decoration: InputDecoration(labelText: "Confirmer mot de passe :"),

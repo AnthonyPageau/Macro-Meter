@@ -105,7 +105,14 @@ class _AccountState extends State<Account> {
           content: Text("Compte modifié"),
         ),
       );
-    } catch (e) {}
+    } on FirebaseAuthException catch (error) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.code),
+        ),
+      );
+    }
   }
 
   Future<void> deleteCurrentUser() async {
