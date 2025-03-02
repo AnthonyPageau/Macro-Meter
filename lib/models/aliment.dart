@@ -14,7 +14,8 @@ const categoryIcons = {
 
 class Aliment {
   Aliment(
-      {required this.name,
+      {required this.id,
+      required this.name,
       required this.calories,
       required this.protein,
       required this.carbs,
@@ -23,6 +24,7 @@ class Aliment {
       required this.quantity,
       required this.category});
 
+  final String id;
   final String name;
   final int calories;
   final num protein;
