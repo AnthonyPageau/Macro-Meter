@@ -32,6 +32,7 @@ class _AlimentState extends State<AlimentScreen> {
     List<Aliment> alimentList = collection.docs.map((doc) {
       var alimentData = doc.data();
       return Aliment(
+        id: doc.id,
         name: alimentData["name"],
         calories: alimentData["calories"],
         protein: alimentData["proteines"],
@@ -72,7 +73,11 @@ class _AlimentState extends State<AlimentScreen> {
       body: aliments == null
           ? const Center(child: CircularProgressIndicator())
           : Column(
-              children: [Expanded(child: AlimentList(aliments: aliments))],
+              children: [
+                Expanded(
+                  child: AlimentList(aliments: aliments, user: widget.user),
+                )
+              ],
             ),
     );
   }
