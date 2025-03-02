@@ -4,9 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_regex/flutter_regex.dart';
 import 'package:macro_meter/widgets/user_avatar.dart';
 import 'package:macro_meter/widgets/form_fields.dart';
+import 'package:flutter/services.dart';
+import 'dart:convert';
 
 final _firebase = FirebaseAuth.instance;
 
@@ -38,6 +39,29 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
 
   File? _selectedAvatar;
   bool _isAvatarChosen = true;
+
+  Future<void> loadJsonData(dynamic userCredentials) async {
+    String jsonString = await rootBundle.loadString('assets/aliments.json');
+
+    List<dynamic> jsonData = jsonDecode(jsonString);
+
+    for (var item in jsonData) {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userCredentials.user!.uid)
+          .collection("aliments")
+          .add({
+        "name": item["aliment"],
+        "calories": item["calories"],
+        "proteines": item["proteines"],
+        "fat": item["fat"],
+        "carbs": item["carbs"],
+        "category": item["categorie"],
+        "portion": item["portion"],
+        "quantity": item["quantity"]
+      });
+    }
+  }
 
   void _submit() async {
     final isValid = _form.currentState!.validate();
@@ -85,6 +109,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
           "sexe": _enteredSexe,
           "calories": int.parse(_enteredCalories)
         });
+        await loadJsonData(userCredentials);
       }
     } on FirebaseAuthException catch (error) {
       if (error.code == "email-already-in-use") {
