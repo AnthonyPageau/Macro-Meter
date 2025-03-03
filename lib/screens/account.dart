@@ -6,8 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:macro_meter/screens/authentication.dart';
-import 'package:macro_meter/widgets/show_alert_dialog.dart';
-import 'package:macro_meter/widgets/password_alert_dialog.dart';
+import 'package:macro_meter/widgets/account/show_alert_dialog.dart';
+import 'package:macro_meter/widgets/account/password_alert_dialog.dart';
 import 'package:macro_meter/widgets/user_avatar.dart';
 import 'package:macro_meter/widgets/form_fields.dart';
 

@@ -44,13 +44,13 @@ class PasswordAlertDialogState extends State<PasswordAlertDialog> {
     final form = GlobalKey<FormState>();
 
     Widget cancelButton = ElevatedButton(
-      child: Text("Cancel"),
+      child: const Text("Cancel"),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = ElevatedButton(
-      child: Text("Modifier"),
+      child: const Text("Modifier"),
       onPressed: () {
         final isValid = form.currentState!.validate();
         if (!isValid) {
