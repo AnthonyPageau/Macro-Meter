@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
 enum Category { protein, fruitsAndVegetable, dairy, cereal, other }
@@ -26,13 +24,13 @@ class Aliment {
       required this.quantity,
       required this.category});
 
-  final String id;
-  final String name;
-  final int calories;
-  final num protein;
-  final num carbs;
-  final num fat;
-  final Unit unit;
-  final num quantity;
-  final Category category;
+  String name;
+  String id;
+  int calories;
+  num protein;
+  num carbs;
+  num fat;
+  Unit unit;
+  num quantity;
+  Category category;
 }

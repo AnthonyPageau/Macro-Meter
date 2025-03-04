@@ -197,13 +197,12 @@ Widget buildVerifyPasswordField(
       onSaved: onSaved);
 }
 
-Widget buildMacroField(String? value, String? initialValue, String? label,
-    Function(String?) onSaved) {
+Widget buildMacroField(num? value, String? label, Function(String?) onSaved) {
   return TextFormField(
     decoration: InputDecoration(labelText: "$label :"),
     keyboardType: TextInputType.numberWithOptions(signed: false, decimal: true),
     autocorrect: false,
-    initialValue: initialValue,
+    initialValue: value.toString(),
     validator: (value) {
       if (value == null || value.trim().isEmpty) {
         return "$label ne peut pas être vide";

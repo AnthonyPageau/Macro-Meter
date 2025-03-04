@@ -1,17 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:macro_meter/models/aliment.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class AlimentItem extends StatelessWidget {
-  const AlimentItem(this.aliment, {super.key});
+import 'package:macro_meter/models/aliment.dart';
+import 'package:macro_meter/widgets/aliments/aliment_modify.dart';
+
+class AlimentItem extends StatefulWidget {
+  const AlimentItem({required this.aliment, required this.user, super.key});
 
   final Aliment aliment;
+  final User user;
+
+  @override
+  State<AlimentItem> createState() {
+    return _AlimentItemState();
+  }
+}
+
+class _AlimentItemState extends State<AlimentItem> {
+  late Aliment aliment;
+
+  @override
+  void initState() {
+    super.initState();
+    aliment = widget.aliment;
+  }
+
+  void _modifyAliment(Aliment modifiedAliment) {
+    setState(() {
+      aliment = modifiedAliment;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Material(
       child: Card(
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (ctx) => AlimentModify(
+                user: widget.user,
+                aliment: aliment,
+                onModifyAliment: _modifyAliment,
+              ),
+            );
+          },
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
