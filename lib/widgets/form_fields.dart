@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_regex/flutter_regex.dart';
+import 'package:macro_meter/models/aliment.dart';
 
 Widget buildAgeField(
     String? value, String? initialValue, Function(String?) onSaved) {
@@ -43,7 +44,7 @@ Widget buildHeightField(
 
 Widget buildSexeField(String? value, Function(String?) onChanged) {
   return DropdownButton<String>(
-    hint: Text("Objectif"),
+    hint: Text("Sexe"),
     value: value,
     items: <String>["Homme", "Femme", "Autres"].map((String value) {
       return DropdownMenuItem<String>(
@@ -194,4 +195,87 @@ Widget buildVerifyPasswordField(
         return null;
       },
       onSaved: onSaved);
+}
+
+Widget buildMacroField(String? value, String? initialValue, String? label,
+    Function(String?) onSaved) {
+  return TextFormField(
+    decoration: InputDecoration(labelText: "$label :"),
+    keyboardType: TextInputType.numberWithOptions(signed: false, decimal: true),
+    autocorrect: false,
+    initialValue: initialValue,
+    validator: (value) {
+      if (value == null || value.trim().isEmpty) {
+        return "$label ne peut pas être vide";
+      }
+
+      if (num.tryParse(value) == null) {
+        return "$label doit être un nombre";
+      }
+      return null;
+    },
+    onSaved: onSaved,
+  );
+}
+
+Widget buildCategoryField(Category? value, Function(Category?) onChanged) {
+  return DropdownButton<Category>(
+    hint: Text("Categorie"),
+    value: value,
+    items: Category.values.map((Category type) {
+      return DropdownMenuItem<Category>(
+        value: type,
+        child: Text(_categoryToString(type)),
+      );
+    }).toList(),
+    onChanged: onChanged,
+  );
+}
+
+String _categoryToString(Category type) {
+  switch (type) {
+    case Category.protein:
+      return "Protéines";
+    case Category.fruitsAndVegetable:
+      return "Fruits/légumes";
+    case Category.dairy:
+      return "Produits laitier";
+    case Category.cereal:
+      return "Céréales";
+    case Category.other:
+      return "Autres";
+  }
+}
+
+Widget buildUnitField(Unit? value, Function(Unit?) onChanged) {
+  return DropdownButton<Unit>(
+    hint: Text("Unité"),
+    value: value,
+    items: Unit.values.map((Unit type) {
+      return DropdownMenuItem<Unit>(
+        value: type,
+        child: Text(_unitToString(type)),
+      );
+    }).toList(),
+    onChanged: onChanged,
+  );
+}
+
+String _unitToString(Unit type) {
+  switch (type) {
+    case Unit.grams:
+      return "Gramme";
+    case Unit.ml:
+      return "mL";
+    case Unit.cup:
+      return "Tasse";
+    case Unit.tbsp:
+      return "Tbsp";
+    case Unit.tsp:
+      return "Tsp";
+    case Unit.ounces:
+      return "Once";
+    case Unit.item:
+      return "Portion";
+  }
 }

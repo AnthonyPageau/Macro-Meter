@@ -34,8 +34,8 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   var _enteredWeight = "";
   var _enteredHeight = "";
   var _enteredCalories = "";
-  var _enteredObjectif = "Maintient";
-  var _enteredSexe = "Homme";
+  String? _enteredObjectif;
+  String? _enteredSexe;
 
   File? _selectedAvatar;
   bool _isAvatarChosen = true;
@@ -57,7 +57,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
         "fat": item["fat"],
         "carbs": item["carbs"],
         "category": item["categorie"],
-        "portion": item["portion"],
+        "unit": item["unit"],
         "quantity": item["quantity"]
       });
     }

@@ -10,6 +10,7 @@ class AlimentList extends StatelessWidget {
   final dynamic user;
 
   void supprimerAliment(Aliment aliment) {
+    aliments.remove(aliment);
     var doc = FirebaseFirestore.instance
         .collection("users")
         .doc(user.uid)
