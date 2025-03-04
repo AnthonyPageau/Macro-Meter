@@ -56,7 +56,10 @@ class AlimentList extends StatelessWidget {
             ),
           );
         },
-        child: AlimentItem(aliments[index]),
+        child: AlimentItem(
+          aliment: aliments[index],
+          user: user,
+        ),
       ),
     );
   }

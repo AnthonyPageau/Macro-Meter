@@ -4,25 +4,24 @@ import 'package:macro_meter/models/aliment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:macro_meter/widgets/form_fields.dart';
 
-class AlimentCreate extends StatefulWidget {
-  const AlimentCreate(
-      {required this.user, required this.onAddAliment, super.key});
+class AlimentModify extends StatefulWidget {
+  AlimentModify(
+      {required this.user,
+      required this.aliment,
+      required this.onModifyAliment,
+      super.key});
 
   final User user;
-  final void Function(Aliment newAliment) onAddAliment;
+  Aliment aliment;
+  final void Function(Aliment modifiedAliment) onModifyAliment;
+
   @override
   State<StatefulWidget> createState() {
-    return _AlimentCreateState();
+    return _AlimentModifyState();
   }
 }
 
-class _AlimentCreateState extends State<AlimentCreate> {
-  String? alimentName;
-  num? fatsValue;
-  num? proteinesValue;
-  num? carbsValue;
-  int? caloriesValue;
-  num? quantityValue;
+class _AlimentModifyState extends State<AlimentModify> {
   Category? categoryValue;
   Unit? unitValue;
   Aliment? newAliment;
@@ -38,38 +37,29 @@ class _AlimentCreateState extends State<AlimentCreate> {
       }
 
       form.currentState!.save();
-      DocumentReference docRef = await FirebaseFirestore.instance
+
+      await FirebaseFirestore.instance
           .collection("users")
           .doc(widget.user.uid)
           .collection("aliments")
-          .add({
-        "name": alimentName,
-        "calories": caloriesValue,
-        "proteines": proteinesValue,
-        "fat": fatsValue,
-        "carbs": carbsValue,
-        "category": categoryValue!.name,
-        "unit": unitValue!.name,
-        "quantity": quantityValue
+          .doc(widget.aliment.id)
+          .update({
+        "name": widget.aliment.name,
+        "calories": widget.aliment.calories,
+        "proteines": widget.aliment.protein,
+        "fat": widget.aliment.fat,
+        "carbs": widget.aliment.carbs,
+        "category": widget.aliment.category.name,
+        "unit": widget.aliment.unit.name,
+        "quantity": widget.aliment.quantity
       });
 
-      widget.onAddAliment(
-        Aliment(
-            id: docRef.id,
-            name: alimentName!,
-            calories: caloriesValue!,
-            protein: proteinesValue!,
-            carbs: carbsValue!,
-            fat: fatsValue!,
-            unit: unitValue!,
-            quantity: quantityValue!,
-            category: categoryValue!),
-      );
+      widget.onModifyAliment(widget.aliment);
 
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Aliment Ajouté!"),
+          content: Text("Aliment Modifié!"),
         ),
       );
       Navigator.pop(context);
@@ -101,10 +91,10 @@ class _AlimentCreateState extends State<AlimentCreate> {
         form.currentState!.save();
         _submit();
       },
-      child: const Text("Ajouter"),
+      child: const Text("Modifier"),
     );
     return AlertDialog(
-      title: const Text("Ajouter un aliment"),
+      title: const Text("Modifier l'aliment"),
       content: Form(
         key: form,
         child: Column(
@@ -116,18 +106,18 @@ class _AlimentCreateState extends State<AlimentCreate> {
               children: [
                 Expanded(
                   child: buildSurnameField(
-                    alimentName,
-                    null,
+                    widget.aliment.name,
+                    widget.aliment.name,
                     (value) {
-                      alimentName = value!;
+                      widget.aliment.name = value!;
                     },
                   ),
                 ),
                 const SizedBox(width: 24),
                 Expanded(
-                    child: buildMacroField(caloriesValue ?? 0, "Calories",
+                    child: buildMacroField(widget.aliment.calories, "Calories",
                         (value) {
-                  caloriesValue = int.parse(value!);
+                  widget.aliment.calories = int.parse(value!);
                 }))
               ],
             ),
@@ -135,20 +125,20 @@ class _AlimentCreateState extends State<AlimentCreate> {
               children: [
                 Expanded(
                   child: buildMacroField(
-                    proteinesValue ?? 0,
+                    widget.aliment.protein,
                     "Protéines",
                     (value) {
-                      proteinesValue = num.parse(value!);
+                      widget.aliment.protein = num.parse(value!);
                     },
                   ),
                 ),
                 const SizedBox(width: 24),
                 Expanded(
                   child: buildMacroField(
-                    carbsValue ?? 0,
+                    widget.aliment.carbs,
                     "Glucides",
                     (value) {
-                      carbsValue = num.parse(value!);
+                      widget.aliment.carbs = num.parse(value!);
                     },
                   ),
                 ),
@@ -158,20 +148,20 @@ class _AlimentCreateState extends State<AlimentCreate> {
               children: [
                 Expanded(
                   child: buildMacroField(
-                    fatsValue ?? 0,
+                    widget.aliment.fat,
                     "Lipides",
                     (value) {
-                      fatsValue = num.parse(value!);
+                      widget.aliment.fat = num.parse(value!);
                     },
                   ),
                 ),
                 const SizedBox(width: 24),
                 Expanded(
                   child: buildMacroField(
-                    quantityValue ?? 0,
+                    widget.aliment.quantity,
                     "Quantité",
                     (value) {
-                      quantityValue = num.parse(value!);
+                      widget.aliment.quantity = num.parse(value!);
                     },
                   ),
                 ),
@@ -181,19 +171,19 @@ class _AlimentCreateState extends State<AlimentCreate> {
               children: [
                 Expanded(
                   child: buildCategoryField(
-                    categoryValue,
+                    widget.aliment.category,
                     (value) {
                       setState(() {
-                        categoryValue = value!;
+                        widget.aliment.category = value!;
                       });
                     },
                   ),
                 ),
                 const SizedBox(width: 13),
                 Expanded(
-                    child: buildUnitField(unitValue, (value) {
+                    child: buildUnitField(widget.aliment.unit, (value) {
                   setState(() {
-                    unitValue = value!;
+                    widget.aliment.unit = value!;
                   });
                 }))
               ],
