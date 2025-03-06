@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:macro_meter/screens/account.dart';
 import 'package:macro_meter/screens/aliment.dart';
+import 'package:macro_meter/screens/plans.dart';
 import 'package:macro_meter/widgets/menu.dart';
 
 class Home extends StatefulWidget {
@@ -33,6 +34,15 @@ class _HomeState extends State<Home> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (ctx) => AlimentScreen(
+              user: widget.user,
+            ),
+          ),
+        );
+      case "Plans":
+        Navigator.of(context).pop();
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (ctx) => PlanScreen(
               user: widget.user,
             ),
           ),
