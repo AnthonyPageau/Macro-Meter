@@ -18,7 +18,7 @@ class PlanScreen extends StatefulWidget {
 }
 
 class _PlanScreenState extends State<PlanScreen> {
-  List<Plan> plans = [];
+  dynamic plans;
 
   @override
   void initState() {
@@ -84,7 +84,7 @@ class _PlanScreenState extends State<PlanScreen> {
       return Plan(
           id: planDoc.id,
           name: planData["name"],
-          date: planData["date"],
+          date: DateTime.parse(planData["date"] as String),
           meals: mealList);
     }).toList());
 
@@ -133,9 +133,13 @@ class _PlanScreenState extends State<PlanScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [Expanded(child: PlanList(plans: plans, user: widget.user))],
-      ),
+      body: plans == null
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                Expanded(child: PlanList(plans: plans, user: widget.user))
+              ],
+            ),
     );
   }
 }

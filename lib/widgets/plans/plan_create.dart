@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:macro_meter/models/plan.dart';
@@ -20,21 +21,38 @@ class _PlanCreateState extends State<PlanCreate> {
   final form = GlobalKey<FormState>();
 
   void _submit() async {
-    final isValid = form.currentState!.validate();
+    try {
+      final isValid = form.currentState!.validate();
 
-    if (!isValid) {
-      return;
+      if (!isValid) {
+        return;
+      }
+      form.currentState!.save();
+      DateTime date = DateTime.now();
+      DocumentReference docRef = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(widget.user.uid)
+          .collection("plans")
+          .add({"name": planName, "date": date.toString()});
+
+      widget.onAddPlan(
+          Plan(id: docRef.id, name: planName!, date: DateTime.now()));
+
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Plan Ajouté!"),
+        ),
+      );
+      Navigator.of(context).pop();
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.code),
+        ),
+      );
     }
-    form.currentState!.save();
-
-    widget.onAddPlan(Plan(id: "test", name: planName!, date: DateTime.now()));
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Plan Ajouté!"),
-      ),
-    );
-    Navigator.of(context).pop();
   }
 
   @override
