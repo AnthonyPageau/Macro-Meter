@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:macro_meter/models/plan.dart';
@@ -16,14 +17,38 @@ class PlanEdit extends StatefulWidget {
 }
 
 class _PlanEditState extends State<PlanEdit> {
-  Meal meal = Meal(id: "test", name: "salut");
-  List<Meal> meals = [];
-
   @override
   void initState() {
     super.initState();
+  }
 
-    meals.add(meal);
+  void addMeal() async {
+    try {
+      DocumentReference docRef = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.user.uid)
+          .collection("plans")
+          .doc(widget.plan.id)
+          .collection("meals")
+          .add({
+        "name": widget.plan.meals.length.toString(),
+      });
+
+      widget.plan.meals.add(
+        Meal(
+          id: docRef.id,
+          name: "Meal ${widget.plan.meals.length.toString()}",
+        ),
+      );
+      setState(() {});
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.code),
+        ),
+      );
+    }
   }
 
   @override
@@ -46,7 +71,32 @@ class _PlanEditState extends State<PlanEdit> {
         ),
       ),
       body: Column(
-        children: [Expanded(child: MealList(meals: meals, user: widget.user))],
+        children: [
+          if (widget.plan.meals.isEmpty) ...[
+            Container(
+              padding: EdgeInsets.only(left: 14),
+              alignment: Alignment.centerLeft,
+              child: ElevatedButton(
+                onPressed: () {
+                  addMeal();
+                },
+                child: const Text("Ajouter Repas"),
+              ),
+            )
+          ],
+          Expanded(
+            child: MealList(
+              meals: widget.plan.meals,
+              user: widget.user,
+              plan: widget.plan,
+              onAddMeal: (newMeal) {
+                setState(() {
+                  widget.plan.meals.add(newMeal);
+                });
+              },
+            ),
+          )
+        ],
       ),
     );
   }

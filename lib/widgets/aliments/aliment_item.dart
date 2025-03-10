@@ -71,7 +71,7 @@ class _AlimentItemState extends State<AlimentItem> {
                   children: [
                     Text("Calories: ${aliment.calories}"),
                     const Spacer(),
-                    Text("Protéine: ${aliment.protein}"),
+                    Text("Protéine: ${aliment.proteines}"),
                     const Spacer(),
                     Text("Glucide: ${aliment.carbs}"),
                     const Spacer(),

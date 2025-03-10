@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:macro_meter/models/meal.dart';
 
 class Plan {

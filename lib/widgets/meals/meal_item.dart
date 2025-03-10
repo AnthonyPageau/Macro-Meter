@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:macro_meter/models/meal.dart';
+import 'package:macro_meter/models/plan.dart';
 import 'package:macro_meter/models/aliment.dart';
 import 'package:macro_meter/widgets/meals/aliment_list.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MealItem extends StatefulWidget {
-  const MealItem({required this.meal, required this.user, super.key});
+  const MealItem(
+      {required this.meal,
+      required this.user,
+      required this.plan,
+      required this.onAddMeal,
+      super.key});
 
   final Meal meal;
   final User user;
+  final Plan plan;
+  final void Function(Meal newMeal) onAddMeal;
 
   @override
   State<StatefulWidget> createState() {
@@ -18,22 +27,41 @@ class MealItem extends StatefulWidget {
 
 class _MealItemState extends State<MealItem> {
   late Meal meal;
-  Aliment aliment = Aliment(
-      id: "id",
-      name: "name",
-      calories: 10,
-      protein: 10,
-      carbs: 10,
-      fat: 10,
-      unit: Unit.grams,
-      quantity: 100,
-      category: Category.cereal);
-  List<Aliment> aliments = [];
+  late Plan plan;
+
   @override
   void initState() {
     super.initState();
-    aliments.add(aliment);
     meal = widget.meal;
+    plan = widget.plan;
+  }
+
+  void addMeal() async {
+    try {
+      DocumentReference docRef = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.user.uid)
+          .collection("plans")
+          .doc(widget.plan.id)
+          .collection("meals")
+          .add({
+        "name": widget.plan.meals.length.toString(),
+      });
+
+      widget.onAddMeal(
+        Meal(
+          id: docRef.id,
+          name: "Meal ${widget.plan.meals.length.toString()}",
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.code),
+        ),
+      );
+    }
   }
 
   @override
@@ -87,20 +115,21 @@ class _MealItemState extends State<MealItem> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.fromLTRB(12, 12, 36, 12),
                   decoration: BoxDecoration(color: Colors.grey),
                   alignment: Alignment.centerRight,
                   child: Text(
-                    "Calories",
-                    style: TextStyle(fontSize: 22),
+                    "Cals",
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
                 Container(
-                    padding: EdgeInsets.all(12),
+                    padding: EdgeInsets.fromLTRB(12, 12, 48, 12),
                     decoration: BoxDecoration(color: Colors.white),
-                    child: AlimentList(aliments: aliments, user: widget.user)),
+                    child: AlimentList(
+                        aliments: meal.aliments, user: widget.user)),
                 Container(
-                  padding: EdgeInsets.fromLTRB(12, 12, 24, 12),
+                  padding: EdgeInsets.fromLTRB(12, 12, 48, 12),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -113,19 +142,29 @@ class _MealItemState extends State<MealItem> {
                       Column(
                         children: [
                           Text("Prot", style: TextStyle(fontSize: 16)),
-                          Text("0", style: TextStyle(fontSize: 16)),
+                          Text(meal.totalProteines().toString(),
+                              style: TextStyle(fontSize: 16)),
                         ],
                       ),
                       Column(
                         children: [
                           Text("Glu", style: TextStyle(fontSize: 16)),
-                          Text("0", style: TextStyle(fontSize: 16)),
+                          Text(meal.totalCarbs().toString(),
+                              style: TextStyle(fontSize: 16)),
                         ],
                       ),
                       Column(
                         children: [
                           Text("Lip", style: TextStyle(fontSize: 16)),
-                          Text("0", style: TextStyle(fontSize: 16)),
+                          Text(meal.totalFats().toString(),
+                              style: TextStyle(fontSize: 16)),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text("", style: TextStyle(fontSize: 16)),
+                          Text(meal.totalCalories().toString(),
+                              style: TextStyle(fontSize: 16)),
                         ],
                       ),
                     ],
@@ -150,7 +189,10 @@ class _MealItemState extends State<MealItem> {
               padding: EdgeInsets.only(left: 14),
               alignment: Alignment.centerLeft,
               child: ElevatedButton(
-                  onPressed: () {}, child: const Text("Ajouter Repas")))
+                  onPressed: () {
+                    addMeal();
+                  },
+                  child: const Text("Ajouter Repas")))
         ],
       ),
     );

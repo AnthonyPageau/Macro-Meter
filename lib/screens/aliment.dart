@@ -36,7 +36,7 @@ class _AlimentState extends State<AlimentScreen> {
         id: doc.id,
         name: alimentData["name"],
         calories: alimentData["calories"],
-        protein: alimentData["proteines"],
+        proteines: alimentData["proteines"],
         carbs: alimentData["carbs"],
         fat: alimentData["fat"],
         quantity: alimentData["quantity"],

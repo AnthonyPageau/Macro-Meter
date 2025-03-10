@@ -46,7 +46,7 @@ class _AlimentModifyState extends State<AlimentModify> {
           .update({
         "name": widget.aliment.name,
         "calories": widget.aliment.calories,
-        "proteines": widget.aliment.protein,
+        "proteines": widget.aliment.proteines,
         "fat": widget.aliment.fat,
         "carbs": widget.aliment.carbs,
         "category": widget.aliment.category.name,
@@ -125,10 +125,10 @@ class _AlimentModifyState extends State<AlimentModify> {
               children: [
                 Expanded(
                   child: buildMacroField(
-                    widget.aliment.protein,
+                    widget.aliment.proteines,
                     "Protéines",
                     (value) {
-                      widget.aliment.protein = num.parse(value!);
+                      widget.aliment.proteines = num.parse(value!);
                     },
                   ),
                 ),

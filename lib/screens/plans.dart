@@ -63,7 +63,7 @@ class _PlanScreenState extends State<PlanScreen> {
               id: alimentDoc.id,
               name: alimentData["name"],
               calories: alimentData["calories"],
-              protein: alimentData["proteines"],
+              proteines: alimentData["proteines"],
               carbs: alimentData["carbs"],
               fat: alimentData["fat"],
               unit: alimentData["unit"],
@@ -72,13 +72,7 @@ class _PlanScreenState extends State<PlanScreen> {
         }).toList();
 
         return Meal(
-            id: mealDoc.id,
-            name: mealData["name"],
-            aliments: alimentList,
-            totalCalories: mealData["totalCalories"],
-            totalCarbs: mealData["totalCarbs"],
-            totalFats: mealData["totalFats"],
-            totalProteines: mealData["totalProteines"]);
+            id: mealDoc.id, name: mealData["name"], aliments: alimentList);
       }).toList());
 
       return Plan(

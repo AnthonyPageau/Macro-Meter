@@ -20,15 +20,49 @@ class _AlimentItemState extends State<AlimentItem> {
     return Row(children: [
       Text(widget.aliment.name),
       const Spacer(),
-      IconButton(onPressed: () {}, icon: Icon(Icons.delete_forever_outlined)),
+      IconButton(
+        onPressed: () {},
+        icon: Icon(Icons.delete_forever_outlined),
+        iconSize: 30,
+      ),
       Container(
-        width: 50.0,
+        width: 110.0,
         height: 30.0,
         decoration: BoxDecoration(color: Colors.grey),
-        child: TextFormField(),
+        child: Row(
+          children: [
+            Container(
+              width: 45,
+              height: 30,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.grey, width: 2),
+              ),
+              child: InkWell(
+                onTap: () {
+                  print('salut');
+                },
+                child: Center(
+                  child: Text(
+                    widget.aliment.quantity.toString(),
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ),
+              ),
+            ),
+            Center(
+              child: Text(
+                widget.aliment.unitToString(widget.aliment.unit),
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 84, 84, 84),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       const Spacer(),
-      Text(widget.aliment.calories.toString())
+      Text(widget.aliment.calories.toString()),
     ]);
   }
 }

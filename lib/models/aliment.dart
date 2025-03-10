@@ -17,7 +17,7 @@ class Aliment {
       {required this.id,
       required this.name,
       required this.calories,
-      required this.protein,
+      required this.proteines,
       required this.carbs,
       required this.fat,
       required this.unit,
@@ -27,10 +27,29 @@ class Aliment {
   String name;
   String id;
   int calories;
-  num protein;
+  num proteines;
   num carbs;
   num fat;
   Unit unit;
   num quantity;
   Category category;
+
+  String unitToString(Unit type) {
+    switch (type) {
+      case Unit.grams:
+        return "Grams";
+      case Unit.cup:
+        return "Tasse";
+      case Unit.tbsp:
+        return "Tbsp";
+      case Unit.tsp:
+        return "Tsp";
+      case Unit.ounces:
+        return "Onces";
+      case Unit.item:
+        return "Item";
+      case Unit.ml:
+        return "mL";
+    }
+  }
 }

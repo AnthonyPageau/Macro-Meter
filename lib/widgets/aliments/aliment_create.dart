@@ -58,7 +58,7 @@ class _AlimentCreateState extends State<AlimentCreate> {
             id: docRef.id,
             name: alimentName!,
             calories: caloriesValue!,
-            protein: proteinesValue!,
+            proteines: proteinesValue!,
             carbs: carbsValue!,
             fat: fatsValue!,
             unit: unitValue!,
