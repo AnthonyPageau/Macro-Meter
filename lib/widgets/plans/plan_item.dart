@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:macro_meter/screens/plan_edit.dart';
 import 'package:intl/intl.dart';
 
 import 'package:macro_meter/models/plan.dart';
@@ -30,7 +31,16 @@ class _AlimentItemState extends State<PlanItem> {
     return Material(
       child: Card(
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (ctx) => PlanEdit(
+                  user: widget.user,
+                  plan: plan,
+                ),
+              ),
+            );
+          },
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
