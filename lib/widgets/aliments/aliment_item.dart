@@ -5,10 +5,18 @@ import 'package:macro_meter/models/aliment.dart';
 import 'package:macro_meter/widgets/aliments/aliment_modify.dart';
 
 class AlimentItem extends StatefulWidget {
-  const AlimentItem({required this.aliment, required this.user, super.key});
+  AlimentItem({
+    required this.aliment,
+    required this.user,
+    required this.fromPage,
+    this.onAddAliment,
+    super.key,
+  });
 
   final Aliment aliment;
   final User user;
+  final String fromPage;
+  void Function(Aliment newAliment)? onAddAliment;
 
   @override
   State<AlimentItem> createState() {
@@ -37,14 +45,18 @@ class _AlimentItemState extends State<AlimentItem> {
       child: Card(
         child: InkWell(
           onTap: () {
-            showDialog(
-              context: context,
-              builder: (ctx) => AlimentModify(
-                user: widget.user,
-                aliment: aliment,
-                onModifyAliment: _modifyAliment,
-              ),
-            );
+            if (widget.fromPage == "Home") {
+              showDialog(
+                context: context,
+                builder: (ctx) => AlimentModify(
+                  user: widget.user,
+                  aliment: aliment,
+                  onModifyAliment: _modifyAliment,
+                ),
+              );
+            } else {
+              widget.onAddAliment!(aliment);
+            }
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:macro_meter/models/plan.dart';
 import 'package:macro_meter/models/meal.dart';
 import 'package:macro_meter/widgets/meals/meal_list.dart';
+import 'package:macro_meter/widgets/plans/plan_edit_footer.dart';
 
 class PlanEdit extends StatefulWidget {
   PlanEdit({required this.plan, required this.user, super.key});
@@ -98,6 +99,7 @@ class _PlanEditState extends State<PlanEdit> {
           )
         ],
       ),
+      bottomSheet: PlanEditFooter(),
     );
   }
 }

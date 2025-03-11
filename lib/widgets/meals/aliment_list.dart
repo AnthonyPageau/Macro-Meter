@@ -19,6 +19,7 @@ class _AlimentListState extends State<AlimentList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: widget.aliments.length,
       itemBuilder: (context, index) {

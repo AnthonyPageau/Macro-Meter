@@ -5,9 +5,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:macro_meter/widgets/aliments/aliment_create.dart';
 
 class AlimentScreen extends StatefulWidget {
-  const AlimentScreen({super.key, required this.user});
+  const AlimentScreen(
+      {super.key,
+      required this.user,
+      required this.fromPage,
+      this.onAddAliment});
 
   final dynamic user;
+  final String fromPage;
+  final void Function(Aliment newAliment)? onAddAliment;
 
   @override
   State<StatefulWidget> createState() {
@@ -103,7 +109,21 @@ class _AlimentState extends State<AlimentScreen> {
           : Column(
               children: [
                 Expanded(
-                  child: AlimentList(aliments: aliments, user: widget.user),
+                  child: widget.fromPage == "Home"
+                      ? AlimentList(
+                          aliments: aliments,
+                          user: widget.user,
+                          fromPage: widget.fromPage,
+                        )
+                      : AlimentList(
+                          aliments: aliments,
+                          user: widget.user,
+                          fromPage: widget.fromPage,
+                          onAddAliment: (newAliment) {
+                            widget.onAddAliment!(newAliment);
+                            Navigator.of(context).pop();
+                          },
+                        ),
                 )
               ],
             ),

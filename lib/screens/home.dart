@@ -35,6 +35,7 @@ class _HomeState extends State<Home> {
           MaterialPageRoute(
             builder: (ctx) => AlimentScreen(
               user: widget.user,
+              fromPage: "Home",
             ),
           ),
         );

@@ -17,7 +17,7 @@ class Meal {
       total += aliment.calories;
     }
 
-    return total;
+    return double.parse(total.toStringAsFixed(2));
   }
 
   num totalProteines() {
@@ -26,7 +26,7 @@ class Meal {
       total += aliment.proteines;
     }
 
-    return total;
+    return double.parse(total.toStringAsFixed(2));
   }
 
   num totalCarbs() {
@@ -35,7 +35,7 @@ class Meal {
       total += aliment.carbs;
     }
 
-    return total;
+    return double.parse(total.toStringAsFixed(2));
   }
 
   num totalFats() {
@@ -44,6 +44,6 @@ class Meal {
       total += aliment.fat;
     }
 
-    return total;
+    return double.parse(total.toStringAsFixed(2));
   }
 }
