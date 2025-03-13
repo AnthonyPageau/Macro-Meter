@@ -95,6 +95,11 @@ class _PlanEditState extends State<PlanEdit> {
               onDeleteALiment: (deletedAliment) {
                 setState(() {});
               },
+              onDeleteMeal: (deletedMeal) {
+                setState(() {
+                  widget.plan.meals.remove(deletedMeal);
+                });
+              },
             ),
           )
         ],

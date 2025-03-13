@@ -7,14 +7,16 @@ import 'package:macro_meter/models/aliment.dart';
 import 'package:macro_meter/widgets/meals/meal_item.dart';
 
 class MealList extends StatelessWidget {
-  const MealList(
-      {super.key,
-      required this.meals,
-      required this.user,
-      required this.plan,
-      required this.onAddMeal,
-      required this.onAddAliment,
-      required this.onDeleteALiment});
+  const MealList({
+    super.key,
+    required this.meals,
+    required this.user,
+    required this.plan,
+    required this.onAddMeal,
+    required this.onAddAliment,
+    required this.onDeleteALiment,
+    required this.onDeleteMeal,
+  });
 
   final List<Meal> meals;
   final User user;
@@ -22,6 +24,7 @@ class MealList extends StatelessWidget {
   final void Function(Meal newMeal) onAddMeal;
   final void Function(Aliment newAliment) onAddAliment;
   final void Function(Aliment deletedAliment) onDeleteALiment;
+  final void Function(Meal deletedMeal) onDeleteMeal;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +43,9 @@ class MealList extends StatelessWidget {
           },
           onDeleteALiment: (deletedAliment) {
             onDeleteALiment(deletedAliment);
+          },
+          onDeleteMeal: (deletedMeal) {
+            onDeleteMeal(deletedMeal);
           },
         );
       },

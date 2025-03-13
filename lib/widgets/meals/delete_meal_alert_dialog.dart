@@ -4,44 +4,53 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:macro_meter/models/plan.dart';
 import 'package:macro_meter/models/meal.dart';
-import 'package:macro_meter/models/aliment.dart';
 
-class DeleteAlimentAlertDialog extends StatefulWidget {
-  const DeleteAlimentAlertDialog(
+class DeleteMealAlertDialog extends StatefulWidget {
+  const DeleteMealAlertDialog(
       {required this.user,
-      required this.aliment,
       required this.plan,
       required this.meal,
-      required this.onDeleteALiment,
+      required this.onDeleteMeal,
       super.key});
 
   final User user;
   final Plan plan;
   final Meal meal;
-  final Aliment aliment;
-  final void Function(Aliment deletedAliment) onDeleteALiment;
+  final void Function(Meal deletedMeal) onDeleteMeal;
 
   @override
   State<StatefulWidget> createState() {
-    return _DeleteAlimentAlertDialogState();
+    return _DeleteMealAlertDialogState();
   }
 }
 
-class _DeleteAlimentAlertDialogState extends State<DeleteAlimentAlertDialog> {
-  void deleteAliment() async {
+class _DeleteMealAlertDialogState extends State<DeleteMealAlertDialog> {
+  void deleteMeal() async {
     try {
-      var doc = FirebaseFirestore.instance
+      var docMeal = FirebaseFirestore.instance
+          .collection("users")
+          .doc(widget.user.uid)
+          .collection("plans")
+          .doc(widget.plan.id)
+          .collection("meals")
+          .doc(widget.meal.id);
+
+      CollectionReference colAliments = FirebaseFirestore.instance
           .collection("users")
           .doc(widget.user.uid)
           .collection("plans")
           .doc(widget.plan.id)
           .collection("meals")
           .doc(widget.meal.id)
-          .collection("aliments")
-          .doc(widget.aliment.id);
+          .collection("aliments");
 
-      doc.delete();
-      widget.onDeleteALiment(widget.aliment);
+      QuerySnapshot collectionSnapshot = await colAliments.get();
+      for (var doc in collectionSnapshot.docs) {
+        await doc.reference.delete();
+      }
+
+      docMeal.delete();
+      widget.onDeleteMeal(widget.meal);
       Navigator.pop(context);
     } on FirebaseAuthException catch (error) {
       ScaffoldMessenger.of(context).clearSnackBars();
@@ -56,7 +65,7 @@ class _DeleteAlimentAlertDialogState extends State<DeleteAlimentAlertDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Voulez-vous supprimer l'aliment?"),
+      title: Text("Voulez-vous supprimer le repas?"),
       actions: [
         ElevatedButton(
           child: Text("Cancel"),
@@ -67,7 +76,7 @@ class _DeleteAlimentAlertDialogState extends State<DeleteAlimentAlertDialog> {
         ElevatedButton(
           child: Text("Supprimer"),
           onPressed: () {
-            deleteAliment();
+            deleteMeal();
           },
         ),
       ],

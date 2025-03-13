@@ -6,6 +6,7 @@ import 'package:macro_meter/models/aliment.dart';
 import 'package:macro_meter/widgets/meals/aliment_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:macro_meter/screens/aliment.dart';
+import 'package:macro_meter/widgets/meals/delete_meal_alert_dialog.dart';
 
 class MealItem extends StatefulWidget {
   const MealItem(
@@ -15,6 +16,7 @@ class MealItem extends StatefulWidget {
       required this.onAddMeal,
       required this.onAddAliment,
       required this.onDeleteALiment,
+      required this.onDeleteMeal,
       super.key});
 
   final Meal meal;
@@ -23,6 +25,7 @@ class MealItem extends StatefulWidget {
   final void Function(Meal newMeal) onAddMeal;
   final void Function(Aliment newAliment) onAddAliment;
   final void Function(Aliment deletedAliment) onDeleteALiment;
+  final void Function(Meal deletedMeal) onDeleteMeal;
 
   @override
   State<StatefulWidget> createState() {
@@ -197,11 +200,23 @@ class _MealItemState extends State<MealItem> {
                       ),
                       const Spacer(),
                       IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => DeleteMealAlertDialog(
+                                user: widget.user,
+                                meal: widget.meal,
+                                plan: widget.plan,
+                                onDeleteMeal: (deletedMeal) {
+                                  widget.onDeleteMeal(deletedMeal);
+                                },
+                              ),
+                            );
+                          },
                           icon: const Icon(
-                            Icons.more_vert,
+                            Icons.close,
                             color: Colors.white,
-                            size: 40,
+                            size: 30,
                           ))
                     ],
                   ),
