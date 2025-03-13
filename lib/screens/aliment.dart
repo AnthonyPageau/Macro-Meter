@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:macro_meter/models/aliment.dart';
+import 'package:macro_meter/models/meal.dart';
 import 'package:macro_meter/widgets/aliments/aliment_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:macro_meter/widgets/aliments/aliment_create.dart';
@@ -9,10 +10,12 @@ class AlimentScreen extends StatefulWidget {
       {super.key,
       required this.user,
       required this.fromPage,
+      this.meal,
       this.onAddAliment});
 
   final dynamic user;
   final String fromPage;
+  final Meal? meal;
   final void Function(Aliment newAliment)? onAddAliment;
 
   @override
@@ -27,6 +30,21 @@ class _AlimentState extends State<AlimentScreen> {
   void initState() {
     super.initState();
     fetchUserAlimentData();
+  }
+
+  void addAliment(Aliment newAliment) {
+    if (widget.meal!.aliments
+        .any((aliment) => aliment.name == newAliment.name)) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("L'aliment est déjà dans le repas"),
+        ),
+      );
+    } else {
+      widget.onAddAliment!(newAliment);
+      Navigator.of(context).pop();
+    }
   }
 
   void fetchUserAlimentData() async {
@@ -120,8 +138,7 @@ class _AlimentState extends State<AlimentScreen> {
                           user: widget.user,
                           fromPage: widget.fromPage,
                           onAddAliment: (newAliment) {
-                            widget.onAddAliment!(newAliment);
-                            Navigator.of(context).pop();
+                            addAliment(newAliment);
                           },
                         ),
                 )

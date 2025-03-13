@@ -60,15 +60,18 @@ class _PlanScreenState extends State<PlanScreen> {
         List<Aliment> alimentList = alimentCollection.docs.map((alimentDoc) {
           var alimentData = alimentDoc.data();
           return Aliment(
-              id: alimentDoc.id,
-              name: alimentData["name"],
-              calories: alimentData["calories"],
-              proteines: alimentData["proteines"],
-              carbs: alimentData["carbs"],
-              fat: alimentData["fat"],
-              unit: alimentData["unit"],
-              quantity: alimentData["quantity"],
-              category: alimentData["categorie"]);
+            id: alimentDoc.id,
+            name: alimentData["name"],
+            calories: alimentData["calories"],
+            proteines: alimentData["proteines"],
+            carbs: alimentData["carbs"],
+            fat: alimentData["fat"],
+            unit: Unit.values.byName(alimentData["unit"]),
+            quantity: alimentData["quantity"],
+            category: Category.values.byName(
+              alimentData["category"],
+            ),
+          );
         }).toList();
 
         return Meal(

@@ -13,12 +13,14 @@ class MealItem extends StatefulWidget {
       required this.user,
       required this.plan,
       required this.onAddMeal,
+      required this.onAddAliment,
       super.key});
 
   final Meal meal;
   final User user;
   final Plan plan;
   final void Function(Meal newMeal) onAddMeal;
+  final void Function(Aliment newAliment) onAddAliment;
 
   @override
   State<StatefulWidget> createState() {
@@ -88,6 +90,7 @@ class _MealItemState extends State<MealItem> {
       addedAliment.id = docRef.id;
       meal.aliments.add(addedAliment);
       setState(() {});
+      widget.onAddAliment(addedAliment);
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -238,6 +241,7 @@ class _MealItemState extends State<MealItem> {
                                 onAddAliment: (newAliment) {
                                   _addAliment(newAliment);
                                 },
+                                meal: meal,
                               ),
                             ),
                           );

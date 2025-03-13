@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:macro_meter/models/meal.dart';
 import 'package:macro_meter/models/plan.dart';
+import 'package:macro_meter/models/aliment.dart';
 import 'package:macro_meter/widgets/meals/meal_item.dart';
 
 class MealList extends StatelessWidget {
@@ -11,12 +12,14 @@ class MealList extends StatelessWidget {
       required this.meals,
       required this.user,
       required this.plan,
-      required this.onAddMeal});
+      required this.onAddMeal,
+      required this.onAddAliment});
 
   final List<Meal> meals;
   final User user;
   final Plan plan;
   final void Function(Meal newMeal) onAddMeal;
+  final void Function(Aliment newAliment) onAddAliment;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +32,9 @@ class MealList extends StatelessWidget {
           plan: plan,
           onAddMeal: (newMeal) {
             onAddMeal(newMeal);
+          },
+          onAddAliment: (newAliment) {
+            onAddAliment(newAliment);
           },
         );
       },

@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:macro_meter/models/plan.dart';
 import 'package:macro_meter/models/meal.dart';
 import 'package:macro_meter/widgets/meals/meal_list.dart';
-import 'package:macro_meter/widgets/plans/plan_edit_footer.dart';
 
 class PlanEdit extends StatefulWidget {
   PlanEdit({required this.plan, required this.user, super.key});
@@ -18,11 +17,6 @@ class PlanEdit extends StatefulWidget {
 }
 
 class _PlanEditState extends State<PlanEdit> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   void addMeal() async {
     try {
       DocumentReference docRef = await FirebaseFirestore.instance
@@ -85,7 +79,7 @@ class _PlanEditState extends State<PlanEdit> {
               ),
             )
           ],
-          Expanded(
+          Flexible(
             child: MealList(
               meals: widget.plan.meals,
               user: widget.user,
@@ -95,11 +89,86 @@ class _PlanEditState extends State<PlanEdit> {
                   widget.plan.meals.add(newMeal);
                 });
               },
+              onAddAliment: (newAliment) {
+                setState(() {});
+              },
             ),
           )
         ],
       ),
-      bottomSheet: PlanEditFooter(),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.black,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  Text(""),
+                  Text("Total",
+                      style: TextStyle(fontSize: 18, color: Colors.white)),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                children: [
+                  Text("Prot",
+                      style: TextStyle(fontSize: 18, color: Colors.white)),
+                  Text(widget.plan.totalProteines().toString(),
+                      style: TextStyle(fontSize: 18, color: Colors.white)),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                children: [
+                  Text(
+                    "Glu",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                  Text(
+                    widget.plan.totalCarbs().toString(),
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                children: [
+                  Text(
+                    "Lip",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                  Text(
+                    widget.plan.totalFats().toString(),
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                children: [
+                  Text(
+                    "Cal",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                  Text(
+                    widget.plan.totalCalories().toString(),
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
