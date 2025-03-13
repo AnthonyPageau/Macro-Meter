@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:macro_meter/models/aliment.dart';
+import 'package:macro_meter/models/meal.dart';
+import 'package:macro_meter/models/plan.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:macro_meter/widgets/meals/delete_aliment_alert_dialog.dart';
 
 class AlimentItem extends StatefulWidget {
-  const AlimentItem({required this.aliment, required this.user, super.key});
+  const AlimentItem(
+      {required this.aliment,
+      required this.meal,
+      required this.plan,
+      required this.user,
+      required this.onDeleteALiment,
+      super.key});
 
   final Aliment aliment;
   final User user;
+  final Meal meal;
+  final Plan plan;
+  final void Function(Aliment deletedAliment) onDeleteALiment;
 
   @override
   State<StatefulWidget> createState() {
@@ -27,7 +39,20 @@ class _AlimentItemState extends State<AlimentItem> {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (ctx) => DeleteAlimentAlertDialog(
+                user: widget.user,
+                aliment: widget.aliment,
+                meal: widget.meal,
+                plan: widget.plan,
+                onDeleteALiment: (deletedAliment) {
+                  widget.onDeleteALiment(deletedAliment);
+                },
+              ),
+            );
+          },
           icon: Icon(Icons.delete_forever_outlined),
           iconSize: 30,
         ),

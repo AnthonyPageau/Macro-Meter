@@ -92,6 +92,9 @@ class _PlanEditState extends State<PlanEdit> {
               onAddAliment: (newAliment) {
                 setState(() {});
               },
+              onDeleteALiment: (deletedAliment) {
+                setState(() {});
+              },
             ),
           )
         ],

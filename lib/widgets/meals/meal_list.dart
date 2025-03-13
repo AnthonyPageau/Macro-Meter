@@ -13,13 +13,15 @@ class MealList extends StatelessWidget {
       required this.user,
       required this.plan,
       required this.onAddMeal,
-      required this.onAddAliment});
+      required this.onAddAliment,
+      required this.onDeleteALiment});
 
   final List<Meal> meals;
   final User user;
   final Plan plan;
   final void Function(Meal newMeal) onAddMeal;
   final void Function(Aliment newAliment) onAddAliment;
+  final void Function(Aliment deletedAliment) onDeleteALiment;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,9 @@ class MealList extends StatelessWidget {
           },
           onAddAliment: (newAliment) {
             onAddAliment(newAliment);
+          },
+          onDeleteALiment: (deletedAliment) {
+            onDeleteALiment(deletedAliment);
           },
         );
       },

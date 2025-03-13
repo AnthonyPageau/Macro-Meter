@@ -14,6 +14,7 @@ class MealItem extends StatefulWidget {
       required this.plan,
       required this.onAddMeal,
       required this.onAddAliment,
+      required this.onDeleteALiment,
       super.key});
 
   final Meal meal;
@@ -21,6 +22,7 @@ class MealItem extends StatefulWidget {
   final Plan plan;
   final void Function(Meal newMeal) onAddMeal;
   final void Function(Aliment newAliment) onAddAliment;
+  final void Function(Aliment deletedAliment) onDeleteALiment;
 
   @override
   State<StatefulWidget> createState() {
@@ -31,6 +33,7 @@ class MealItem extends StatefulWidget {
 class _MealItemState extends State<MealItem> {
   late Meal meal;
   late Plan plan;
+  bool _isEditingName = false;
 
   @override
   void initState() {
@@ -164,7 +167,17 @@ class _MealItemState extends State<MealItem> {
                     padding: EdgeInsets.fromLTRB(12, 12, 32, 12),
                     decoration: BoxDecoration(color: Colors.white),
                     child: AlimentList(
-                        aliments: meal.aliments, user: widget.user)),
+                      aliments: meal.aliments,
+                      user: widget.user,
+                      plan: widget.plan,
+                      meal: widget.meal,
+                      onDeleteALiment: (deletedAliment) {
+                        setState(() {
+                          widget.onDeleteALiment(deletedAliment);
+                          widget.meal.aliments.remove(deletedAliment);
+                        });
+                      },
+                    )),
                 Container(
                   padding: EdgeInsets.fromLTRB(12, 12, 0, 12),
                   child: Row(
