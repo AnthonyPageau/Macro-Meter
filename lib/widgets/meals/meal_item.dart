@@ -34,12 +34,20 @@ class _MealItemState extends State<MealItem> {
   late Meal meal;
   late Plan plan;
   bool _isEditingName = false;
+  late TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
     meal = widget.meal;
     plan = widget.plan;
+    _controller = TextEditingController(text: widget.meal.name);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   void addMeal() async {
@@ -104,6 +112,29 @@ class _MealItemState extends State<MealItem> {
     }
   }
 
+  void _updateMealName() {
+    try {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.user.uid)
+          .collection("plans")
+          .doc(widget.plan.id)
+          .collection("meals")
+          .doc(meal.id)
+          .update({
+        'name': _controller.text,
+      });
+      meal.name = _controller.text;
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.code),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -129,17 +160,38 @@ class _MealItemState extends State<MealItem> {
                   alignment: Alignment.centerLeft,
                   child: Row(
                     children: [
-                      Text(
-                        meal.name,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ),
+                      _isEditingName
+                          ? Expanded(
+                              child: TextField(
+                                controller: _controller,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                decoration: InputDecoration(
+                                  border: UnderlineInputBorder(),
+                                ),
+                              ),
+                            )
+                          : Text(
+                              meal.name,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            ),
                       IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.edit,
+                        onPressed: () {
+                          setState(() {
+                            if (_isEditingName) {
+                              _updateMealName();
+                            }
+                            _isEditingName = !_isEditingName;
+                          });
+                        },
+                        icon: Icon(
+                          _isEditingName ? Icons.save : Icons.edit,
                           color: Colors.white,
                         ),
                       ),
