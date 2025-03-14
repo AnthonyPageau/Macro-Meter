@@ -4,21 +4,24 @@ import 'package:macro_meter/models/meal.dart';
 import 'package:macro_meter/models/plan.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:macro_meter/widgets/meals/delete_aliment_alert_dialog.dart';
+import 'package:macro_meter/widgets/meals/edit_quantity_alert_dialog.dart';
 
 class AlimentItem extends StatefulWidget {
-  const AlimentItem(
+  AlimentItem(
       {required this.aliment,
       required this.meal,
       required this.plan,
       required this.user,
       required this.onDeleteALiment,
+      required this.onModifyQuantity,
       super.key});
 
-  final Aliment aliment;
+  Aliment aliment;
   final User user;
   final Meal meal;
   final Plan plan;
   final void Function(Aliment deletedAliment) onDeleteALiment;
+  final void Function(Aliment modifiedAliment) onModifyQuantity;
 
   @override
   State<StatefulWidget> createState() {
@@ -72,7 +75,21 @@ class _AlimentItemState extends State<AlimentItem> {
                 ),
                 child: InkWell(
                   onTap: () {
-                    print('salut');
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => EditQuantityAlertDialog(
+                        aliment: widget.aliment,
+                        user: widget.user,
+                        meal: widget.meal,
+                        plan: widget.plan,
+                        onModifyQuantity: (aliment) {
+                          setState(() {
+                            widget.aliment = aliment;
+                            widget.onModifyQuantity(aliment);
+                          });
+                        },
+                      ),
+                    );
                   },
                   child: Center(
                     child: Text(

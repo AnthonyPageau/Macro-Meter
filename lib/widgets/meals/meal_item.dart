@@ -17,6 +17,7 @@ class MealItem extends StatefulWidget {
       required this.onAddAliment,
       required this.onDeleteALiment,
       required this.onDeleteMeal,
+      required this.onModifyQuantity,
       super.key});
 
   final Meal meal;
@@ -26,6 +27,7 @@ class MealItem extends StatefulWidget {
   final void Function(Aliment newAliment) onAddAliment;
   final void Function(Aliment deletedAliment) onDeleteALiment;
   final void Function(Meal deletedMeal) onDeleteMeal;
+  final void Function(Aliment modifiedAliment) onModifyQuantity;
 
   @override
   State<StatefulWidget> createState() {
@@ -242,6 +244,11 @@ class _MealItemState extends State<MealItem> {
                         setState(() {
                           widget.onDeleteALiment(deletedAliment);
                           widget.meal.aliments.remove(deletedAliment);
+                        });
+                      },
+                      onModifyQuantity: (modifiedAliment) {
+                        setState(() {
+                          widget.onModifyQuantity(modifiedAliment);
                         });
                       },
                     )),

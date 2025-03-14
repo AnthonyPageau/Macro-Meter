@@ -37,7 +37,7 @@ class Aliment {
   String unitToString(Unit type) {
     switch (type) {
       case Unit.grams:
-        return "Grams";
+        return "G";
       case Unit.cup:
         return "Tasse";
       case Unit.tbsp:
@@ -51,5 +51,15 @@ class Aliment {
       case Unit.ml:
         return "mL";
     }
+  }
+
+  void updateValues(num updatedQuantity) {
+    num ratio = updatedQuantity / quantity;
+
+    calories = (calories * ratio).toInt();
+    proteines *= ratio;
+    carbs *= ratio;
+    fat *= ratio;
+    quantity = updatedQuantity;
   }
 }

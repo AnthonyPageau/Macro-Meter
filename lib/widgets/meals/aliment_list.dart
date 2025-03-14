@@ -6,19 +6,22 @@ import 'package:macro_meter/models/plan.dart';
 import 'package:macro_meter/widgets/meals/aliment_item.dart';
 
 class AlimentList extends StatefulWidget {
-  const AlimentList(
-      {super.key,
-      required this.aliments,
-      required this.user,
-      required this.meal,
-      required this.plan,
-      required this.onDeleteALiment});
+  const AlimentList({
+    super.key,
+    required this.aliments,
+    required this.user,
+    required this.meal,
+    required this.plan,
+    required this.onDeleteALiment,
+    required this.onModifyQuantity,
+  });
 
   final List<Aliment> aliments;
   final User user;
   final Meal meal;
   final Plan plan;
   final void Function(Aliment deletedAliment) onDeleteALiment;
+  final void Function(Aliment modifiedAliment) onModifyQuantity;
 
   @override
   State<StatefulWidget> createState() {
@@ -41,6 +44,9 @@ class _AlimentListState extends State<AlimentList> {
           plan: widget.plan,
           onDeleteALiment: (deletedAliment) {
             widget.onDeleteALiment(deletedAliment);
+          },
+          onModifyQuantity: (modifiedAliment) {
+            widget.onModifyQuantity(modifiedAliment);
           },
         );
       },

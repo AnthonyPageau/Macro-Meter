@@ -16,6 +16,7 @@ class MealList extends StatelessWidget {
     required this.onAddAliment,
     required this.onDeleteALiment,
     required this.onDeleteMeal,
+    required this.onModifyQuantity,
   });
 
   final List<Meal> meals;
@@ -25,6 +26,7 @@ class MealList extends StatelessWidget {
   final void Function(Aliment newAliment) onAddAliment;
   final void Function(Aliment deletedAliment) onDeleteALiment;
   final void Function(Meal deletedMeal) onDeleteMeal;
+  final void Function(Aliment modifiedAliment) onModifyQuantity;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,9 @@ class MealList extends StatelessWidget {
           },
           onDeleteMeal: (deletedMeal) {
             onDeleteMeal(deletedMeal);
+          },
+          onModifyQuantity: (modifiedAliment) {
+            onModifyQuantity(modifiedAliment);
           },
         );
       },
