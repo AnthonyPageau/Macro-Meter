@@ -33,7 +33,7 @@ class _AlimentListState extends State<AlimentList> {
     aliments = widget.aliments;
   }
 
-  void supprimerAliment(Aliment aliment) {
+  void deleteAliment(Aliment aliment) {
     setState(() {
       aliments.remove(aliment);
     });
@@ -63,7 +63,7 @@ class _AlimentListState extends State<AlimentList> {
         ),
         direction: DismissDirection.endToStart,
         onDismissed: (direction) {
-          supprimerAliment(aliments[index]);
+          deleteAliment(aliments[index]);
         },
         confirmDismiss: (direction) async {
           return await showDialog(
