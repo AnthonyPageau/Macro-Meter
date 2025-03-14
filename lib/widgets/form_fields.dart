@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_regex/flutter_regex.dart';
 import 'package:macro_meter/models/aliment.dart';
+import 'package:macro_meter/models/plan.dart';
 
 Widget buildAgeField(
     String? value, String? initialValue, Function(String?) onSaved) {
@@ -280,7 +281,7 @@ String _unitToString(Unit type) {
 }
 
 Widget buildAlimentNameField(String? value, String? initialValue,
-    List<Aliment> aliments, Function(String?) onSaved) {
+    List<Aliment> aliments, String? alimentId, Function(String?) onSaved) {
   return TextFormField(
     decoration: InputDecoration(labelText: "Nom :"),
     autocorrect: false,
@@ -289,8 +290,37 @@ Widget buildAlimentNameField(String? value, String? initialValue,
       if (value == null || value.trim().isEmpty) {
         return "Le Nom ne peut pas être vide";
       }
-      if (aliments.any((aliment) => aliment.name == value)) {
-        return "Cet aliment existe déjà";
+      if (alimentId == null) {
+        if (aliments.any(
+            (aliment) => aliment.name.toUpperCase() == value.toUpperCase())) {
+          return "Cet aliment existe déjà";
+        }
+      } else {
+        // If editing, skip the aliment being edited from the duplicate check.
+        if (aliments.any((aliment) =>
+            aliment.name.toUpperCase() == value.toUpperCase() &&
+            aliment.id != alimentId)) {
+          return "Cet aliment existe déjà";
+        }
+      }
+      return null;
+    },
+    onSaved: onSaved,
+  );
+}
+
+Widget buildPlanNameField(String? value, String? initialValue, List<Plan> plans,
+    Function(String?) onSaved) {
+  return TextFormField(
+    decoration: InputDecoration(labelText: "Nom :"),
+    autocorrect: false,
+    initialValue: initialValue,
+    validator: (value) {
+      if (value == null || value.trim().isEmpty) {
+        return "Le Nom ne peut pas être vide";
+      }
+      if (plans.any((plan) => plan.name.toUpperCase() == value.toUpperCase())) {
+        return "Ce plan existe déjà";
       }
       return null;
     },

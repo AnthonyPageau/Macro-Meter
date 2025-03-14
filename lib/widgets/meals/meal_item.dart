@@ -119,6 +119,15 @@ class _MealItemState extends State<MealItem> {
 
   void _updateMealName() {
     try {
+      if (plan.meals
+          .any((m) => m.name == _controller.text && m.id != meal.id)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Le repas existe déjà"),
+          ),
+        );
+        return;
+      }
       FirebaseFirestore.instance
           .collection('users')
           .doc(widget.user.uid)

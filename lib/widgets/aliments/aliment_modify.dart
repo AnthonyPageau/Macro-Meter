@@ -111,6 +111,7 @@ class _AlimentModifyState extends State<AlimentModify> {
                     widget.aliment.name,
                     widget.aliment.name,
                     widget.aliments,
+                    widget.aliment.id,
                     (value) {
                       widget.aliment.name = value!;
                     },

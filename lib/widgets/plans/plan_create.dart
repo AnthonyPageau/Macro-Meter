@@ -5,9 +5,14 @@ import 'package:macro_meter/models/plan.dart';
 import 'package:macro_meter/widgets/form_fields.dart';
 
 class PlanCreate extends StatefulWidget {
-  const PlanCreate({required this.user, required this.onAddPlan, super.key});
+  const PlanCreate(
+      {required this.user,
+      required this.onAddPlan,
+      required this.plans,
+      super.key});
 
   final User user;
+  final List<Plan> plans;
   final void Function(Plan newPlan) onAddPlan;
 
   @override
@@ -77,9 +82,10 @@ class _PlanCreateState extends State<PlanCreate> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            buildSurnameField(
+            buildPlanNameField(
               planName,
               null,
+              widget.plans,
               (value) {
                 planName = value!;
               },

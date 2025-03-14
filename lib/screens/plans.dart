@@ -114,13 +114,13 @@ class _PlanScreenState extends State<PlanScreen> {
               showDialog(
                 context: context,
                 builder: (ctx) => PlanCreate(
-                  user: widget.user,
-                  onAddPlan: (newPlan) {
-                    setState(() {
-                      plans.add(newPlan);
-                    });
-                  },
-                ),
+                    user: widget.user,
+                    onAddPlan: (newPlan) {
+                      setState(() {
+                        plans.add(newPlan);
+                      });
+                    },
+                    plans: plans),
               );
             },
             icon: const Icon(
