@@ -278,3 +278,22 @@ String _unitToString(Unit type) {
       return "Portion";
   }
 }
+
+Widget buildAlimentNameField(String? value, String? initialValue,
+    List<Aliment> aliments, Function(String?) onSaved) {
+  return TextFormField(
+    decoration: InputDecoration(labelText: "Nom :"),
+    autocorrect: false,
+    initialValue: initialValue,
+    validator: (value) {
+      if (value == null || value.trim().isEmpty) {
+        return "Le Nom ne peut pas être vide";
+      }
+      if (aliments.any((aliment) => aliment.name == value)) {
+        return "Cet aliment existe déjà";
+      }
+      return null;
+    },
+    onSaved: onSaved,
+  );
+}

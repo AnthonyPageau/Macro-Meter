@@ -9,10 +9,12 @@ class AlimentModify extends StatefulWidget {
       {required this.user,
       required this.aliment,
       required this.onModifyAliment,
+      required this.aliments,
       super.key});
 
   final User user;
   Aliment aliment;
+  List<Aliment> aliments;
   final void Function(Aliment modifiedAliment) onModifyAliment;
 
   @override
@@ -105,9 +107,10 @@ class _AlimentModifyState extends State<AlimentModify> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: buildSurnameField(
+                  child: buildAlimentNameField(
                     widget.aliment.name,
                     widget.aliment.name,
+                    widget.aliments,
                     (value) {
                       widget.aliment.name = value!;
                     },

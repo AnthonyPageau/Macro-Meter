@@ -9,6 +9,7 @@ class AlimentItem extends StatefulWidget {
     required this.aliment,
     required this.user,
     required this.fromPage,
+    required this.aliments,
     this.onAddAliment,
     super.key,
   });
@@ -16,6 +17,8 @@ class AlimentItem extends StatefulWidget {
   final Aliment aliment;
   final User user;
   final String fromPage;
+  List<Aliment> aliments;
+
   void Function(Aliment newAliment)? onAddAliment;
 
   @override
@@ -52,6 +55,7 @@ class _AlimentItemState extends State<AlimentItem> {
                   user: widget.user,
                   aliment: aliment,
                   onModifyAliment: _modifyAliment,
+                  aliments: widget.aliments,
                 ),
               );
             } else {

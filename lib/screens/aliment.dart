@@ -106,13 +106,13 @@ class _AlimentState extends State<AlimentScreen> {
               showDialog(
                 context: context,
                 builder: (ctx) => AlimentCreate(
-                  onAddAliment: (newAliment) {
-                    setState(() {
-                      aliments.add(newAliment);
-                    });
-                  },
-                  user: widget.user,
-                ),
+                    onAddAliment: (newAliment) {
+                      setState(() {
+                        aliments.add(newAliment);
+                      });
+                    },
+                    user: widget.user,
+                    aliments: aliments),
               );
             },
             icon: const Icon(

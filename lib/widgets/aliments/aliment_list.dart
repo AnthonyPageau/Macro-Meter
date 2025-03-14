@@ -88,6 +88,7 @@ class _AlimentListState extends State<AlimentList> {
                 aliment: aliments[index],
                 user: widget.user,
                 fromPage: widget.fromPage,
+                aliments: aliments,
               )
             : AlimentItem(
                 aliment: aliments[index],
@@ -96,6 +97,7 @@ class _AlimentListState extends State<AlimentList> {
                 onAddAliment: (newAliment) {
                   widget.onAddAliment!(newAliment);
                 },
+                aliments: aliments,
               ),
       ),
     );

@@ -6,9 +6,13 @@ import 'package:macro_meter/widgets/form_fields.dart';
 
 class AlimentCreate extends StatefulWidget {
   const AlimentCreate(
-      {required this.user, required this.onAddAliment, super.key});
+      {required this.user,
+      required this.onAddAliment,
+      super.key,
+      required this.aliments});
 
   final User user;
+  final List<Aliment> aliments;
   final void Function(Aliment newAliment) onAddAliment;
   @override
   State<StatefulWidget> createState() {
@@ -32,6 +36,15 @@ class _AlimentCreateState extends State<AlimentCreate> {
   void _submit() async {
     try {
       final isValid = form.currentState!.validate();
+
+      if (widget.aliments.any((aliment) => aliment.name == alimentName)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("L'aliment existe déjà"),
+          ),
+        );
+        return;
+      }
 
       if (!isValid) {
         return;
@@ -115,9 +128,10 @@ class _AlimentCreateState extends State<AlimentCreate> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: buildSurnameField(
+                  child: buildAlimentNameField(
                     alimentName,
                     null,
+                    widget.aliments,
                     (value) {
                       alimentName = value!;
                     },
