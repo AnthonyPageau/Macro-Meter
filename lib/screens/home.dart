@@ -75,8 +75,23 @@ class _HomeState extends State<Home> {
       drawer: Menu(
         onSelectScreen: _setScreen,
       ),
-      body: const Center(
-        child: Text("Logged in!"),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.black,
+              Color.fromARGB(255, 17, 127, 112),
+            ],
+            begin: Alignment.bottomRight,
+            end: Alignment.topLeft,
+          ),
+        ),
+        child: const Center(
+          child: Text(
+            "Connecté!",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
       ),
     );
   }

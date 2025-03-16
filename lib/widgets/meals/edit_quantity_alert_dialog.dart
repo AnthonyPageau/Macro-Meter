@@ -71,6 +71,8 @@ class _EditQuantityAlertDialogState extends State<EditQuantityAlertDialog> {
         child: TextFormField(
           obscureText: true,
           decoration: InputDecoration(labelText: "Nouvelle quantité :"),
+          keyboardType:
+              TextInputType.numberWithOptions(signed: false, decimal: true),
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
               return "La quantité ne peut pas être vide";

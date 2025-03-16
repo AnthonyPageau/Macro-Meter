@@ -122,28 +122,40 @@ class _AlimentState extends State<AlimentScreen> {
           ),
         ],
       ),
-      body: aliments == null
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                Expanded(
-                  child: widget.fromPage == "Home"
-                      ? AlimentList(
-                          aliments: aliments,
-                          user: widget.user,
-                          fromPage: widget.fromPage,
-                        )
-                      : AlimentList(
-                          aliments: aliments,
-                          user: widget.user,
-                          fromPage: widget.fromPage,
-                          onAddAliment: (newAliment) {
-                            addAliment(newAliment);
-                          },
-                        ),
-                )
-              ],
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.black,
+              Color.fromARGB(255, 17, 127, 112),
+            ],
+            begin: Alignment.bottomRight,
+            end: Alignment.topLeft,
+          ),
+        ),
+        child: aliments == null
+            ? const Center(child: CircularProgressIndicator())
+            : Column(
+                children: [
+                  Expanded(
+                    child: widget.fromPage == "Home"
+                        ? AlimentList(
+                            aliments: aliments,
+                            user: widget.user,
+                            fromPage: widget.fromPage,
+                          )
+                        : AlimentList(
+                            aliments: aliments,
+                            user: widget.user,
+                            fromPage: widget.fromPage,
+                            onAddAliment: (newAliment) {
+                              addAliment(newAliment);
+                            },
+                          ),
+                  )
+                ],
+              ),
+      ),
     );
   }
 }

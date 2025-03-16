@@ -23,13 +23,11 @@ class AlimentList extends StatefulWidget {
 }
 
 class _AlimentListState extends State<AlimentList> {
-  // You can store the list of aliments in the state
   late List<Aliment> aliments;
 
   @override
   void initState() {
     super.initState();
-    // Initialize the aliments list here
     aliments = widget.aliments;
   }
 

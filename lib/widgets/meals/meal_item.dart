@@ -119,8 +119,9 @@ class _MealItemState extends State<MealItem> {
 
   void _updateMealName() {
     try {
-      if (plan.meals
-          .any((m) => m.name == _controller.text && m.id != meal.id)) {
+      if (plan.meals.any((m) =>
+          m.name.toUpperCase() == _controller.text.toUpperCase() &&
+          m.id != meal.id)) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Le repas existe déjà"),
@@ -152,213 +153,225 @@ class _MealItemState extends State<MealItem> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: Column(
-        children: [
-          Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(16, 4, 0, 4),
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                    ),
-                  ),
-                  alignment: Alignment.centerLeft,
-                  child: Row(
-                    children: [
-                      _isEditingName
-                          ? Expanded(
-                              child: TextField(
-                                controller: _controller,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                decoration: InputDecoration(
-                                  border: UnderlineInputBorder(),
-                                ),
-                              ),
-                            )
-                          : Text(
-                              meal.name,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            if (_isEditingName) {
-                              _updateMealName();
-                            }
-                            _isEditingName = !_isEditingName;
-                          });
-                        },
-                        icon: Icon(
-                          _isEditingName ? Icons.save : Icons.edit,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (ctx) => DeleteMealAlertDialog(
-                                user: widget.user,
-                                meal: widget.meal,
-                                plan: widget.plan,
-                                onDeleteMeal: (deletedMeal) {
-                                  widget.onDeleteMeal(deletedMeal);
-                                },
-                              ),
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.close,
-                            color: Colors.white,
-                            size: 30,
-                          ))
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(12, 12, 36, 12),
-                  decoration: BoxDecoration(color: Colors.grey),
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    "Cals",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-                Container(
-                    padding: EdgeInsets.fromLTRB(12, 12, 32, 12),
-                    decoration: BoxDecoration(color: Colors.white),
-                    child: AlimentList(
-                      aliments: meal.aliments,
-                      user: widget.user,
-                      plan: widget.plan,
-                      meal: widget.meal,
-                      onDeleteALiment: (deletedAliment) {
-                        setState(() {
-                          widget.onDeleteALiment(deletedAliment);
-                          widget.meal.aliments.remove(deletedAliment);
-                        });
-                      },
-                      onModifyQuantity: (modifiedAliment) {
-                        setState(() {
-                          widget.onModifyQuantity(modifiedAliment);
-                        });
-                      },
-                    )),
-                Container(
-                  padding: EdgeInsets.fromLTRB(12, 12, 0, 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Text(""),
-                            Text("Total", style: TextStyle(fontSize: 16)),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          children: [
-                            Text("Prot", style: TextStyle(fontSize: 16)),
-                            Text(meal.totalProteines().toString(),
-                                style: TextStyle(fontSize: 16)),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          children: [
-                            Text("Glu", style: TextStyle(fontSize: 16)),
-                            Text(meal.totalCarbs().toString(),
-                                style: TextStyle(fontSize: 16)),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          children: [
-                            Text("Lip", style: TextStyle(fontSize: 16)),
-                            Text(meal.totalFats().toString(),
-                                style: TextStyle(fontSize: 16)),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          children: [
-                            Text("", style: TextStyle(fontSize: 16)),
-                            Text(meal.totalCalories().toString(),
-                                style: TextStyle(fontSize: 16)),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                    padding: EdgeInsets.all(12),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.black,
+              Color.fromARGB(255, 17, 127, 112),
+            ],
+            begin: Alignment.bottomRight,
+            end: Alignment.topLeft,
+          ),
+        ),
+        child: Column(
+          children: [
+            Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: EdgeInsets.fromLTRB(16, 4, 0, 4),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.black,
                       borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(15),
-                        bottomRight: Radius.circular(15),
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
                       ),
                     ),
                     alignment: Alignment.centerLeft,
-                    child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (ctx) => AlimentScreen(
-                                user: widget.user,
-                                fromPage: "PlanEdit",
-                                onAddAliment: (newAliment) {
-                                  _addAliment(newAliment);
-                                },
-                                meal: meal,
+                    child: Row(
+                      children: [
+                        _isEditingName
+                            ? Expanded(
+                                child: TextField(
+                                  controller: _controller,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  decoration: InputDecoration(
+                                    border: UnderlineInputBorder(),
+                                  ),
+                                ),
+                              )
+                            : Text(
+                                meal.name,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
                               ),
-                            ),
-                          );
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              if (_isEditingName) {
+                                _updateMealName();
+                              }
+                              _isEditingName = !_isEditingName;
+                            });
+                          },
+                          icon: Icon(
+                            _isEditingName ? Icons.save : Icons.edit,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const Spacer(),
+                        IconButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (ctx) => DeleteMealAlertDialog(
+                                  user: widget.user,
+                                  meal: widget.meal,
+                                  plan: widget.plan,
+                                  onDeleteMeal: (deletedMeal) {
+                                    widget.onDeleteMeal(deletedMeal);
+                                  },
+                                ),
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 30,
+                            ))
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(12, 12, 36, 12),
+                    decoration: BoxDecoration(color: Colors.grey),
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      "Cals",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  Container(
+                      padding: EdgeInsets.fromLTRB(12, 12, 32, 12),
+                      decoration: BoxDecoration(color: Colors.white),
+                      child: AlimentList(
+                        aliments: meal.aliments,
+                        user: widget.user,
+                        plan: widget.plan,
+                        meal: widget.meal,
+                        onDeleteALiment: (deletedAliment) {
+                          setState(() {
+                            widget.onDeleteALiment(deletedAliment);
+                            widget.meal.aliments.remove(deletedAliment);
+                          });
                         },
-                        child: Text("+ Ajouter aliment"))),
-              ],
-            ),
-          ),
-          if (plan.meals.lastIndexOf(meal) == plan.meals.length - 1) ...[
-            Container(
-              padding: EdgeInsets.only(left: 14),
-              alignment: Alignment.centerLeft,
-              child: ElevatedButton(
-                onPressed: () {
-                  addMeal();
-                },
-                child: const Text("Ajouter Repas"),
+                        onModifyQuantity: (modifiedAliment) {
+                          setState(() {
+                            widget.onModifyQuantity(modifiedAliment);
+                          });
+                        },
+                      )),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(12, 12, 0, 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text(""),
+                              Text("Total", style: TextStyle(fontSize: 16)),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            children: [
+                              Text("Prot", style: TextStyle(fontSize: 16)),
+                              Text(meal.totalProteines().toString(),
+                                  style: TextStyle(fontSize: 16)),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            children: [
+                              Text("Glu", style: TextStyle(fontSize: 16)),
+                              Text(meal.totalCarbs().toString(),
+                                  style: TextStyle(fontSize: 16)),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            children: [
+                              Text("Lip", style: TextStyle(fontSize: 16)),
+                              Text(meal.totalFats().toString(),
+                                  style: TextStyle(fontSize: 16)),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            children: [
+                              Text("", style: TextStyle(fontSize: 16)),
+                              Text(meal.totalCalories().toString(),
+                                  style: TextStyle(fontSize: 16)),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(15),
+                        ),
+                      ),
+                      alignment: Alignment.centerLeft,
+                      child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (ctx) => AlimentScreen(
+                                  user: widget.user,
+                                  fromPage: "PlanEdit",
+                                  onAddAliment: (newAliment) {
+                                    _addAliment(newAliment);
+                                  },
+                                  meal: meal,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text("+ Ajouter aliment"))),
+                ],
               ),
             ),
-          ]
-        ],
+            if (plan.meals.lastIndexOf(meal) == plan.meals.length - 1) ...[
+              Container(
+                padding: EdgeInsets.only(left: 14),
+                alignment: Alignment.centerLeft,
+                child: ElevatedButton(
+                  onPressed: () {
+                    addMeal();
+                  },
+                  child: const Text("Ajouter Repas"),
+                ),
+              ),
+            ]
+          ],
+        ),
       ),
     );
   }

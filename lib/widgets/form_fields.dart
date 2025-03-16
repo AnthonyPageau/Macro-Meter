@@ -44,9 +44,14 @@ Widget buildHeightField(
 }
 
 Widget buildSexeField(String? value, Function(String?) onChanged) {
-  return DropdownButton<String>(
+  return DropdownButtonFormField<String>(
     hint: Text("Sexe"),
     value: value,
+    validator: (value) {
+      if (value == null) {
+        return "Vous devez choisir une option";
+      }
+    },
     items: <String>["Homme", "Femme", "Autres"].map((String value) {
       return DropdownMenuItem<String>(
         value: value,
@@ -79,9 +84,14 @@ Widget buildWeightField(
 }
 
 Widget buildObjectiveField(String? value, Function(String?) onChanged) {
-  return DropdownButton<String>(
+  return DropdownButtonFormField<String>(
     hint: Text("Objectif"),
     value: value,
+    validator: (value) {
+      if (value == null) {
+        return "Vous devez choisir une option";
+      }
+    },
     items: <String>['Maintient', 'Perte de poids', 'Prise de poids']
         .map((String value) {
       return DropdownMenuItem<String>(
@@ -219,9 +229,14 @@ Widget buildMacroField(num? value, String? label, Function(String?) onSaved) {
 }
 
 Widget buildCategoryField(Category? value, Function(Category?) onChanged) {
-  return DropdownButton<Category>(
+  return DropdownButtonFormField<Category>(
     hint: Text("Categorie"),
     value: value,
+    validator: (value) {
+      if (value == null) {
+        return "Vous devez choisir une valeur";
+      }
+    },
     items: Category.values.map((Category type) {
       return DropdownMenuItem<Category>(
         value: type,
@@ -248,9 +263,14 @@ String _categoryToString(Category type) {
 }
 
 Widget buildUnitField(Unit? value, Function(Unit?) onChanged) {
-  return DropdownButton<Unit>(
+  return DropdownButtonFormField<Unit>(
     hint: Text("Unité"),
     value: value,
+    validator: (value) {
+      if (value == null) {
+        return "Vous devez choisir une option";
+      }
+    },
     items: Unit.values.map((Unit type) {
       return DropdownMenuItem<Unit>(
         value: type,
@@ -296,7 +316,6 @@ Widget buildAlimentNameField(String? value, String? initialValue,
           return "Cet aliment existe déjà";
         }
       } else {
-        // If editing, skip the aliment being edited from the duplicate check.
         if (aliments.any((aliment) =>
             aliment.name.toUpperCase() == value.toUpperCase() &&
             aliment.id != alimentId)) {

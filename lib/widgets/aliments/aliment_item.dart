@@ -45,56 +45,68 @@ class _AlimentItemState extends State<AlimentItem> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: Card(
-        child: InkWell(
-          onTap: () {
-            if (widget.fromPage == "Home") {
-              showDialog(
-                context: context,
-                builder: (ctx) => AlimentModify(
-                  user: widget.user,
-                  aliment: aliment,
-                  onModifyAliment: _modifyAliment,
-                  aliments: widget.aliments,
-                ),
-              );
-            } else {
-              widget.onAddAliment!(aliment);
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 16,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      aliment.name,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const Spacer(),
-                    Icon(categoryIcons[aliment.category])
-                  ],
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                Row(
-                  children: [
-                    Text("Calories: ${aliment.calories}"),
-                    const Spacer(),
-                    Text("Protéine: ${aliment.proteines}"),
-                    const Spacer(),
-                    Text("Glucide: ${aliment.carbs}"),
-                    const Spacer(),
-                    Text("Lipide: ${aliment.fat}")
-                  ],
-                )
-              ],
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.black,
+              Color.fromARGB(255, 17, 127, 112),
+            ],
+            begin: Alignment.bottomRight,
+            end: Alignment.topLeft,
+          ),
+        ),
+        child: Card(
+          child: InkWell(
+            onTap: () {
+              if (widget.fromPage == "Home") {
+                showDialog(
+                  context: context,
+                  builder: (ctx) => AlimentModify(
+                    user: widget.user,
+                    aliment: aliment,
+                    onModifyAliment: _modifyAliment,
+                    aliments: widget.aliments,
+                  ),
+                );
+              } else {
+                widget.onAddAliment!(aliment);
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 16,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        aliment.name,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const Spacer(),
+                      Icon(categoryIcons[aliment.category])
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Row(
+                    children: [
+                      Text("Calories: ${aliment.calories}"),
+                      const Spacer(),
+                      Text("Protéine: ${aliment.proteines}"),
+                      const Spacer(),
+                      Text("Glucide: ${aliment.carbs}"),
+                      const Spacer(),
+                      Text("Lipide: ${aliment.fat}")
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

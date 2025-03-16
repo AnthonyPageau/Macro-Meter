@@ -65,47 +65,59 @@ class _PlanEditState extends State<PlanEdit> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          if (widget.plan.meals.isEmpty) ...[
-            Container(
-              padding: EdgeInsets.only(left: 14),
-              alignment: Alignment.centerLeft,
-              child: ElevatedButton(
-                onPressed: () {
-                  addMeal();
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.black,
+              Color.fromARGB(255, 17, 127, 112),
+            ],
+            begin: Alignment.bottomRight,
+            end: Alignment.topLeft,
+          ),
+        ),
+        child: Column(
+          children: [
+            if (widget.plan.meals.isEmpty) ...[
+              Container(
+                padding: EdgeInsets.only(left: 14),
+                alignment: Alignment.centerLeft,
+                child: ElevatedButton(
+                  onPressed: () {
+                    addMeal();
+                  },
+                  child: const Text("Ajouter Repas"),
+                ),
+              )
+            ],
+            Flexible(
+              child: MealList(
+                meals: widget.plan.meals,
+                user: widget.user,
+                plan: widget.plan,
+                onAddMeal: (newMeal) {
+                  setState(() {
+                    widget.plan.meals.add(newMeal);
+                  });
                 },
-                child: const Text("Ajouter Repas"),
+                onAddAliment: (newAliment) {
+                  setState(() {});
+                },
+                onDeleteALiment: (deletedAliment) {
+                  setState(() {});
+                },
+                onDeleteMeal: (deletedMeal) {
+                  setState(() {
+                    widget.plan.meals.remove(deletedMeal);
+                  });
+                },
+                onModifyQuantity: (modifiedAliment) {
+                  setState(() {});
+                },
               ),
             )
           ],
-          Flexible(
-            child: MealList(
-              meals: widget.plan.meals,
-              user: widget.user,
-              plan: widget.plan,
-              onAddMeal: (newMeal) {
-                setState(() {
-                  widget.plan.meals.add(newMeal);
-                });
-              },
-              onAddAliment: (newAliment) {
-                setState(() {});
-              },
-              onDeleteALiment: (deletedAliment) {
-                setState(() {});
-              },
-              onDeleteMeal: (deletedMeal) {
-                setState(() {
-                  widget.plan.meals.remove(deletedMeal);
-                });
-              },
-              onModifyQuantity: (modifiedAliment) {
-                setState(() {});
-              },
-            ),
-          )
-        ],
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.black,

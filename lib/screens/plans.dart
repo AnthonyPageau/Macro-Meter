@@ -130,13 +130,25 @@ class _PlanScreenState extends State<PlanScreen> {
           ),
         ],
       ),
-      body: plans == null
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                Expanded(child: PlanList(plans: plans, user: widget.user))
-              ],
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.black,
+              Color.fromARGB(255, 17, 127, 112),
+            ],
+            begin: Alignment.bottomRight,
+            end: Alignment.topLeft,
+          ),
+        ),
+        child: plans == null
+            ? const Center(child: CircularProgressIndicator())
+            : Column(
+                children: [
+                  Expanded(child: PlanList(plans: plans, user: widget.user))
+                ],
+              ),
+      ),
     );
   }
 }
