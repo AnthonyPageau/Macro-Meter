@@ -10,6 +10,27 @@ class PlanList extends StatelessWidget {
   final List<Plan> plans;
   final User user;
 
+  void deletePlan(Plan plan) async {
+    var docRef = FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .collection("plans")
+        .doc(plan.id);
+
+    CollectionReference colMeals = docRef.collection("meals");
+
+    QuerySnapshot collectionMealsSnapshot = await colMeals.get();
+    for (var doc in collectionMealsSnapshot.docs) {
+      CollectionReference colAliments = doc.reference.collection("aliments");
+      QuerySnapshot collectionAlimentSnapshot = await colAliments.get();
+      for (var doc in collectionAlimentSnapshot.docs) {
+        await doc.reference.delete();
+      }
+      doc.reference.delete();
+    }
+    docRef.delete();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -24,6 +45,28 @@ class PlanList extends StatelessWidget {
             horizontal: Theme.of(context).cardTheme.margin!.horizontal,
           ),
         ),
+        direction: DismissDirection.endToStart,
+        onDismissed: (direction) {
+          deletePlan(plans[index]);
+        },
+        confirmDismiss: (direction) async {
+          return await showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: Text("Voulez-vous vraiment supprimer?"),
+              actions: [
+                ElevatedButton(
+                  onPressed: () => Navigator.of(ctx).pop(false),
+                  child: Text("Cancel"),
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.of(ctx).pop(true),
+                  child: Text("Supprimer"),
+                ),
+              ],
+            ),
+          );
+        },
         child: PlanItem(
           plan: plans[index],
           user: user,

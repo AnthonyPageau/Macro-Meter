@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:macro_meter/models/aliment.dart';
+import 'package:macro_meter/models/meal.dart';
 import 'package:macro_meter/widgets/aliments/aliment_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:macro_meter/widgets/aliments/aliment_create.dart';
 
 class AlimentScreen extends StatefulWidget {
-  const AlimentScreen({super.key, required this.user});
+  const AlimentScreen(
+      {super.key,
+      required this.user,
+      required this.fromPage,
+      this.meal,
+      this.onAddAliment});
 
   final dynamic user;
+  final String fromPage;
+  final Meal? meal;
+  final void Function(Aliment newAliment)? onAddAliment;
 
   @override
   State<StatefulWidget> createState() {
@@ -23,6 +32,21 @@ class _AlimentState extends State<AlimentScreen> {
     fetchUserAlimentData();
   }
 
+  void addAliment(Aliment newAliment) {
+    if (widget.meal!.aliments
+        .any((aliment) => aliment.name == newAliment.name)) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("L'aliment est déjà dans le repas"),
+        ),
+      );
+    } else {
+      widget.onAddAliment!(newAliment);
+      Navigator.of(context).pop();
+    }
+  }
+
   void fetchUserAlimentData() async {
     var collection = await FirebaseFirestore.instance
         .collection("users")
@@ -36,7 +60,7 @@ class _AlimentState extends State<AlimentScreen> {
         id: doc.id,
         name: alimentData["name"],
         calories: alimentData["calories"],
-        protein: alimentData["proteines"],
+        proteines: alimentData["proteines"],
         carbs: alimentData["carbs"],
         fat: alimentData["fat"],
         quantity: alimentData["quantity"],
@@ -82,13 +106,13 @@ class _AlimentState extends State<AlimentScreen> {
               showDialog(
                 context: context,
                 builder: (ctx) => AlimentCreate(
-                  onAddAliment: (newAliment) {
-                    setState(() {
-                      aliments.add(newAliment);
-                    });
-                  },
-                  user: widget.user,
-                ),
+                    onAddAliment: (newAliment) {
+                      setState(() {
+                        aliments.add(newAliment);
+                      });
+                    },
+                    user: widget.user,
+                    aliments: aliments),
               );
             },
             icon: const Icon(
@@ -98,15 +122,40 @@ class _AlimentState extends State<AlimentScreen> {
           ),
         ],
       ),
-      body: aliments == null
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                Expanded(
-                  child: AlimentList(aliments: aliments, user: widget.user),
-                )
-              ],
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.black,
+              Color.fromARGB(255, 17, 127, 112),
+            ],
+            begin: Alignment.bottomRight,
+            end: Alignment.topLeft,
+          ),
+        ),
+        child: aliments == null
+            ? const Center(child: CircularProgressIndicator())
+            : Column(
+                children: [
+                  Expanded(
+                    child: widget.fromPage == "Home"
+                        ? AlimentList(
+                            aliments: aliments,
+                            user: widget.user,
+                            fromPage: widget.fromPage,
+                          )
+                        : AlimentList(
+                            aliments: aliments,
+                            user: widget.user,
+                            fromPage: widget.fromPage,
+                            onAddAliment: (newAliment) {
+                              addAliment(newAliment);
+                            },
+                          ),
+                  )
+                ],
+              ),
+      ),
     );
   }
 }

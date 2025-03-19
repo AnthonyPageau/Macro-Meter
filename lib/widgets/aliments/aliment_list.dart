@@ -3,17 +3,42 @@ import 'package:flutter/material.dart';
 import 'package:macro_meter/models/aliment.dart';
 import 'package:macro_meter/widgets/aliments/aliment_item.dart';
 
-class AlimentList extends StatelessWidget {
-  const AlimentList({super.key, required this.aliments, required this.user});
+class AlimentList extends StatefulWidget {
+  AlimentList(
+      {super.key,
+      required this.aliments,
+      required this.user,
+      required this.fromPage,
+      this.onAddAliment});
 
   final List<Aliment> aliments;
   final dynamic user;
+  final String fromPage;
+  void Function(Aliment newAliment)? onAddAliment;
 
-  void supprimerAliment(Aliment aliment) {
-    aliments.remove(aliment);
+  @override
+  State<StatefulWidget> createState() {
+    return _AlimentListState();
+  }
+}
+
+class _AlimentListState extends State<AlimentList> {
+  late List<Aliment> aliments;
+
+  @override
+  void initState() {
+    super.initState();
+    aliments = widget.aliments;
+  }
+
+  void deleteAliment(Aliment aliment) {
+    setState(() {
+      aliments.remove(aliment);
+    });
+
     var doc = FirebaseFirestore.instance
         .collection("users")
-        .doc(user.uid)
+        .doc(widget.user.uid)
         .collection("aliments")
         .doc(aliment.id);
 
@@ -36,7 +61,7 @@ class AlimentList extends StatelessWidget {
         ),
         direction: DismissDirection.endToStart,
         onDismissed: (direction) {
-          supprimerAliment(aliments[index]);
+          deleteAliment(aliments[index]);
         },
         confirmDismiss: (direction) async {
           return await showDialog(
@@ -56,10 +81,22 @@ class AlimentList extends StatelessWidget {
             ),
           );
         },
-        child: AlimentItem(
-          aliment: aliments[index],
-          user: user,
-        ),
+        child: widget.fromPage == "Home"
+            ? AlimentItem(
+                aliment: aliments[index],
+                user: widget.user,
+                fromPage: widget.fromPage,
+                aliments: aliments,
+              )
+            : AlimentItem(
+                aliment: aliments[index],
+                user: widget.user,
+                fromPage: widget.fromPage,
+                onAddAliment: (newAliment) {
+                  widget.onAddAliment!(newAliment);
+                },
+                aliments: aliments,
+              ),
       ),
     );
   }

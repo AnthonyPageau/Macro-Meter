@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_regex/flutter_regex.dart';
 import 'package:macro_meter/models/aliment.dart';
+import 'package:macro_meter/models/plan.dart';
 
 Widget buildAgeField(
     String? value, String? initialValue, Function(String?) onSaved) {
@@ -43,9 +44,14 @@ Widget buildHeightField(
 }
 
 Widget buildSexeField(String? value, Function(String?) onChanged) {
-  return DropdownButton<String>(
+  return DropdownButtonFormField<String>(
     hint: Text("Sexe"),
     value: value,
+    validator: (value) {
+      if (value == null) {
+        return "Vous devez choisir une option";
+      }
+    },
     items: <String>["Homme", "Femme", "Autres"].map((String value) {
       return DropdownMenuItem<String>(
         value: value,
@@ -78,9 +84,14 @@ Widget buildWeightField(
 }
 
 Widget buildObjectiveField(String? value, Function(String?) onChanged) {
-  return DropdownButton<String>(
+  return DropdownButtonFormField<String>(
     hint: Text("Objectif"),
     value: value,
+    validator: (value) {
+      if (value == null) {
+        return "Vous devez choisir une option";
+      }
+    },
     items: <String>['Maintient', 'Perte de poids', 'Prise de poids']
         .map((String value) {
       return DropdownMenuItem<String>(
@@ -218,9 +229,14 @@ Widget buildMacroField(num? value, String? label, Function(String?) onSaved) {
 }
 
 Widget buildCategoryField(Category? value, Function(Category?) onChanged) {
-  return DropdownButton<Category>(
+  return DropdownButtonFormField<Category>(
     hint: Text("Categorie"),
     value: value,
+    validator: (value) {
+      if (value == null) {
+        return "Vous devez choisir une valeur";
+      }
+    },
     items: Category.values.map((Category type) {
       return DropdownMenuItem<Category>(
         value: type,
@@ -247,9 +263,14 @@ String _categoryToString(Category type) {
 }
 
 Widget buildUnitField(Unit? value, Function(Unit?) onChanged) {
-  return DropdownButton<Unit>(
+  return DropdownButtonFormField<Unit>(
     hint: Text("Unité"),
     value: value,
+    validator: (value) {
+      if (value == null) {
+        return "Vous devez choisir une option";
+      }
+    },
     items: Unit.values.map((Unit type) {
       return DropdownMenuItem<Unit>(
         value: type,
@@ -277,4 +298,51 @@ String _unitToString(Unit type) {
     case Unit.item:
       return "Portion";
   }
+}
+
+Widget buildAlimentNameField(String? value, String? initialValue,
+    List<Aliment> aliments, String? alimentId, Function(String?) onSaved) {
+  return TextFormField(
+    decoration: InputDecoration(labelText: "Nom :"),
+    autocorrect: false,
+    initialValue: initialValue,
+    validator: (value) {
+      if (value == null || value.trim().isEmpty) {
+        return "Le Nom ne peut pas être vide";
+      }
+      if (alimentId == null) {
+        if (aliments.any(
+            (aliment) => aliment.name.toUpperCase() == value.toUpperCase())) {
+          return "Cet aliment existe déjà";
+        }
+      } else {
+        if (aliments.any((aliment) =>
+            aliment.name.toUpperCase() == value.toUpperCase() &&
+            aliment.id != alimentId)) {
+          return "Cet aliment existe déjà";
+        }
+      }
+      return null;
+    },
+    onSaved: onSaved,
+  );
+}
+
+Widget buildPlanNameField(String? value, String? initialValue, List<Plan> plans,
+    Function(String?) onSaved) {
+  return TextFormField(
+    decoration: InputDecoration(labelText: "Nom :"),
+    autocorrect: false,
+    initialValue: initialValue,
+    validator: (value) {
+      if (value == null || value.trim().isEmpty) {
+        return "Le Nom ne peut pas être vide";
+      }
+      if (plans.any((plan) => plan.name.toUpperCase() == value.toUpperCase())) {
+        return "Ce plan existe déjà";
+      }
+      return null;
+    },
+    onSaved: onSaved,
+  );
 }

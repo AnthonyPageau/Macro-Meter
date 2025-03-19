@@ -28,85 +28,68 @@ class Menu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      width: 230,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            DrawerHeader(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Theme.of(context).colorScheme.primaryContainer,
-                    Theme.of(context)
-                        .colorScheme
-                        .primaryContainer
-                        .withOpacity(0.8),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.menu,
-                    size: 48,
-                    color: Theme.of(context).colorScheme.primary,
+    return Container(
+      child: Drawer(
+        width: 230,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              DrawerHeader(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.black,
+                      Color.fromARGB(255, 17, 127, 112),
+                    ],
+                    begin: Alignment.bottomRight,
+                    end: Alignment.topLeft,
                   ),
-                  const SizedBox(width: 18),
-                  Text(
-                    "Menu",
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: 30,
-                        ),
+                ),
+                child: Center(child: Image.asset("assets/images/logo.png")),
+              ),
+              ListBody(
+                children: [
+                  buildMenuItem(
+                    context,
+                    icon: Icons.home,
+                    title: "Accueil",
+                    onTap: () => onSelectScreen("Accueil"),
+                  ),
+                  buildMenuItem(
+                    context,
+                    icon: Icons.person,
+                    title: "Compte",
+                    onTap: () => onSelectScreen("Compte"),
+                  ),
+                  buildMenuItem(context,
+                      icon: Icons.calendar_month,
+                      title: "Plans",
+                      onTap: () => onSelectScreen("Plans")),
+                  buildMenuItem(context,
+                      icon: Icons.food_bank,
+                      title: "Aliments",
+                      onTap: () => onSelectScreen("Aliment")),
+                  buildMenuItem(context,
+                      icon: Icons.bar_chart_sharp, title: "Statistiques"),
+                  buildMenuItem(context,
+                      icon: Icons.photo_camera, title: "Photos"),
+                  buildMenuItem(
+                    context,
+                    icon: Icons.settings,
+                    title: "Paramètres",
+                    onTap: () => onSelectScreen("Paramètres"),
+                  ),
+                  buildMenuItem(
+                    context,
+                    icon: Icons.logout,
+                    title: "Déconnexion",
+                    onTap: () => FirebaseAuth.instance.signOut(),
                   ),
                 ],
               ),
-            ),
-            ListBody(
-              children: [
-                buildMenuItem(
-                  context,
-                  icon: Icons.home,
-                  title: "Accueil",
-                  onTap: () => onSelectScreen("Accueil"),
-                ),
-                buildMenuItem(
-                  context,
-                  icon: Icons.person,
-                  title: "Compte",
-                  onTap: () => onSelectScreen("Compte"),
-                ),
-                buildMenuItem(context,
-                    icon: Icons.calendar_month,
-                    title: "Plans",
-                    onTap: () => onSelectScreen("Plans")),
-                buildMenuItem(context,
-                    icon: Icons.food_bank,
-                    title: "Aliments",
-                    onTap: () => onSelectScreen("Aliment")),
-                buildMenuItem(context,
-                    icon: Icons.bar_chart_sharp, title: "Statistiques"),
-                buildMenuItem(context,
-                    icon: Icons.photo_camera, title: "Photos"),
-                buildMenuItem(
-                  context,
-                  icon: Icons.settings,
-                  title: "Paramètres",
-                  onTap: () => onSelectScreen("Paramètres"),
-                ),
-                buildMenuItem(
-                  context,
-                  icon: Icons.logout,
-                  title: "Déconnexion",
-                  onTap: () => FirebaseAuth.instance.signOut(),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

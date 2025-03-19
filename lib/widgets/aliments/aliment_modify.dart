@@ -9,10 +9,12 @@ class AlimentModify extends StatefulWidget {
       {required this.user,
       required this.aliment,
       required this.onModifyAliment,
+      required this.aliments,
       super.key});
 
   final User user;
   Aliment aliment;
+  List<Aliment> aliments;
   final void Function(Aliment modifiedAliment) onModifyAliment;
 
   @override
@@ -46,7 +48,7 @@ class _AlimentModifyState extends State<AlimentModify> {
           .update({
         "name": widget.aliment.name,
         "calories": widget.aliment.calories,
-        "proteines": widget.aliment.protein,
+        "proteines": widget.aliment.proteines,
         "fat": widget.aliment.fat,
         "carbs": widget.aliment.carbs,
         "category": widget.aliment.category.name,
@@ -105,9 +107,11 @@ class _AlimentModifyState extends State<AlimentModify> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: buildSurnameField(
+                  child: buildAlimentNameField(
                     widget.aliment.name,
                     widget.aliment.name,
+                    widget.aliments,
+                    widget.aliment.id,
                     (value) {
                       widget.aliment.name = value!;
                     },
@@ -125,10 +129,10 @@ class _AlimentModifyState extends State<AlimentModify> {
               children: [
                 Expanded(
                   child: buildMacroField(
-                    widget.aliment.protein,
+                    widget.aliment.proteines,
                     "Protéines",
                     (value) {
-                      widget.aliment.protein = num.parse(value!);
+                      widget.aliment.proteines = num.parse(value!);
                     },
                   ),
                 ),

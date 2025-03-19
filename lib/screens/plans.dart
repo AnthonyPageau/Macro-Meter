@@ -60,25 +60,22 @@ class _PlanScreenState extends State<PlanScreen> {
         List<Aliment> alimentList = alimentCollection.docs.map((alimentDoc) {
           var alimentData = alimentDoc.data();
           return Aliment(
-              id: alimentDoc.id,
-              name: alimentData["name"],
-              calories: alimentData["calories"],
-              protein: alimentData["proteines"],
-              carbs: alimentData["carbs"],
-              fat: alimentData["fat"],
-              unit: alimentData["unit"],
-              quantity: alimentData["quantity"],
-              category: alimentData["categorie"]);
+            id: alimentDoc.id,
+            name: alimentData["name"],
+            calories: alimentData["calories"],
+            proteines: alimentData["proteines"],
+            carbs: alimentData["carbs"],
+            fat: alimentData["fat"],
+            unit: Unit.values.byName(alimentData["unit"]),
+            quantity: alimentData["quantity"],
+            category: Category.values.byName(
+              alimentData["category"],
+            ),
+          );
         }).toList();
 
         return Meal(
-            id: mealDoc.id,
-            name: mealData["name"],
-            aliments: alimentList,
-            totalCalories: mealData["totalCalories"],
-            totalCarbs: mealData["totalCarbs"],
-            totalFats: mealData["totalFats"],
-            totalProteines: mealData["totalProteines"]);
+            id: mealDoc.id, name: mealData["name"], aliments: alimentList);
       }).toList());
 
       return Plan(
@@ -117,13 +114,13 @@ class _PlanScreenState extends State<PlanScreen> {
               showDialog(
                 context: context,
                 builder: (ctx) => PlanCreate(
-                  user: widget.user,
-                  onAddPlan: (newPlan) {
-                    setState(() {
-                      plans.add(newPlan);
-                    });
-                  },
-                ),
+                    user: widget.user,
+                    onAddPlan: (newPlan) {
+                      setState(() {
+                        plans.add(newPlan);
+                      });
+                    },
+                    plans: plans),
               );
             },
             icon: const Icon(
@@ -133,13 +130,25 @@ class _PlanScreenState extends State<PlanScreen> {
           ),
         ],
       ),
-      body: plans == null
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                Expanded(child: PlanList(plans: plans, user: widget.user))
-              ],
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.black,
+              Color.fromARGB(255, 17, 127, 112),
+            ],
+            begin: Alignment.bottomRight,
+            end: Alignment.topLeft,
+          ),
+        ),
+        child: plans == null
+            ? const Center(child: CircularProgressIndicator())
+            : Column(
+                children: [
+                  Expanded(child: PlanList(plans: plans, user: widget.user))
+                ],
+              ),
+      ),
     );
   }
 }
