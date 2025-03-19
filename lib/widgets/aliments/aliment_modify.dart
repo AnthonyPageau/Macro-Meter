@@ -24,8 +24,8 @@ class AlimentModify extends StatefulWidget {
 }
 
 class _AlimentModifyState extends State<AlimentModify> {
-  Category? categoryValue;
-  Unit? unitValue;
+  AlimentCategory? categoryValue;
+  AlimentUnit? unitValue;
   Aliment? newAliment;
 
   final form = GlobalKey<FormState>();
@@ -49,7 +49,7 @@ class _AlimentModifyState extends State<AlimentModify> {
         "name": widget.aliment.name,
         "calories": widget.aliment.calories,
         "proteines": widget.aliment.proteines,
-        "fat": widget.aliment.fat,
+        "fat": widget.aliment.fats,
         "carbs": widget.aliment.carbs,
         "category": widget.aliment.category.name,
         "unit": widget.aliment.unit.name,
@@ -152,10 +152,10 @@ class _AlimentModifyState extends State<AlimentModify> {
               children: [
                 Expanded(
                   child: buildMacroField(
-                    widget.aliment.fat,
+                    widget.aliment.fats,
                     "Lipides",
                     (value) {
-                      widget.aliment.fat = num.parse(value!);
+                      widget.aliment.fats = num.parse(value!);
                     },
                   ),
                 ),

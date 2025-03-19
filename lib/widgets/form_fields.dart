@@ -228,8 +228,9 @@ Widget buildMacroField(num? value, String? label, Function(String?) onSaved) {
   );
 }
 
-Widget buildCategoryField(Category? value, Function(Category?) onChanged) {
-  return DropdownButtonFormField<Category>(
+Widget buildCategoryField(
+    AlimentCategory? value, Function(AlimentCategory?) onChanged) {
+  return DropdownButtonFormField<AlimentCategory>(
     hint: Text("Categorie"),
     value: value,
     validator: (value) {
@@ -237,8 +238,8 @@ Widget buildCategoryField(Category? value, Function(Category?) onChanged) {
         return "Vous devez choisir une valeur";
       }
     },
-    items: Category.values.map((Category type) {
-      return DropdownMenuItem<Category>(
+    items: AlimentCategory.values.map((AlimentCategory type) {
+      return DropdownMenuItem<AlimentCategory>(
         value: type,
         child: Text(_categoryToString(type)),
       );
@@ -247,23 +248,23 @@ Widget buildCategoryField(Category? value, Function(Category?) onChanged) {
   );
 }
 
-String _categoryToString(Category type) {
+String _categoryToString(AlimentCategory type) {
   switch (type) {
-    case Category.protein:
+    case AlimentCategory.proteine:
       return "Protéines";
-    case Category.fruitsAndVegetable:
+    case AlimentCategory.fruitsAndVegetable:
       return "Fruits/légumes";
-    case Category.dairy:
+    case AlimentCategory.dairy:
       return "Produits laitier";
-    case Category.cereal:
+    case AlimentCategory.cereal:
       return "Céréales";
-    case Category.other:
+    case AlimentCategory.other:
       return "Autres";
   }
 }
 
-Widget buildUnitField(Unit? value, Function(Unit?) onChanged) {
-  return DropdownButtonFormField<Unit>(
+Widget buildUnitField(AlimentUnit? value, Function(AlimentUnit?) onChanged) {
+  return DropdownButtonFormField<AlimentUnit>(
     hint: Text("Unité"),
     value: value,
     validator: (value) {
@@ -271,8 +272,8 @@ Widget buildUnitField(Unit? value, Function(Unit?) onChanged) {
         return "Vous devez choisir une option";
       }
     },
-    items: Unit.values.map((Unit type) {
-      return DropdownMenuItem<Unit>(
+    items: AlimentUnit.values.map((AlimentUnit type) {
+      return DropdownMenuItem<AlimentUnit>(
         value: type,
         child: Text(_unitToString(type)),
       );
@@ -281,21 +282,21 @@ Widget buildUnitField(Unit? value, Function(Unit?) onChanged) {
   );
 }
 
-String _unitToString(Unit type) {
+String _unitToString(AlimentUnit type) {
   switch (type) {
-    case Unit.grams:
+    case AlimentUnit.grams:
       return "Gramme";
-    case Unit.ml:
+    case AlimentUnit.ml:
       return "mL";
-    case Unit.cup:
+    case AlimentUnit.cup:
       return "Tasse";
-    case Unit.tbsp:
+    case AlimentUnit.tbsp:
       return "Tbsp";
-    case Unit.tsp:
+    case AlimentUnit.tsp:
       return "Tsp";
-    case Unit.ounces:
+    case AlimentUnit.ounces:
       return "Once";
-    case Unit.item:
+    case AlimentUnit.item:
       return "Portion";
   }
 }

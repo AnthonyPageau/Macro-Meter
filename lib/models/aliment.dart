@@ -1,54 +1,121 @@
 import 'package:flutter/material.dart';
 
-enum Category { protein, fruitsAndVegetable, dairy, cereal, other }
+enum AlimentCategory { proteine, fruitsAndVegetable, dairy, cereal, other }
 
-enum Unit { grams, cup, tbsp, tsp, ounces, item, ml }
+enum AlimentUnit { grams, cup, tbsp, tsp, ounces, item, ml }
 
 const categoryIcons = {
-  Category.protein: Icons.egg_alt_outlined,
-  Category.fruitsAndVegetable: Icons.apple,
-  Category.dairy: Icons.local_drink,
-  Category.cereal: Icons.breakfast_dining,
-  Category.other: Icons.fastfood
+  AlimentCategory.proteine: Icons.egg_alt_outlined,
+  AlimentCategory.fruitsAndVegetable: Icons.apple,
+  AlimentCategory.dairy: Icons.local_drink,
+  AlimentCategory.cereal: Icons.breakfast_dining,
+  AlimentCategory.other: Icons.fastfood
 };
 
 class Aliment {
-  Aliment(
-      {required this.id,
-      required this.name,
-      required this.calories,
-      required this.proteines,
-      required this.carbs,
-      required this.fat,
-      required this.unit,
-      required this.quantity,
-      required this.category});
+  Aliment({
+    required String id,
+    required String name,
+    required int calories,
+    required num proteines,
+    required num carbs,
+    required num fats,
+    required AlimentUnit unit,
+    required num quantity,
+    required AlimentCategory category,
+  })  : _id = id,
+        _name = name,
+        _calories = calories,
+        _proteines = proteines,
+        _carbs = carbs,
+        _fats = fats,
+        _unit = unit,
+        _quantity = quantity,
+        _category = category;
 
-  String name;
-  String id;
-  int calories;
-  num proteines;
-  num carbs;
-  num fat;
-  Unit unit;
-  num quantity;
-  Category category;
+  String _id;
+  String _name;
+  int _calories;
+  num _proteines;
+  num _carbs;
+  num _fats;
+  AlimentUnit _unit;
+  num _quantity;
+  AlimentCategory _category;
 
-  String unitToString(Unit type) {
+  String get id => _id;
+  String get name => _name;
+  int get calories => _calories;
+  num get proteines => _proteines;
+  num get carbs => _carbs;
+  num get fats => _fats;
+  AlimentUnit get unit => _unit;
+  num get quantity => _quantity;
+  AlimentCategory get category => _category;
+
+  set id(String value) {
+    _id = value;
+  }
+
+  set name(String value) {
+    if (value.isNotEmpty) {
+      _name = value;
+    }
+  }
+
+  set calories(int value) {
+    if (value >= 0) {
+      _calories = value;
+    }
+  }
+
+  set proteines(num value) {
+    if (value >= 0) {
+      _proteines = value;
+    }
+  }
+
+  set carbs(num value) {
+    if (value >= 0) {
+      _carbs = value;
+    }
+  }
+
+  set fats(num value) {
+    if (value >= 0) {
+      _fats = value;
+    }
+  }
+
+  set unit(AlimentUnit value) {
+    _unit = value;
+  }
+
+  set quantity(num value) {
+    if (value > 0) {
+      _quantity = value;
+    }
+  }
+
+  set category(AlimentCategory value) {
+    _category = value;
+  }
+
+  String unitToString(AlimentUnit type) {
     switch (type) {
-      case Unit.grams:
+      case AlimentUnit.grams:
         return "G";
-      case Unit.cup:
+      case AlimentUnit.cup:
         return "Tasse";
-      case Unit.tbsp:
+      case AlimentUnit.tbsp:
         return "Tbsp";
-      case Unit.tsp:
+      case AlimentUnit.tsp:
         return "Tsp";
-      case Unit.ounces:
+      case AlimentUnit.ounces:
         return "Onces";
-      case Unit.item:
+      case AlimentUnit.item:
         return "Item";
-      case Unit.ml:
+      case AlimentUnit.ml:
         return "mL";
     }
   }
@@ -59,7 +126,7 @@ class Aliment {
     calories = (calories * ratio).toInt();
     proteines *= ratio;
     carbs *= ratio;
-    fat *= ratio;
+    fats *= ratio;
     quantity = updatedQuantity;
   }
 }

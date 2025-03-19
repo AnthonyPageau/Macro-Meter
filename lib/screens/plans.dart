@@ -65,10 +65,10 @@ class _PlanScreenState extends State<PlanScreen> {
             calories: alimentData["calories"],
             proteines: alimentData["proteines"],
             carbs: alimentData["carbs"],
-            fat: alimentData["fat"],
-            unit: Unit.values.byName(alimentData["unit"]),
+            fats: alimentData["fat"],
+            unit: AlimentUnit.values.byName(alimentData["unit"]),
             quantity: alimentData["quantity"],
-            category: Category.values.byName(
+            category: AlimentCategory.values.byName(
               alimentData["category"],
             ),
           );

@@ -62,10 +62,10 @@ class _AlimentState extends State<AlimentScreen> {
         calories: alimentData["calories"],
         proteines: alimentData["proteines"],
         carbs: alimentData["carbs"],
-        fat: alimentData["fat"],
+        fats: alimentData["fat"],
         quantity: alimentData["quantity"],
-        unit: Unit.values.byName(alimentData["unit"]),
-        category: Category.values.byName(
+        unit: AlimentUnit.values.byName(alimentData["unit"]),
+        category: AlimentCategory.values.byName(
           alimentData["category"],
         ),
       );

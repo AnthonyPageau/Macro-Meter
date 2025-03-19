@@ -41,7 +41,7 @@ class Meal {
   num totalFats() {
     num total = 0;
     for (Aliment aliment in aliments) {
-      total += aliment.fat;
+      total += aliment.fats;
     }
 
     return double.parse(total.toStringAsFixed(2));
