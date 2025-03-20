@@ -102,7 +102,7 @@ class _AlimentItemState extends State<AlimentItem> {
                       const Spacer(),
                       Text("Glucide: ${aliment.carbs}"),
                       const Spacer(),
-                      Text("Lipide: ${aliment.fat}")
+                      Text("Lipide: ${aliment.fats}")
                     ],
                   )
                 ],

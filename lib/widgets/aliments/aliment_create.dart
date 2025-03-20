@@ -27,8 +27,8 @@ class _AlimentCreateState extends State<AlimentCreate> {
   num? carbsValue;
   int? caloriesValue;
   num? quantityValue;
-  Category? categoryValue;
-  Unit? unitValue;
+  AlimentCategory? categoryValue;
+  AlimentUnit? unitValue;
   Aliment? newAliment;
 
   final form = GlobalKey<FormState>();
@@ -73,7 +73,7 @@ class _AlimentCreateState extends State<AlimentCreate> {
             calories: caloriesValue!,
             proteines: proteinesValue!,
             carbs: carbsValue!,
-            fat: fatsValue!,
+            fats: fatsValue!,
             unit: unitValue!,
             quantity: quantityValue!,
             category: categoryValue!),

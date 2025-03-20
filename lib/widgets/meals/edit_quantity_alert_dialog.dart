@@ -47,7 +47,7 @@ class _EditQuantityAlertDialogState extends State<EditQuantityAlertDialog> {
         "calories": widget.aliment.calories,
         "proteines": widget.aliment.proteines,
         "carbs": widget.aliment.carbs,
-        "fat": widget.aliment.fat,
+        "fat": widget.aliment.fats,
         "quantity": widget.aliment.quantity,
       });
       widget.onModifyQuantity(widget.aliment);
@@ -69,7 +69,6 @@ class _EditQuantityAlertDialogState extends State<EditQuantityAlertDialog> {
       content: Form(
         key: form,
         child: TextFormField(
-          obscureText: true,
           decoration: InputDecoration(labelText: "Nouvelle quantité :"),
           keyboardType:
               TextInputType.numberWithOptions(signed: false, decimal: true),

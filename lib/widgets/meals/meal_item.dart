@@ -97,7 +97,7 @@ class _MealItemState extends State<MealItem> {
         "name": addedAliment.name,
         "calories": addedAliment.calories,
         "proteines": addedAliment.proteines,
-        "fat": addedAliment.fat,
+        "fat": addedAliment.fats,
         "carbs": addedAliment.carbs,
         "category": addedAliment.category.name,
         "unit": addedAliment.unit.name,
