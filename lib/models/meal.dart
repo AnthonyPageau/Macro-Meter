@@ -2,14 +2,36 @@ import 'package:macro_meter/models/aliment.dart';
 
 class Meal {
   Meal({
-    required this.id,
-    required this.name,
+    required String id,
+    required String name,
     List<Aliment>? aliments,
-  }) : aliments = aliments ?? [];
+  })  : _id = id,
+        _name = name,
+        _aliments = aliments ?? [];
 
-  String id;
-  String name;
-  List<Aliment> aliments;
+  String _id;
+  String _name;
+  List<Aliment> _aliments;
+
+  String get id => _id;
+  String get name => _name;
+  List<Aliment> get aliments => _aliments;
+
+  set id(String value) {
+    if (value.isNotEmpty) {
+      _id = value;
+    }
+  }
+
+  set name(String value) {
+    if (value.isNotEmpty) {
+      _name = value;
+    }
+  }
+
+  set aliments(List<Aliment> value) {
+    _aliments = value;
+  }
 
   num totalCalories() {
     num total = 0;
