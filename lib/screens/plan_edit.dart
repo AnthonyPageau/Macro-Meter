@@ -55,15 +55,6 @@ class _PlanEditState extends State<PlanEdit> {
           widget.plan.name,
           style: TextStyle(fontSize: 36),
         ),
-        flexibleSpace: Center(
-          child: Padding(
-            padding: EdgeInsets.only(right: 56),
-            child: Text(
-              widget.plan.name,
-              style: TextStyle(fontSize: 36),
-            ),
-          ),
-        ),
       ),
       body: Container(
         decoration: BoxDecoration(

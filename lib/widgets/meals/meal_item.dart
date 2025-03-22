@@ -39,6 +39,7 @@ class _MealItemState extends State<MealItem> {
   late Meal meal;
   late Plan plan;
   bool _isEditingName = false;
+  bool _isChecked = false;
   late TextEditingController _controller;
 
   @override
@@ -245,12 +246,27 @@ class _MealItemState extends State<MealItem> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.fromLTRB(12, 12, 36, 12),
                     decoration: BoxDecoration(color: Colors.grey),
                     alignment: Alignment.centerRight,
-                    child: Text(
-                      "Cals",
-                      style: TextStyle(fontSize: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Cals",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        Checkbox(
+                          value: _isChecked,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _isChecked = !_isChecked;
+                            });
+                          },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Container(
@@ -261,6 +277,7 @@ class _MealItemState extends State<MealItem> {
                         user: widget.user,
                         plan: widget.plan,
                         meal: widget.meal,
+                        isChecked: _isChecked,
                         onDeleteALiment: (deletedAliment) {
                           setState(() {
                             widget.onDeleteALiment(deletedAliment);

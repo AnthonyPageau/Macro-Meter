@@ -14,12 +14,14 @@ class AlimentItem extends StatefulWidget {
       required this.user,
       required this.onDeleteALiment,
       required this.onModifyQuantity,
+      required this.isChecked,
       super.key});
 
   Aliment aliment;
   final User user;
   final Meal meal;
   final Plan plan;
+  bool isChecked;
   final void Function(Aliment deletedAliment) onDeleteALiment;
   final void Function(Aliment modifiedAliment) onModifyQuantity;
 
@@ -38,7 +40,7 @@ class _AlimentItemState extends State<AlimentItem> {
           flex: 4,
           child: Text(
             widget.aliment.name,
-            textAlign: TextAlign.center, // Ensures it aligns in the middle
+            textAlign: TextAlign.center,
           ),
         ),
         IconButton(
@@ -60,7 +62,6 @@ class _AlimentItemState extends State<AlimentItem> {
           iconSize: 30,
         ),
         Container(
-          padding: EdgeInsets.only(right: 20),
           width: 110.0,
           height: 30.0,
           decoration: BoxDecoration(color: Colors.grey),
@@ -110,10 +111,47 @@ class _AlimentItemState extends State<AlimentItem> {
             ],
           ),
         ),
+        Container(
+            // child: Row(
+            //   children: [
+            //     Text(
+            //       widget.aliment.calories.toString(),
+            //       textAlign: TextAlign.center,
+            //     ),
+            //     Checkbox(
+            //       value: _isChecked,
+            //       onChanged: (bool? value) {
+            //         setState(() {
+            //           _isChecked = !_isChecked;
+            //         });
+            //       },
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(20),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            ),
+        const SizedBox(
+          width: 20,
+        ),
         Expanded(
           child: Text(
             widget.aliment.calories.toString(),
-            textAlign: TextAlign.center, // Ensures it aligns in the middle
+            textAlign: TextAlign.center,
+          ),
+        ),
+        Expanded(
+          child: Checkbox(
+            value: widget.isChecked,
+            onChanged: (bool? value) {
+              setState(() {
+                widget.isChecked = !widget.isChecked;
+              });
+            },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
           ),
         ),
       ],

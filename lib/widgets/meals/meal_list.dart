@@ -7,17 +7,16 @@ import 'package:macro_meter/models/aliment.dart';
 import 'package:macro_meter/widgets/meals/meal_item.dart';
 
 class MealList extends StatelessWidget {
-  const MealList({
-    super.key,
-    required this.meals,
-    required this.user,
-    required this.plan,
-    required this.onAddMeal,
-    required this.onAddAliment,
-    required this.onDeleteALiment,
-    required this.onDeleteMeal,
-    required this.onModifyQuantity,
-  });
+  const MealList(
+      {super.key,
+      required this.meals,
+      required this.user,
+      required this.plan,
+      required this.onAddMeal,
+      required this.onAddAliment,
+      required this.onDeleteALiment,
+      required this.onDeleteMeal,
+      required this.onModifyQuantity});
 
   final List<Meal> meals;
   final User user;
