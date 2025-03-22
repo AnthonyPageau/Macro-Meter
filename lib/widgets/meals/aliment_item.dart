@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:macro_meter/models/aliment.dart';
 import 'package:macro_meter/models/meal.dart';
 import 'package:macro_meter/models/plan.dart';
+import 'package:macro_meter/models/journal.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:macro_meter/widgets/meals/delete_aliment_alert_dialog.dart';
 import 'package:macro_meter/widgets/meals/edit_quantity_alert_dialog.dart';
@@ -12,6 +13,7 @@ class AlimentItem extends StatefulWidget {
       required this.meal,
       required this.plan,
       required this.user,
+      this.journal,
       required this.onDeleteALiment,
       required this.onModifyQuantity,
       required this.isChecked,
@@ -21,6 +23,7 @@ class AlimentItem extends StatefulWidget {
   final User user;
   final Meal meal;
   final Plan plan;
+  final Journal? journal;
   bool isChecked;
   final void Function(Aliment deletedAliment) onDeleteALiment;
   final void Function(Aliment modifiedAliment) onModifyQuantity;
@@ -52,6 +55,7 @@ class _AlimentItemState extends State<AlimentItem> {
                 aliment: widget.aliment,
                 meal: widget.meal,
                 plan: widget.plan,
+                journal: widget.journal,
                 onDeleteALiment: (deletedAliment) {
                   widget.onDeleteALiment(deletedAliment);
                 },
@@ -83,6 +87,7 @@ class _AlimentItemState extends State<AlimentItem> {
                         user: widget.user,
                         meal: widget.meal,
                         plan: widget.plan,
+                        journal: widget.journal,
                         onModifyQuantity: (aliment) {
                           setState(() {
                             widget.aliment = aliment;

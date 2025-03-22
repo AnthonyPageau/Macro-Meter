@@ -97,6 +97,20 @@ class _PlanScreenState extends State<PlanScreen> {
     });
   }
 
+  void _choosePlan(Plan choosePlan) {
+    if (choosePlan.meals.isNotEmpty) {
+      widget.onChoosePlan!(choosePlan);
+      Navigator.of(context).pop();
+    } else {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Choisissez un plan avec des repas"),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,8 +173,7 @@ class _PlanScreenState extends State<PlanScreen> {
                               user: widget.user,
                               fromPage: widget.fromPage,
                               onChoosePlan: (choosePlan) {
-                                widget.onChoosePlan!(choosePlan);
-                                Navigator.of(context).pop();
+                                _choosePlan(choosePlan);
                               },
                             )
                           : PlanList(

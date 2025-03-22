@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:macro_meter/models/meal.dart';
 import 'package:macro_meter/models/plan.dart';
+import 'package:macro_meter/models/journal.dart';
 import 'package:macro_meter/models/aliment.dart';
 import 'package:macro_meter/widgets/meals/meal_item.dart';
 
@@ -12,6 +13,7 @@ class MealList extends StatelessWidget {
       required this.meals,
       required this.user,
       required this.plan,
+      this.journal,
       required this.onAddMeal,
       required this.onAddAliment,
       required this.onDeleteALiment,
@@ -21,6 +23,7 @@ class MealList extends StatelessWidget {
   final List<Meal> meals;
   final User user;
   final Plan plan;
+  final Journal? journal;
   final void Function(Meal newMeal) onAddMeal;
   final void Function(Aliment newAliment) onAddAliment;
   final void Function(Aliment deletedAliment) onDeleteALiment;
@@ -36,6 +39,7 @@ class MealList extends StatelessWidget {
           meal: meals[index],
           user: user,
           plan: plan,
+          journal: journal,
           onAddMeal: (newMeal) {
             onAddMeal(newMeal);
           },

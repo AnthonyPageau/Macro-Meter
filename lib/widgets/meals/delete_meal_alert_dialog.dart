@@ -4,18 +4,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:macro_meter/models/plan.dart';
 import 'package:macro_meter/models/meal.dart';
+import 'package:macro_meter/models/journal.dart';
 
 class DeleteMealAlertDialog extends StatefulWidget {
   const DeleteMealAlertDialog(
       {required this.user,
       required this.plan,
       required this.meal,
+      this.journal,
       required this.onDeleteMeal,
       super.key});
 
   final User user;
   final Plan plan;
   final Meal meal;
+  final Journal? journal;
   final void Function(Meal deletedMeal) onDeleteMeal;
 
   @override
@@ -27,24 +30,49 @@ class DeleteMealAlertDialog extends StatefulWidget {
 class _DeleteMealAlertDialogState extends State<DeleteMealAlertDialog> {
   void deleteMeal() async {
     try {
-      var docMeal = FirebaseFirestore.instance
-          .collection("users")
-          .doc(widget.user.uid)
-          .collection("plans")
-          .doc(widget.plan.id)
-          .collection("meals")
-          .doc(widget.meal.id);
+      CollectionReference collection;
+      var docMeal;
+      if (widget.journal != null) {
+        docMeal = FirebaseFirestore.instance
+            .collection("users")
+            .doc(widget.user.uid)
+            .collection("journals")
+            .doc(widget.journal!.id)
+            .collection("plan")
+            .doc(widget.plan.id)
+            .collection("meals")
+            .doc(widget.meal.id);
 
-      CollectionReference colAliments = FirebaseFirestore.instance
-          .collection("users")
-          .doc(widget.user.uid)
-          .collection("plans")
-          .doc(widget.plan.id)
-          .collection("meals")
-          .doc(widget.meal.id)
-          .collection("aliments");
+        collection = FirebaseFirestore.instance
+            .collection("users")
+            .doc(widget.user.uid)
+            .collection("journals")
+            .doc(widget.journal!.id)
+            .collection("plan")
+            .doc(widget.plan.id)
+            .collection("meals")
+            .doc(widget.meal.id)
+            .collection("aliments");
+      } else {
+        docMeal = FirebaseFirestore.instance
+            .collection("users")
+            .doc(widget.user.uid)
+            .collection("plans")
+            .doc(widget.plan.id)
+            .collection("meals")
+            .doc(widget.meal.id);
 
-      QuerySnapshot collectionSnapshot = await colAliments.get();
+        collection = FirebaseFirestore.instance
+            .collection("users")
+            .doc(widget.user.uid)
+            .collection("plans")
+            .doc(widget.plan.id)
+            .collection("meals")
+            .doc(widget.meal.id)
+            .collection("aliments");
+      }
+
+      QuerySnapshot collectionSnapshot = await collection.get();
       for (var doc in collectionSnapshot.docs) {
         await doc.reference.delete();
       }

@@ -3,16 +3,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:macro_meter/models/meal.dart';
 import 'package:macro_meter/models/plan.dart';
 import 'package:macro_meter/models/aliment.dart';
+import 'package:macro_meter/models/journal.dart';
 import 'package:macro_meter/widgets/meals/aliment_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:macro_meter/screens/aliment.dart';
 import 'package:macro_meter/widgets/meals/delete_meal_alert_dialog.dart';
 
 class MealItem extends StatefulWidget {
-  const MealItem(
+  MealItem(
       {required this.meal,
       required this.user,
       required this.plan,
+      this.journal,
       required this.onAddMeal,
       required this.onAddAliment,
       required this.onDeleteALiment,
@@ -23,6 +25,7 @@ class MealItem extends StatefulWidget {
   final Meal meal;
   final User user;
   final Plan plan;
+  Journal? journal;
   final void Function(Meal newMeal) onAddMeal;
   final void Function(Aliment newAliment) onAddAliment;
   final void Function(Aliment deletedAliment) onDeleteALiment;
@@ -58,19 +61,35 @@ class _MealItemState extends State<MealItem> {
 
   void addMeal() async {
     try {
-      DocumentReference docRef = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(widget.user.uid)
-          .collection("plans")
-          .doc(widget.plan.id)
-          .collection("meals")
-          .add({
-        "name": widget.plan.meals.length.toString(),
-      });
-
+      String refId;
+      if (widget.journal != null) {
+        DocumentReference docRef = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(widget.user.uid)
+            .collection("journals")
+            .doc(widget.journal!.id)
+            .collection("plan")
+            .doc(widget.journal!.plan.id)
+            .collection("meals")
+            .add({
+          "name": widget.plan.meals.length.toString(),
+        });
+        refId = docRef.id;
+      } else {
+        DocumentReference docRef = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(widget.user.uid)
+            .collection("plans")
+            .doc(widget.plan.id)
+            .collection("meals")
+            .add({
+          "name": widget.plan.meals.length.toString(),
+        });
+        refId = docRef.id;
+      }
       widget.onAddMeal(
         Meal(
-          id: docRef.id,
+          id: refId,
           name: "Meal ${widget.plan.meals.length.toString()}",
         ),
       );
@@ -86,25 +105,52 @@ class _MealItemState extends State<MealItem> {
 
   void _addAliment(Aliment addedAliment) async {
     try {
-      DocumentReference docRef = await FirebaseFirestore.instance
-          .collection("users")
-          .doc(widget.user.uid)
-          .collection("plans")
-          .doc(plan.id)
-          .collection("meals")
-          .doc(meal.id)
-          .collection("aliments")
-          .add({
-        "name": addedAliment.name,
-        "calories": addedAliment.calories,
-        "proteines": addedAliment.proteines,
-        "fat": addedAliment.fats,
-        "carbs": addedAliment.carbs,
-        "category": addedAliment.category.name,
-        "unit": addedAliment.unit.name,
-        "quantity": addedAliment.quantity
-      });
-      addedAliment.id = docRef.id;
+      String refId;
+
+      if (widget.journal != null) {
+        DocumentReference docRef = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(widget.user.uid)
+            .collection("journals")
+            .doc(widget.journal!.id)
+            .collection("plan")
+            .doc(widget.journal!.plan.id)
+            .collection("meals")
+            .doc(meal.id)
+            .collection("aliments")
+            .add({
+          "name": addedAliment.name,
+          "calories": addedAliment.calories,
+          "proteines": addedAliment.proteines,
+          "fat": addedAliment.fats,
+          "carbs": addedAliment.carbs,
+          "category": addedAliment.category.name,
+          "unit": addedAliment.unit.name,
+          "quantity": addedAliment.quantity
+        });
+        refId = docRef.id;
+      } else {
+        DocumentReference docRef = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(widget.user.uid)
+            .collection("plans")
+            .doc(plan.id)
+            .collection("meals")
+            .doc(meal.id)
+            .collection("aliments")
+            .add({
+          "name": addedAliment.name,
+          "calories": addedAliment.calories,
+          "proteines": addedAliment.proteines,
+          "fat": addedAliment.fats,
+          "carbs": addedAliment.carbs,
+          "category": addedAliment.category.name,
+          "unit": addedAliment.unit.name,
+          "quantity": addedAliment.quantity
+        });
+        refId = docRef.id;
+      }
+      addedAliment.id = refId;
       meal.aliments.add(addedAliment);
       setState(() {});
       widget.onAddAliment(addedAliment);
@@ -130,16 +176,31 @@ class _MealItemState extends State<MealItem> {
         );
         return;
       }
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(widget.user.uid)
-          .collection("plans")
-          .doc(widget.plan.id)
-          .collection("meals")
-          .doc(meal.id)
-          .update({
-        'name': _controller.text,
-      });
+      if (widget.journal != null) {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(widget.user.uid)
+            .collection("journals")
+            .doc(widget.journal!.id)
+            .collection("plans")
+            .doc(widget.plan.id)
+            .collection("meals")
+            .doc(meal.id)
+            .update({
+          'name': _controller.text,
+        });
+      } else {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(widget.user.uid)
+            .collection("plans")
+            .doc(widget.plan.id)
+            .collection("meals")
+            .doc(meal.id)
+            .update({
+          'name': _controller.text,
+        });
+      }
       meal.name = _controller.text;
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).clearSnackBars();
@@ -231,6 +292,7 @@ class _MealItemState extends State<MealItem> {
                                   user: widget.user,
                                   meal: widget.meal,
                                   plan: widget.plan,
+                                  journal: widget.journal,
                                   onDeleteMeal: (deletedMeal) {
                                     widget.onDeleteMeal(deletedMeal);
                                   },
@@ -277,6 +339,7 @@ class _MealItemState extends State<MealItem> {
                         user: widget.user,
                         plan: widget.plan,
                         meal: widget.meal,
+                        journal: widget.journal,
                         isChecked: _isChecked,
                         onDeleteALiment: (deletedAliment) {
                           setState(() {
