@@ -5,10 +5,17 @@ import 'package:macro_meter/models/plan.dart';
 import 'package:macro_meter/widgets/plans/plan_item.dart';
 
 class PlanList extends StatelessWidget {
-  const PlanList({super.key, required this.plans, required this.user});
+  const PlanList(
+      {super.key,
+      required this.plans,
+      required this.user,
+      required this.fromPage,
+      this.onChoosePlan});
 
   final List<Plan> plans;
   final User user;
+  final String fromPage;
+  final void Function(Plan choosePlan)? onChoosePlan;
 
   void deletePlan(Plan plan) async {
     var docRef = FirebaseFirestore.instance
@@ -67,10 +74,20 @@ class PlanList extends StatelessWidget {
             ),
           );
         },
-        child: PlanItem(
-          plan: plans[index],
-          user: user,
-        ),
+        child: fromPage == "Journal"
+            ? PlanItem(
+                plan: plans[index],
+                user: user,
+                fromPage: fromPage,
+                onChoosePlan: (chosePlan) {
+                  onChoosePlan!(chosePlan);
+                },
+              )
+            : PlanItem(
+                plan: plans[index],
+                user: user,
+                fromPage: fromPage,
+              ),
       ),
     );
   }

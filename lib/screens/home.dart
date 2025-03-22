@@ -46,6 +46,7 @@ class _HomeState extends State<Home> {
           MaterialPageRoute(
             builder: (ctx) => PlanScreen(
               user: widget.user,
+              fromPage: "Home",
             ),
           ),
         );
@@ -53,7 +54,9 @@ class _HomeState extends State<Home> {
         Navigator.of(context).pop();
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (ctx) => JournalScreen(),
+            builder: (ctx) => JournalScreen(
+              user: widget.user,
+            ),
           ),
         );
       default:

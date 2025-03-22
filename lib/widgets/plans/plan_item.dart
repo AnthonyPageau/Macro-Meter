@@ -6,10 +6,17 @@ import 'package:intl/intl.dart';
 import 'package:macro_meter/models/plan.dart';
 
 class PlanItem extends StatefulWidget {
-  const PlanItem({required this.plan, required this.user, super.key});
+  PlanItem(
+      {required this.plan,
+      required this.user,
+      required this.fromPage,
+      this.onChoosePlan,
+      super.key});
 
   final Plan plan;
   final User user;
+  final String fromPage;
+  void Function(Plan chosePlan)? onChoosePlan;
 
   @override
   State<PlanItem> createState() {
@@ -43,14 +50,18 @@ class _AlimentItemState extends State<PlanItem> {
         child: Card(
           child: InkWell(
             onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (ctx) => PlanEdit(
-                    user: widget.user,
-                    plan: plan,
+              if (widget.fromPage == "Journal") {
+                widget.onChoosePlan!(plan);
+              } else {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => PlanEdit(
+                      user: widget.user,
+                      plan: plan,
+                    ),
                   ),
-                ),
-              );
+                );
+              }
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(

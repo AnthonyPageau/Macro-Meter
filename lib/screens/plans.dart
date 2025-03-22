@@ -8,9 +8,16 @@ import 'package:macro_meter/models/plan.dart';
 import 'package:macro_meter/models/meal.dart';
 
 class PlanScreen extends StatefulWidget {
-  const PlanScreen({required this.user, super.key});
+  const PlanScreen(
+      {required this.user,
+      required this.fromPage,
+      this.onChoosePlan,
+      super.key});
 
   final User user;
+  final String fromPage;
+  final void Function(Plan choosePlan)? onChoosePlan;
+
   @override
   State<StatefulWidget> createState() {
     return _PlanScreenState();
@@ -145,7 +152,21 @@ class _PlanScreenState extends State<PlanScreen> {
             ? const Center(child: CircularProgressIndicator())
             : Column(
                 children: [
-                  Expanded(child: PlanList(plans: plans, user: widget.user))
+                  Expanded(
+                      child: widget.fromPage == "Journal"
+                          ? PlanList(
+                              plans: plans,
+                              user: widget.user,
+                              fromPage: widget.fromPage,
+                              onChoosePlan: (choosePlan) {
+                                widget.onChoosePlan!(choosePlan);
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          : PlanList(
+                              plans: plans,
+                              user: widget.user,
+                              fromPage: widget.fromPage))
                 ],
               ),
       ),
