@@ -26,6 +26,8 @@ class _JournalScreenState extends State<JournalScreen> {
   DateTime? selectedDate;
   Journal? journal;
   Plan? plan;
+  List<Meal>? meals;
+  List<Journal> journals = [];
   String dateDisplayed = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
   void fetchUserJournalData() async {
@@ -38,40 +40,79 @@ class _JournalScreenState extends State<JournalScreen> {
     List<Journal> journalList =
         await Future.wait(journalsCollection.docs.map((journalDoc) async {
       var journalData = journalDoc.data();
+      var planCollection = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(widget.user.uid)
+          .collection("journals")
+          .doc(journalDoc.id)
+          .collection("plan")
+          .get();
+      var planDoc = planCollection.docs[0];
+      var planData = planDoc.data();
+      var mealsCollection = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(widget.user.uid)
+          .collection("journals")
+          .doc(journalDoc.id)
+          .collection("plan")
+          .doc(planDoc.id)
+          .collection("meals")
+          .get();
 
-      var mealsList = List<Meal>.from(
-        journalData['meals'].map((mealData) {
-          var alimentsList = List<Aliment>.from(
-            mealData['aliments'].map((alimentData) {
-              return Aliment(
-                id: alimentData['id'],
-                name: alimentData['name'],
-                calories: alimentData['calories'],
-                proteines: alimentData['proteines'],
-                carbs: alimentData['carbs'],
-                fats: alimentData['fats'],
-                unit: AlimentUnit.values.byName(alimentData['unit']),
-                quantity: alimentData['quantity'],
-                category:
-                    AlimentCategory.values.byName(alimentData['category']),
-              );
-            }),
+      List<Meal> mealList =
+          await Future.wait(mealsCollection.docs.map((mealDoc) async {
+        var mealData = mealDoc.data();
+        var alimentCollection = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(widget.user.uid)
+            .collection("journals")
+            .doc(journalDoc.id)
+            .collection("plan")
+            .doc(planDoc.id)
+            .collection("meals")
+            .doc(mealDoc.id)
+            .collection("aliments")
+            .get();
+
+        List<Aliment> alimentList = alimentCollection.docs.map((alimentDoc) {
+          var alimentData = alimentDoc.data();
+          return Aliment(
+            id: alimentDoc.id,
+            name: alimentData["name"],
+            calories: alimentData["calories"],
+            proteines: alimentData["proteines"],
+            carbs: alimentData["carbs"],
+            fats: alimentData["fat"],
+            unit: AlimentUnit.values.byName(alimentData["unit"]),
+            quantity: alimentData["quantity"],
+            category: AlimentCategory.values.byName(
+              alimentData["category"],
+            ),
           );
+        }).toList();
 
-          return Meal(
-            id: mealData['id'],
-            name: mealData['name'],
-            aliments: alimentsList,
-          );
-        }),
-      );
-
+        return Meal(
+            id: mealDoc.id, name: mealData["name"], aliments: alimentList);
+      }).toList());
+      Plan plan = Plan(
+          id: planDoc.id,
+          name: planData["name"],
+          date: DateTime.parse(planData["date"] as String),
+          meals: mealList);
       return Journal(
         id: journalDoc.id,
-        plan: journalData['planId'],
-        date: DateTime.parse(journalData['date']),
+        plan: plan,
+        date: DateTime.parse(journalData['date'] as String),
+        targetCalories: journalData["targetCalories"],
+        targetProteines: journalData["targetProteines"],
+        targetCarbs: journalData["targetCarbs"],
+        targetFats: journalData["targetFats"],
       );
-    }));
+    }).toList());
+    if (journalList.isNotEmpty) {
+      journals = journalList;
+      findJournal(DateTime.now());
+    }
   }
 
   void _createJournal(Plan plan) async {
@@ -81,7 +122,13 @@ class _JournalScreenState extends State<JournalScreen> {
         .collection("users")
         .doc(widget.user.uid)
         .collection("journals")
-        .add({"date": date.toString()});
+        .add({
+      "date": date.toString(),
+      "targetCalories": plan.totalCalories(),
+      "targetProteines": plan.totalProteines(),
+      "targetFats": plan.totalFats(),
+      "targetCarbs": plan.totalCarbs(),
+    });
 
     DocumentReference planRef = await FirebaseFirestore.instance
         .collection("users")
@@ -137,8 +184,52 @@ class _JournalScreenState extends State<JournalScreen> {
       }
     }
     journalPlan.meals = meals;
-    journal = Journal(id: journalRef.id, date: date, plan: journalPlan);
+    journal = Journal(
+        id: journalRef.id,
+        date: date,
+        plan: journalPlan,
+        targetCalories: plan.totalCalories(),
+        targetProteines: plan.totalProteines(),
+        targetCarbs: plan.totalCarbs(),
+        targetFats: plan.totalCarbs());
+    journals.add(journal!);
+    meals = journalPlan.meals;
     setState(() {});
+  }
+
+  void _onArrowClick(bool isNext) {
+    setState(() {
+      if (isNext) {
+        date = date.add(const Duration(days: 1));
+      } else {
+        date = date.subtract(const Duration(days: 1));
+      }
+      displayDate(date);
+      findJournal(date);
+    });
+  }
+
+  void findJournal(DateTime date) {
+    DateTime todayStartOfDay = DateTime(date.year, date.month, date.day);
+    bool found = false;
+    Journal? foundJournal;
+
+    int index = 0;
+    while (!found && index < journals.length) {
+      var j = journals[index];
+      DateTime journalDate = DateTime(j.date.year, j.date.month, j.date.day);
+
+      if (journalDate.isAtSameMomentAs(todayStartOfDay)) {
+        found = true;
+        foundJournal = j;
+      }
+      index++;
+    }
+
+    setState(() {
+      journal = found ? foundJournal : null;
+      meals = found ? foundJournal!.plan.meals : null;
+    });
   }
 
   void displayDate(DateTime newDate) {
@@ -161,7 +252,7 @@ class _JournalScreenState extends State<JournalScreen> {
   Future<void> _selectDate() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: date,
       firstDate: DateTime.now().subtract(const Duration(days: 730)),
       lastDate: DateTime.now().add(const Duration(days: 730)),
     );
@@ -170,8 +261,15 @@ class _JournalScreenState extends State<JournalScreen> {
       if (pickedDate != null) {
         date = pickedDate;
         displayDate(pickedDate);
+        findJournal(date);
       }
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserJournalData();
   }
 
   @override
@@ -211,10 +309,7 @@ class _JournalScreenState extends State<JournalScreen> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          setState(() {
-                            date = date.subtract(const Duration(days: 1));
-                            displayDate(date);
-                          });
+                          _onArrowClick(false);
                         },
                         icon: Icon(
                           Icons.arrow_back_ios_new,
@@ -233,10 +328,7 @@ class _JournalScreenState extends State<JournalScreen> {
                       ),
                       IconButton(
                         onPressed: () {
-                          setState(() {
-                            date = date.add(const Duration(days: 1));
-                            displayDate(date);
-                          });
+                          _onArrowClick(true);
                         },
                         icon: Icon(
                           Icons.arrow_forward_ios,
@@ -257,67 +349,66 @@ class _JournalScreenState extends State<JournalScreen> {
                 ],
               ),
             ),
-            if (journal == null) ...[
-              Column(
-                children: [
-                  Icon(
-                    Icons.food_bank_outlined,
-                    color: kColorScheme.primaryContainer,
-                    size: 80,
-                  ),
-                  Text(
-                    "Vous n'avez pas encore enregistrer\nde nourrite pour cette journée",
-                    style: TextStyle(
-                        color: kColorScheme.primaryContainer, fontSize: 20),
-                    textAlign: TextAlign.center,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (ctx) => PlanScreen(
-                              user: widget.user,
-                              fromPage: "Journal",
-                              onChoosePlan: (choosePlan) {
-                                _createJournal(choosePlan);
-                                plan = choosePlan;
-                              },
-                            ),
-                          ),
-                        );
+            Flexible(
+              child: journal != null
+                  ? MealList(
+                      meals: meals!,
+                      user: widget.user,
+                      plan: journal!.plan,
+                      journal: journal,
+                      onAddMeal: (newMeal) {
+                        setState(() {
+                          journal!.plan.meals.add(newMeal);
+                        });
                       },
-                      child: Text("Choisir plan"))
-                ],
-              ),
-            ] else ...[
-              Flexible(
-                child: MealList(
-                  meals: journal!.plan.meals,
-                  user: widget.user,
-                  plan: journal!.plan,
-                  journal: journal,
-                  onAddMeal: (newMeal) {
-                    setState(() {
-                      journal!.plan.meals.add(newMeal);
-                    });
-                  },
-                  onAddAliment: (newAliment) {
-                    setState(() {});
-                  },
-                  onDeleteALiment: (deletedAliment) {
-                    setState(() {});
-                  },
-                  onDeleteMeal: (deletedMeal) {
-                    setState(() {
-                      journal!.plan.meals.remove(deletedMeal);
-                    });
-                  },
-                  onModifyQuantity: (modifiedAliment) {
-                    setState(() {});
-                  },
-                ),
-              )
-            ]
+                      onAddAliment: (newAliment) {
+                        setState(() {});
+                      },
+                      onDeleteALiment: (deletedAliment) {
+                        setState(() {});
+                      },
+                      onDeleteMeal: (deletedMeal) {
+                        setState(() {
+                          journal!.plan.meals.remove(deletedMeal);
+                        });
+                      },
+                      onModifyQuantity: (modifiedAliment) {
+                        setState(() {});
+                      },
+                    )
+                  : Column(
+                      children: [
+                        Icon(
+                          Icons.food_bank_outlined,
+                          color: kColorScheme.primaryContainer,
+                          size: 80,
+                        ),
+                        Text(
+                          "Vous n'avez pas encore enregistrer\nde nourrite pour cette journée",
+                          style: TextStyle(
+                              color: kColorScheme.primaryContainer,
+                              fontSize: 20),
+                          textAlign: TextAlign.center,
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (ctx) => PlanScreen(
+                                    user: widget.user,
+                                    fromPage: "Journal",
+                                    onChoosePlan: (choosePlan) {
+                                      _createJournal(choosePlan);
+                                      plan = choosePlan;
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text("Choisir plan"))
+                      ],
+                    ),
+            )
           ],
         ),
       ),
@@ -367,16 +458,16 @@ class _JournalScreenState extends State<JournalScreen> {
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Text(
-                          plan!.totalCalories().toString(),
+                          "0",
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Divider(color: Colors.white, thickness: 1),
                         Text(
-                          plan!.totalCalories().toString(),
+                          journal!.targetCalories.toString(),
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Text(
-                          plan!.totalCalories().toString(),
+                          "0",
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                       ],
@@ -389,14 +480,14 @@ class _JournalScreenState extends State<JournalScreen> {
                         Text("Prot",
                             style:
                                 TextStyle(fontSize: 15, color: Colors.white)),
-                        Text(plan!.totalProteines().toString(),
+                        Text("0",
                             style:
                                 TextStyle(fontSize: 15, color: Colors.white)),
                         Divider(color: Colors.white, thickness: 1),
-                        Text(plan!.totalProteines().toString(),
+                        Text(journal!.targetCalories.toString(),
                             style:
                                 TextStyle(fontSize: 15, color: Colors.white)),
-                        Text(plan!.totalProteines().toString(),
+                        Text("0",
                             style:
                                 TextStyle(fontSize: 15, color: Colors.white)),
                       ],
@@ -411,16 +502,16 @@ class _JournalScreenState extends State<JournalScreen> {
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Text(
-                          plan!.totalCarbs().toString(),
+                          "0",
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Divider(color: Colors.white, thickness: 1),
                         Text(
-                          plan!.totalCarbs().toString(),
+                          journal!.targetCalories.toString(),
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Text(
-                          plan!.totalCarbs().toString(),
+                          "0",
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                       ],
@@ -435,16 +526,16 @@ class _JournalScreenState extends State<JournalScreen> {
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Text(
-                          plan!.totalFats().toString(),
+                          "0",
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Divider(color: Colors.white, thickness: 1),
                         Text(
-                          plan!.totalFats().toString(),
+                          journal!.targetCalories.toString(),
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Text(
-                          plan!.totalFats().toString(),
+                          "0",
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                       ],

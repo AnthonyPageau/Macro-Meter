@@ -182,7 +182,7 @@ class _MealItemState extends State<MealItem> {
             .doc(widget.user.uid)
             .collection("journals")
             .doc(widget.journal!.id)
-            .collection("plans")
+            .collection("plan")
             .doc(widget.plan.id)
             .collection("meals")
             .doc(meal.id)
