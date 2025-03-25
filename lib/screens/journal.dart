@@ -57,6 +57,7 @@ class _JournalScreenState extends State<JournalScreen> {
           .collection("plan")
           .doc(planDoc.id)
           .collection("meals")
+          .orderBy("createdAt", descending: false)
           .get();
 
       List<Meal> mealList =
@@ -92,7 +93,10 @@ class _JournalScreenState extends State<JournalScreen> {
         }).toList();
 
         return Meal(
-            id: mealDoc.id, name: mealData["name"], aliments: alimentList);
+            id: mealDoc.id,
+            name: mealData["name"],
+            createdAt: mealData["createdAt"],
+            aliments: alimentList);
       }).toList());
       Plan plan = Plan(
           id: planDoc.id,
@@ -149,7 +153,11 @@ class _JournalScreenState extends State<JournalScreen> {
           .doc(planRef.id)
           .collection("meals")
           .add({"name": meal.name});
-      meals.add(Meal(id: mealRef.id, name: meal.name, aliments: aliments));
+      meals.add(Meal(
+          id: mealRef.id,
+          name: meal.name,
+          createdAt: meal.createdAt,
+          aliments: aliments));
       for (Aliment aliment in meal.aliments) {
         DocumentReference alimentRef = await FirebaseFirestore.instance
             .collection("users")

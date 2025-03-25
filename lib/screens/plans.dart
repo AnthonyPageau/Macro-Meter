@@ -49,6 +49,7 @@ class _PlanScreenState extends State<PlanScreen> {
           .collection("plans")
           .doc(planDoc.id)
           .collection("meals")
+          .orderBy("createdAt", descending: false)
           .get();
 
       List<Meal> mealList =
@@ -82,7 +83,10 @@ class _PlanScreenState extends State<PlanScreen> {
         }).toList();
 
         return Meal(
-            id: mealDoc.id, name: mealData["name"], aliments: alimentList);
+            id: mealDoc.id,
+            name: mealData["name"],
+            createdAt: mealData["createdAt"],
+            aliments: alimentList);
       }).toList());
 
       return Plan(

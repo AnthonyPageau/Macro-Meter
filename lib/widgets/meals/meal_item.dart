@@ -42,7 +42,6 @@ class _MealItemState extends State<MealItem> {
   late Meal meal;
   late Plan plan;
   bool _isEditingName = false;
-  bool _isChecked = false;
   late TextEditingController _controller;
 
   @override
@@ -62,6 +61,7 @@ class _MealItemState extends State<MealItem> {
   void addMeal() async {
     try {
       String refId;
+      Timestamp createdAt = Timestamp.now();
       if (widget.journal != null) {
         DocumentReference docRef = await FirebaseFirestore.instance
             .collection('users')
@@ -73,6 +73,7 @@ class _MealItemState extends State<MealItem> {
             .collection("meals")
             .add({
           "name": widget.plan.meals.length.toString(),
+          "createdAt": createdAt
         });
         refId = docRef.id;
       } else {
@@ -84,6 +85,7 @@ class _MealItemState extends State<MealItem> {
             .collection("meals")
             .add({
           "name": widget.plan.meals.length.toString(),
+          "createdAt": createdAt
         });
         refId = docRef.id;
       }
@@ -91,6 +93,7 @@ class _MealItemState extends State<MealItem> {
         Meal(
           id: refId,
           name: "Meal ${widget.plan.meals.length.toString()}",
+          createdAt: createdAt,
         ),
       );
     } on FirebaseAuthException catch (e) {
@@ -308,27 +311,12 @@ class _MealItemState extends State<MealItem> {
                     ),
                   ),
                   Container(
+                    padding: EdgeInsets.fromLTRB(12, 12, 36, 12),
                     decoration: BoxDecoration(color: Colors.grey),
                     alignment: Alignment.centerRight,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          "Cals",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Checkbox(
-                          value: _isChecked,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              _isChecked = !_isChecked;
-                            });
-                          },
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      "Cals",
+                      style: TextStyle(fontSize: 16),
                     ),
                   ),
                   Container(
@@ -340,7 +328,6 @@ class _MealItemState extends State<MealItem> {
                         plan: widget.plan,
                         meal: widget.meal,
                         journal: widget.journal,
-                        isChecked: _isChecked,
                         onDeleteALiment: (deletedAliment) {
                           setState(() {
                             widget.onDeleteALiment(deletedAliment);

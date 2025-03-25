@@ -16,7 +16,6 @@ class AlimentItem extends StatefulWidget {
       this.journal,
       required this.onDeleteALiment,
       required this.onModifyQuantity,
-      required this.isChecked,
       super.key});
 
   Aliment aliment;
@@ -24,7 +23,6 @@ class AlimentItem extends StatefulWidget {
   final Meal meal;
   final Plan plan;
   final Journal? journal;
-  bool isChecked;
   final void Function(Aliment deletedAliment) onDeleteALiment;
   final void Function(Aliment modifiedAliment) onModifyQuantity;
 
@@ -66,6 +64,7 @@ class _AlimentItemState extends State<AlimentItem> {
           iconSize: 30,
         ),
         Container(
+          padding: EdgeInsets.only(right: 20),
           width: 110.0,
           height: 30.0,
           decoration: BoxDecoration(color: Colors.grey),
@@ -116,47 +115,10 @@ class _AlimentItemState extends State<AlimentItem> {
             ],
           ),
         ),
-        Container(
-            // child: Row(
-            //   children: [
-            //     Text(
-            //       widget.aliment.calories.toString(),
-            //       textAlign: TextAlign.center,
-            //     ),
-            //     Checkbox(
-            //       value: _isChecked,
-            //       onChanged: (bool? value) {
-            //         setState(() {
-            //           _isChecked = !_isChecked;
-            //         });
-            //       },
-            //       shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(20),
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            ),
-        const SizedBox(
-          width: 20,
-        ),
         Expanded(
           child: Text(
             widget.aliment.calories.toString(),
             textAlign: TextAlign.center,
-          ),
-        ),
-        Expanded(
-          child: Checkbox(
-            value: widget.isChecked,
-            onChanged: (bool? value) {
-              setState(() {
-                widget.isChecked = !widget.isChecked;
-              });
-            },
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
           ),
         ),
       ],
