@@ -22,7 +22,8 @@ class Aliment {
       required num fats,
       required AlimentUnit unit,
       required num quantity,
-      required AlimentCategory category})
+      required AlimentCategory category,
+      required bool isChecked})
       : _id = id,
         _name = name,
         _calories = calories,
@@ -31,7 +32,8 @@ class Aliment {
         _fats = fats,
         _unit = unit,
         _quantity = quantity,
-        _category = category;
+        _category = category,
+        _isChecked = isChecked;
 
   String _id;
   String _name;
@@ -42,6 +44,7 @@ class Aliment {
   AlimentUnit _unit;
   num _quantity;
   AlimentCategory _category;
+  bool _isChecked;
 
   String get id => _id;
   String get name => _name;
@@ -52,6 +55,7 @@ class Aliment {
   AlimentUnit get unit => _unit;
   num get quantity => _quantity;
   AlimentCategory get category => _category;
+  bool get isChecked => _isChecked;
 
   set id(String value) {
     if (value.isNotEmpty) {
@@ -101,6 +105,10 @@ class Aliment {
 
   set category(AlimentCategory value) {
     _category = value;
+  }
+
+  set isChecked(bool value) {
+    _isChecked = value;
   }
 
   String unitToString(AlimentUnit type) {

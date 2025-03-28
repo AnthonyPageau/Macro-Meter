@@ -89,6 +89,7 @@ class _JournalScreenState extends State<JournalScreen> {
             category: AlimentCategory.values.byName(
               alimentData["category"],
             ),
+            isChecked: alimentData["isChecked"],
           );
         }).toList();
 
@@ -177,7 +178,8 @@ class _JournalScreenState extends State<JournalScreen> {
           "carbs": aliment.carbs,
           "category": aliment.category.name,
           "unit": aliment.unit.name,
-          "quantity": aliment.quantity
+          "quantity": aliment.quantity,
+          "isChecked": false
         });
         aliments.add(Aliment(
             id: alimentRef.id,
@@ -188,7 +190,8 @@ class _JournalScreenState extends State<JournalScreen> {
             carbs: aliment.carbs,
             category: aliment.category,
             unit: aliment.unit,
-            quantity: aliment.quantity));
+            quantity: aliment.quantity,
+            isChecked: aliment.isChecked));
       }
     }
     journalPlan.meals = meals;

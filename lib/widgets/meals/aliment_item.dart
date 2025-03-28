@@ -115,12 +115,32 @@ class _AlimentItemState extends State<AlimentItem> {
             ],
           ),
         ),
-        Expanded(
-          child: Text(
-            widget.aliment.calories.toString(),
-            textAlign: TextAlign.center,
-          ),
+        const SizedBox(
+          width: 20,
         ),
+        Expanded(
+          child: Row(
+            children: [
+              Text(
+                widget.aliment.calories.toString(),
+                textAlign: TextAlign.center,
+              ),
+              if (widget.journal != null) ...[
+                Checkbox(
+                  value: widget.aliment.isChecked,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      widget.aliment.isChecked = !widget.aliment.isChecked;
+                    });
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ]
+            ],
+          ),
+        )
       ],
     );
   }

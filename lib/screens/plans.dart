@@ -79,6 +79,7 @@ class _PlanScreenState extends State<PlanScreen> {
             category: AlimentCategory.values.byName(
               alimentData["category"],
             ),
+            isChecked: alimentData["isChecked"],
           );
         }).toList();
 

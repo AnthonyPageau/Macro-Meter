@@ -41,7 +41,7 @@ class MealItem extends StatefulWidget {
 class _MealItemState extends State<MealItem> {
   bool _isEditingName = false;
   late TextEditingController _controller;
-
+  bool _isChecked = false;
   @override
   void initState() {
     super.initState();
@@ -125,7 +125,8 @@ class _MealItemState extends State<MealItem> {
           "carbs": addedAliment.carbs,
           "category": addedAliment.category.name,
           "unit": addedAliment.unit.name,
-          "quantity": addedAliment.quantity
+          "quantity": addedAliment.quantity,
+          "isChecked": false
         });
         refId = docRef.id;
       } else {
@@ -145,7 +146,8 @@ class _MealItemState extends State<MealItem> {
           "carbs": addedAliment.carbs,
           "category": addedAliment.category.name,
           "unit": addedAliment.unit.name,
-          "quantity": addedAliment.quantity
+          "quantity": addedAliment.quantity,
+          "isChecked": false
         });
         refId = docRef.id;
       }
@@ -310,10 +312,35 @@ class _MealItemState extends State<MealItem> {
                     padding: EdgeInsets.fromLTRB(12, 12, 36, 12),
                     decoration: BoxDecoration(color: Colors.grey),
                     alignment: Alignment.centerRight,
-                    child: Text(
-                      "Cals",
-                      style: TextStyle(fontSize: 16),
-                    ),
+                    child: widget.journal != null
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                "Cals",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Checkbox(
+                                value: _isChecked,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    _isChecked = !_isChecked;
+                                    for (Aliment aliment
+                                        in widget.meal.aliments) {
+                                      aliment.isChecked = _isChecked;
+                                    }
+                                  });
+                                },
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Text(
+                            "Cals",
+                            style: TextStyle(fontSize: 16),
+                          ),
                   ),
                   Container(
                       padding: EdgeInsets.fromLTRB(12, 12, 32, 12),
