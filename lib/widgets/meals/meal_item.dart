@@ -39,16 +39,12 @@ class MealItem extends StatefulWidget {
 }
 
 class _MealItemState extends State<MealItem> {
-  late Meal meal;
-  late Plan plan;
   bool _isEditingName = false;
   late TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
-    meal = widget.meal;
-    plan = widget.plan;
     _controller = TextEditingController(text: widget.meal.name);
   }
 
@@ -119,7 +115,7 @@ class _MealItemState extends State<MealItem> {
             .collection("plan")
             .doc(widget.journal!.plan.id)
             .collection("meals")
-            .doc(meal.id)
+            .doc(widget.meal.id)
             .collection("aliments")
             .add({
           "name": addedAliment.name,
@@ -137,9 +133,9 @@ class _MealItemState extends State<MealItem> {
             .collection("users")
             .doc(widget.user.uid)
             .collection("plans")
-            .doc(plan.id)
+            .doc(widget.plan.id)
             .collection("meals")
-            .doc(meal.id)
+            .doc(widget.meal.id)
             .collection("aliments")
             .add({
           "name": addedAliment.name,
@@ -154,7 +150,7 @@ class _MealItemState extends State<MealItem> {
         refId = docRef.id;
       }
       addedAliment.id = refId;
-      meal.aliments.add(addedAliment);
+      widget.meal.aliments.add(addedAliment);
       setState(() {});
       widget.onAddAliment(addedAliment);
     } on FirebaseAuthException catch (e) {
@@ -169,9 +165,9 @@ class _MealItemState extends State<MealItem> {
 
   void _updateMealName() {
     try {
-      if (plan.meals.any((m) =>
+      if (widget.plan.meals.any((m) =>
           m.name.toUpperCase() == _controller.text.toUpperCase() &&
-          m.id != meal.id)) {
+          m.id != widget.meal.id)) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Le repas existe déjà"),
@@ -188,7 +184,7 @@ class _MealItemState extends State<MealItem> {
             .collection("plan")
             .doc(widget.plan.id)
             .collection("meals")
-            .doc(meal.id)
+            .doc(widget.meal.id)
             .update({
           'name': _controller.text,
         });
@@ -199,12 +195,12 @@ class _MealItemState extends State<MealItem> {
             .collection("plans")
             .doc(widget.plan.id)
             .collection("meals")
-            .doc(meal.id)
+            .doc(widget.meal.id)
             .update({
           'name': _controller.text,
         });
       }
-      meal.name = _controller.text;
+      widget.meal.name = _controller.text;
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -266,7 +262,7 @@ class _MealItemState extends State<MealItem> {
                                 ),
                               )
                             : Text(
-                                meal.name,
+                                widget.meal.name,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 18,
@@ -323,7 +319,7 @@ class _MealItemState extends State<MealItem> {
                       padding: EdgeInsets.fromLTRB(12, 12, 32, 12),
                       decoration: BoxDecoration(color: Colors.white),
                       child: AlimentList(
-                        aliments: meal.aliments,
+                        aliments: widget.meal.aliments,
                         user: widget.user,
                         plan: widget.plan,
                         meal: widget.meal,
@@ -358,7 +354,7 @@ class _MealItemState extends State<MealItem> {
                           child: Column(
                             children: [
                               Text("Prot", style: TextStyle(fontSize: 16)),
-                              Text(meal.totalProteines().toString(),
+                              Text(widget.meal.totalProteines().toString(),
                                   style: TextStyle(fontSize: 16)),
                             ],
                           ),
@@ -368,7 +364,7 @@ class _MealItemState extends State<MealItem> {
                           child: Column(
                             children: [
                               Text("Glu", style: TextStyle(fontSize: 16)),
-                              Text(meal.totalCarbs().toString(),
+                              Text(widget.meal.totalCarbs().toString(),
                                   style: TextStyle(fontSize: 16)),
                             ],
                           ),
@@ -378,7 +374,7 @@ class _MealItemState extends State<MealItem> {
                           child: Column(
                             children: [
                               Text("Lip", style: TextStyle(fontSize: 16)),
-                              Text(meal.totalFats().toString(),
+                              Text(widget.meal.totalFats().toString(),
                                   style: TextStyle(fontSize: 16)),
                             ],
                           ),
@@ -388,7 +384,7 @@ class _MealItemState extends State<MealItem> {
                           child: Column(
                             children: [
                               Text("", style: TextStyle(fontSize: 16)),
-                              Text(meal.totalCalories().toString(),
+                              Text(widget.meal.totalCalories().toString(),
                                   style: TextStyle(fontSize: 16)),
                             ],
                           ),
@@ -416,7 +412,7 @@ class _MealItemState extends State<MealItem> {
                                   onAddAliment: (newAliment) {
                                     _addAliment(newAliment);
                                   },
-                                  meal: meal,
+                                  meal: widget.meal,
                                 ),
                               ),
                             );
@@ -425,7 +421,8 @@ class _MealItemState extends State<MealItem> {
                 ],
               ),
             ),
-            if (plan.meals.lastIndexOf(meal) == plan.meals.length - 1) ...[
+            if (widget.plan.meals.lastIndexOf(widget.meal) ==
+                widget.plan.meals.length - 1) ...[
               Container(
                 padding: EdgeInsets.only(left: 14),
                 alignment: Alignment.centerLeft,

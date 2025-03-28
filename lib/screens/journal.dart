@@ -152,7 +152,7 @@ class _JournalScreenState extends State<JournalScreen> {
           .collection("plan")
           .doc(planRef.id)
           .collection("meals")
-          .add({"name": meal.name});
+          .add({"name": meal.name, "createdAt": meal.createdAt});
       meals.add(Meal(
           id: mealRef.id,
           name: meal.name,
@@ -360,7 +360,7 @@ class _JournalScreenState extends State<JournalScreen> {
             Flexible(
               child: journal != null
                   ? MealList(
-                      meals: meals!,
+                      meals: journal!.plan.meals,
                       user: widget.user,
                       plan: journal!.plan,
                       journal: journal,
