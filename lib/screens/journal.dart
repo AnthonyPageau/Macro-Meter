@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 import 'package:macro_meter/main.dart';
 import 'package:macro_meter/models/plan.dart';
@@ -29,6 +30,7 @@ class _JournalScreenState extends State<JournalScreen> {
   List<Meal>? meals;
   List<Journal> journals = [];
   String dateDisplayed = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   void fetchUserJournalData() async {
     var journalsCollection = await FirebaseFirestore.instance
@@ -112,6 +114,7 @@ class _JournalScreenState extends State<JournalScreen> {
         targetProteines: journalData["targetProteines"],
         targetCarbs: journalData["targetCarbs"],
         targetFats: journalData["targetFats"],
+        isComplete: journalData["isComplete"],
       );
     }).toList());
     if (journalList.isNotEmpty) {
@@ -202,7 +205,8 @@ class _JournalScreenState extends State<JournalScreen> {
         targetCalories: plan.totalCalories(),
         targetProteines: plan.totalProteines(),
         targetCarbs: plan.totalCarbs(),
-        targetFats: plan.totalCarbs());
+        targetFats: plan.totalCarbs(),
+        isComplete: false);
     journals.add(journal!);
     meals = journalPlan.meals;
     setState(() {});
@@ -275,6 +279,10 @@ class _JournalScreenState extends State<JournalScreen> {
         findJournal(date);
       }
     });
+  }
+
+  void _playSound() {
+    _audioPlayer.play(AssetSource("sounds/complete_sound.mp3"));
   }
 
   @override
@@ -350,7 +358,9 @@ class _JournalScreenState extends State<JournalScreen> {
                     ],
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _playSound();
+                    },
                     icon: Icon(
                       Icons.check,
                       color: Colors.white,
@@ -384,6 +394,12 @@ class _JournalScreenState extends State<JournalScreen> {
                         });
                       },
                       onModifyQuantity: (modifiedAliment) {
+                        setState(() {});
+                      },
+                      onCheckedMeal: (checkedMeal) {
+                        setState(() {});
+                      },
+                      onCheckedAliment: (checkedAliment) {
                         setState(() {});
                       },
                     )
@@ -469,7 +485,7 @@ class _JournalScreenState extends State<JournalScreen> {
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Text(
-                          "0",
+                          journal!.totalCalories().toString(),
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Divider(color: Colors.white, thickness: 1),
@@ -478,7 +494,7 @@ class _JournalScreenState extends State<JournalScreen> {
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Text(
-                          "0",
+                          journal!.remaningCalories().toString(),
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                       ],
@@ -491,14 +507,14 @@ class _JournalScreenState extends State<JournalScreen> {
                         Text("Prot",
                             style:
                                 TextStyle(fontSize: 15, color: Colors.white)),
-                        Text("0",
+                        Text(journal!.totalProteines().toString(),
                             style:
                                 TextStyle(fontSize: 15, color: Colors.white)),
                         Divider(color: Colors.white, thickness: 1),
-                        Text(journal!.targetCalories.toString(),
+                        Text(journal!.targetProteines.toString(),
                             style:
                                 TextStyle(fontSize: 15, color: Colors.white)),
-                        Text("0",
+                        Text(journal!.remaningProteines().toString(),
                             style:
                                 TextStyle(fontSize: 15, color: Colors.white)),
                       ],
@@ -513,16 +529,16 @@ class _JournalScreenState extends State<JournalScreen> {
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Text(
-                          "0",
+                          journal!.totalCarbs().toString(),
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Divider(color: Colors.white, thickness: 1),
                         Text(
-                          journal!.targetCalories.toString(),
+                          journal!.targetCarbs.toString(),
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Text(
-                          "0",
+                          journal!.remaningCarbs().toString(),
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                       ],
@@ -537,16 +553,16 @@ class _JournalScreenState extends State<JournalScreen> {
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Text(
-                          "0",
+                          journal!.totalFats().toString(),
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Divider(color: Colors.white, thickness: 1),
                         Text(
-                          journal!.targetCalories.toString(),
+                          journal!.targetFats.toString(),
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         Text(
-                          "0",
+                          journal!.remaningFats().toString(),
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                       ],

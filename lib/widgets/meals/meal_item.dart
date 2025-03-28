@@ -20,6 +20,8 @@ class MealItem extends StatefulWidget {
       required this.onDeleteALiment,
       required this.onDeleteMeal,
       required this.onModifyQuantity,
+      this.onCheckedMeal,
+      this.onCheckedAliment,
       super.key});
 
   final Meal meal;
@@ -31,6 +33,8 @@ class MealItem extends StatefulWidget {
   final void Function(Aliment deletedAliment) onDeleteALiment;
   final void Function(Meal deletedMeal) onDeleteMeal;
   final void Function(Aliment modifiedAliment) onModifyQuantity;
+  final void Function(bool checkedMeal)? onCheckedMeal;
+  final void Function(bool checkedAliment)? onCheckedAliment;
 
   @override
   State<StatefulWidget> createState() {
@@ -213,6 +217,35 @@ class _MealItemState extends State<MealItem> {
     }
   }
 
+  void updateIsChecked() async {
+    try {
+      _isChecked = !_isChecked;
+      for (Aliment aliment in widget.meal.aliments) {
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(widget.user.uid)
+            .collection("journals")
+            .doc(widget.journal!.id)
+            .collection("plan")
+            .doc(widget.plan.id)
+            .collection("meals")
+            .doc(widget.meal.id)
+            .collection("aliments")
+            .doc(aliment.id)
+            .update({"isChecked": _isChecked});
+        aliment.isChecked = _isChecked;
+      }
+      widget.onCheckedMeal!(_isChecked);
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.code),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -324,11 +357,7 @@ class _MealItemState extends State<MealItem> {
                                 value: _isChecked,
                                 onChanged: (bool? value) {
                                   setState(() {
-                                    _isChecked = !_isChecked;
-                                    for (Aliment aliment
-                                        in widget.meal.aliments) {
-                                      aliment.isChecked = _isChecked;
-                                    }
+                                    updateIsChecked();
                                   });
                                 },
                                 shape: RoundedRectangleBorder(
@@ -343,26 +372,49 @@ class _MealItemState extends State<MealItem> {
                           ),
                   ),
                   Container(
-                      padding: EdgeInsets.fromLTRB(12, 12, 32, 12),
-                      decoration: BoxDecoration(color: Colors.white),
-                      child: AlimentList(
-                        aliments: widget.meal.aliments,
-                        user: widget.user,
-                        plan: widget.plan,
-                        meal: widget.meal,
-                        journal: widget.journal,
-                        onDeleteALiment: (deletedAliment) {
-                          setState(() {
-                            widget.onDeleteALiment(deletedAliment);
-                            widget.meal.aliments.remove(deletedAliment);
-                          });
-                        },
-                        onModifyQuantity: (modifiedAliment) {
-                          setState(() {
-                            widget.onModifyQuantity(modifiedAliment);
-                          });
-                        },
-                      )),
+                    padding: EdgeInsets.fromLTRB(12, 12, 32, 12),
+                    decoration: BoxDecoration(color: Colors.white),
+                    child: widget.journal != null
+                        ? AlimentList(
+                            aliments: widget.meal.aliments,
+                            user: widget.user,
+                            plan: widget.plan,
+                            meal: widget.meal,
+                            journal: widget.journal,
+                            onDeleteALiment: (deletedAliment) {
+                              setState(() {
+                                widget.onDeleteALiment(deletedAliment);
+                                widget.meal.aliments.remove(deletedAliment);
+                              });
+                            },
+                            onModifyQuantity: (modifiedAliment) {
+                              setState(() {
+                                widget.onModifyQuantity(modifiedAliment);
+                              });
+                            },
+                            onCheckedAliment: (checkedAliment) {
+                              widget.onCheckedAliment!(checkedAliment);
+                            },
+                          )
+                        : AlimentList(
+                            aliments: widget.meal.aliments,
+                            user: widget.user,
+                            plan: widget.plan,
+                            meal: widget.meal,
+                            journal: widget.journal,
+                            onDeleteALiment: (deletedAliment) {
+                              setState(() {
+                                widget.onDeleteALiment(deletedAliment);
+                                widget.meal.aliments.remove(deletedAliment);
+                              });
+                            },
+                            onModifyQuantity: (modifiedAliment) {
+                              setState(() {
+                                widget.onModifyQuantity(modifiedAliment);
+                              });
+                            },
+                          ),
+                  ),
                   Container(
                     padding: EdgeInsets.fromLTRB(12, 12, 0, 12),
                     child: Row(

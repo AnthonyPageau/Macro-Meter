@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:macro_meter/models/aliment.dart';
 import 'package:macro_meter/models/meal.dart';
@@ -16,6 +17,7 @@ class AlimentItem extends StatefulWidget {
       this.journal,
       required this.onDeleteALiment,
       required this.onModifyQuantity,
+      this.onCheckedAliment,
       super.key});
 
   Aliment aliment;
@@ -25,6 +27,7 @@ class AlimentItem extends StatefulWidget {
   final Journal? journal;
   final void Function(Aliment deletedAliment) onDeleteALiment;
   final void Function(Aliment modifiedAliment) onModifyQuantity;
+  final void Function(bool checkedAliment)? onCheckedAliment;
 
   @override
   State<StatefulWidget> createState() {
@@ -33,6 +36,33 @@ class AlimentItem extends StatefulWidget {
 }
 
 class _AlimentItemState extends State<AlimentItem> {
+  void updateIsChecked() async {
+    try {
+      bool isChecked = !widget.aliment.isChecked;
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(widget.user.uid)
+          .collection("journals")
+          .doc(widget.journal!.id)
+          .collection("plan")
+          .doc(widget.plan.id)
+          .collection("meals")
+          .doc(widget.meal.id)
+          .collection("aliments")
+          .doc(widget.aliment.id)
+          .update({"isChecked": isChecked});
+      widget.aliment.isChecked = isChecked;
+      widget.onCheckedAliment!(isChecked);
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.code),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -118,29 +148,23 @@ class _AlimentItemState extends State<AlimentItem> {
         const SizedBox(
           width: 20,
         ),
-        Expanded(
-          child: Row(
-            children: [
-              Text(
-                widget.aliment.calories.toString(),
-                textAlign: TextAlign.center,
-              ),
-              if (widget.journal != null) ...[
-                Checkbox(
-                  value: widget.aliment.isChecked,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      widget.aliment.isChecked = !widget.aliment.isChecked;
-                    });
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-              ]
-            ],
+        Text(
+          widget.aliment.calories.toString(),
+          textAlign: TextAlign.center,
+        ),
+        if (widget.journal != null) ...[
+          Checkbox(
+            value: widget.aliment.isChecked,
+            onChanged: (bool? value) {
+              setState(() {
+                updateIsChecked();
+              });
+            },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
           ),
-        )
+        ]
       ],
     );
   }

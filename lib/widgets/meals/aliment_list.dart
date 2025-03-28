@@ -15,7 +15,8 @@ class AlimentList extends StatefulWidget {
       required this.plan,
       this.journal,
       required this.onDeleteALiment,
-      required this.onModifyQuantity});
+      required this.onModifyQuantity,
+      this.onCheckedAliment});
 
   final List<Aliment> aliments;
   final User user;
@@ -24,6 +25,7 @@ class AlimentList extends StatefulWidget {
   final Journal? journal;
   final void Function(Aliment deletedAliment) onDeleteALiment;
   final void Function(Aliment modifiedAliment) onModifyQuantity;
+  final void Function(bool checkedAliment)? onCheckedAliment;
 
   @override
   State<StatefulWidget> createState() {
@@ -39,19 +41,36 @@ class _AlimentListState extends State<AlimentList> {
       shrinkWrap: true,
       itemCount: widget.aliments.length,
       itemBuilder: (context, index) {
-        return AlimentItem(
-          aliment: widget.aliments[index],
-          user: widget.user,
-          meal: widget.meal,
-          plan: widget.plan,
-          journal: widget.journal,
-          onDeleteALiment: (deletedAliment) {
-            widget.onDeleteALiment(deletedAliment);
-          },
-          onModifyQuantity: (modifiedAliment) {
-            widget.onModifyQuantity(modifiedAliment);
-          },
-        );
+        return widget.journal != null
+            ? AlimentItem(
+                aliment: widget.aliments[index],
+                user: widget.user,
+                meal: widget.meal,
+                plan: widget.plan,
+                journal: widget.journal,
+                onDeleteALiment: (deletedAliment) {
+                  widget.onDeleteALiment(deletedAliment);
+                },
+                onModifyQuantity: (modifiedAliment) {
+                  widget.onModifyQuantity(modifiedAliment);
+                },
+                onCheckedAliment: (checkedAliment) {
+                  widget.onCheckedAliment!(checkedAliment);
+                },
+              )
+            : AlimentItem(
+                aliment: widget.aliments[index],
+                user: widget.user,
+                meal: widget.meal,
+                plan: widget.plan,
+                journal: widget.journal,
+                onDeleteALiment: (deletedAliment) {
+                  widget.onDeleteALiment(deletedAliment);
+                },
+                onModifyQuantity: (modifiedAliment) {
+                  widget.onModifyQuantity(modifiedAliment);
+                },
+              );
       },
     );
   }
