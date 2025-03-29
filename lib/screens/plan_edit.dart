@@ -19,6 +19,8 @@ class PlanEdit extends StatefulWidget {
 class _PlanEditState extends State<PlanEdit> {
   void addMeal() async {
     try {
+      Timestamp createdAt = Timestamp.now();
+
       DocumentReference docRef = await FirebaseFirestore.instance
           .collection('users')
           .doc(widget.user.uid)
@@ -27,13 +29,14 @@ class _PlanEditState extends State<PlanEdit> {
           .collection("meals")
           .add({
         "name": widget.plan.meals.length.toString(),
+        "createdAt": createdAt
       });
 
       widget.plan.meals.add(
         Meal(
-          id: docRef.id,
-          name: "Meal ${widget.plan.meals.length.toString()}",
-        ),
+            id: docRef.id,
+            name: "Meal ${widget.plan.meals.length.toString()}",
+            createdAt: createdAt),
       );
       setState(() {});
     } on FirebaseAuthException catch (e) {
@@ -54,15 +57,6 @@ class _PlanEditState extends State<PlanEdit> {
         title: Text(
           widget.plan.name,
           style: TextStyle(fontSize: 36),
-        ),
-        flexibleSpace: Center(
-          child: Padding(
-            padding: EdgeInsets.only(right: 56),
-            child: Text(
-              widget.plan.name,
-              style: TextStyle(fontSize: 36),
-            ),
-          ),
         ),
       ),
       body: Container(

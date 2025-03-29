@@ -58,6 +58,12 @@ class Menu extends StatelessWidget {
                   ),
                   buildMenuItem(
                     context,
+                    icon: Icons.calendar_month,
+                    title: "Journal",
+                    onTap: () => onSelectScreen("Journal"),
+                  ),
+                  buildMenuItem(
+                    context,
                     icon: Icons.person,
                     title: "Compte",
                     onTap: () => onSelectScreen("Compte"),

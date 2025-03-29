@@ -58,7 +58,8 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
         "carbs": item["carbs"],
         "category": item["categorie"],
         "unit": item["unit"],
-        "quantity": item["quantity"]
+        "quantity": item["quantity"],
+        "isChecked": false
       });
     }
   }

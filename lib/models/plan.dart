@@ -38,7 +38,7 @@ class Plan {
   }
 
   set meals(List<Meal> value) {
-    meals = value;
+    _meals = value;
   }
 
   num totalCalories() {

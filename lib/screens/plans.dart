@@ -8,9 +8,16 @@ import 'package:macro_meter/models/plan.dart';
 import 'package:macro_meter/models/meal.dart';
 
 class PlanScreen extends StatefulWidget {
-  const PlanScreen({required this.user, super.key});
+  const PlanScreen(
+      {required this.user,
+      required this.fromPage,
+      this.onChoosePlan,
+      super.key});
 
   final User user;
+  final String fromPage;
+  final void Function(Plan choosePlan)? onChoosePlan;
+
   @override
   State<StatefulWidget> createState() {
     return _PlanScreenState();
@@ -42,6 +49,7 @@ class _PlanScreenState extends State<PlanScreen> {
           .collection("plans")
           .doc(planDoc.id)
           .collection("meals")
+          .orderBy("createdAt", descending: false)
           .get();
 
       List<Meal> mealList =
@@ -71,11 +79,15 @@ class _PlanScreenState extends State<PlanScreen> {
             category: AlimentCategory.values.byName(
               alimentData["category"],
             ),
+            isChecked: alimentData["isChecked"],
           );
         }).toList();
 
         return Meal(
-            id: mealDoc.id, name: mealData["name"], aliments: alimentList);
+            id: mealDoc.id,
+            name: mealData["name"],
+            createdAt: mealData["createdAt"],
+            aliments: alimentList);
       }).toList());
 
       return Plan(
@@ -88,6 +100,20 @@ class _PlanScreenState extends State<PlanScreen> {
     setState(() {
       plans = planList;
     });
+  }
+
+  void _choosePlan(Plan choosePlan) {
+    if (choosePlan.meals.isNotEmpty) {
+      widget.onChoosePlan!(choosePlan);
+      Navigator.of(context).pop();
+    } else {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Choisissez un plan avec des repas"),
+        ),
+      );
+    }
   }
 
   @override
@@ -145,7 +171,20 @@ class _PlanScreenState extends State<PlanScreen> {
             ? const Center(child: CircularProgressIndicator())
             : Column(
                 children: [
-                  Expanded(child: PlanList(plans: plans, user: widget.user))
+                  Expanded(
+                      child: widget.fromPage == "Journal"
+                          ? PlanList(
+                              plans: plans,
+                              user: widget.user,
+                              fromPage: widget.fromPage,
+                              onChoosePlan: (choosePlan) {
+                                _choosePlan(choosePlan);
+                              },
+                            )
+                          : PlanList(
+                              plans: plans,
+                              user: widget.user,
+                              fromPage: widget.fromPage))
                 ],
               ),
       ),

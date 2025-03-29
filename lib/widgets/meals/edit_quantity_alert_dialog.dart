@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:macro_meter/models/aliment.dart';
 import 'package:macro_meter/models/meal.dart';
 import 'package:macro_meter/models/plan.dart';
+import 'package:macro_meter/models/journal.dart';
 
 class EditQuantityAlertDialog extends StatefulWidget {
   const EditQuantityAlertDialog(
@@ -11,6 +12,7 @@ class EditQuantityAlertDialog extends StatefulWidget {
       required this.plan,
       required this.meal,
       required this.user,
+      this.journal,
       required this.onModifyQuantity,
       super.key});
 
@@ -18,6 +20,7 @@ class EditQuantityAlertDialog extends StatefulWidget {
   final Aliment aliment;
   final Plan plan;
   final Meal meal;
+  final Journal? journal;
   final void Function(Aliment aliment) onModifyQuantity;
 
   @override
@@ -34,22 +37,43 @@ class _EditQuantityAlertDialogState extends State<EditQuantityAlertDialog> {
   void _submit() async {
     try {
       widget.aliment.updateValues(quanity);
-      FirebaseFirestore.instance
-          .collection("users")
-          .doc(widget.user.uid)
-          .collection("plans")
-          .doc(widget.plan.id)
-          .collection("meals")
-          .doc(widget.meal.id)
-          .collection("aliments")
-          .doc(widget.aliment.id)
-          .update({
-        "calories": widget.aliment.calories,
-        "proteines": widget.aliment.proteines,
-        "carbs": widget.aliment.carbs,
-        "fat": widget.aliment.fats,
-        "quantity": widget.aliment.quantity,
-      });
+      if (widget.journal != null) {
+        FirebaseFirestore.instance
+            .collection("users")
+            .doc(widget.user.uid)
+            .collection("journals")
+            .doc(widget.journal!.id)
+            .collection("plan")
+            .doc(widget.plan.id)
+            .collection("meals")
+            .doc(widget.meal.id)
+            .collection("aliments")
+            .doc(widget.aliment.id)
+            .update({
+          "calories": widget.aliment.calories,
+          "proteines": widget.aliment.proteines,
+          "carbs": widget.aliment.carbs,
+          "fat": widget.aliment.fats,
+          "quantity": widget.aliment.quantity,
+        });
+      } else {
+        FirebaseFirestore.instance
+            .collection("users")
+            .doc(widget.user.uid)
+            .collection("plans")
+            .doc(widget.plan.id)
+            .collection("meals")
+            .doc(widget.meal.id)
+            .collection("aliments")
+            .doc(widget.aliment.id)
+            .update({
+          "calories": widget.aliment.calories,
+          "proteines": widget.aliment.proteines,
+          "carbs": widget.aliment.carbs,
+          "fat": widget.aliment.fats,
+          "quantity": widget.aliment.quantity,
+        });
+      }
       widget.onModifyQuantity(widget.aliment);
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {

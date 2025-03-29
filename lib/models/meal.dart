@@ -1,20 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:macro_meter/models/aliment.dart';
 
 class Meal {
   Meal({
     required String id,
     required String name,
+    required Timestamp createdAt,
     List<Aliment>? aliments,
   })  : _id = id,
         _name = name,
+        _createdAt = createdAt,
         _aliments = aliments ?? [];
 
   String _id;
   String _name;
+  Timestamp _createdAt;
   List<Aliment> _aliments;
 
   String get id => _id;
   String get name => _name;
+  Timestamp get createdAt => _createdAt;
   List<Aliment> get aliments => _aliments;
 
   set id(String value) {
@@ -27,6 +32,10 @@ class Meal {
     if (value.isNotEmpty) {
       _name = value;
     }
+  }
+
+  set createdAt(Timestamp value) {
+    _createdAt = value;
   }
 
   set aliments(List<Aliment> value) {

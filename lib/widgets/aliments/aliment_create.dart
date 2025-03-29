@@ -76,7 +76,8 @@ class _AlimentCreateState extends State<AlimentCreate> {
             fats: fatsValue!,
             unit: unitValue!,
             quantity: quantityValue!,
-            category: categoryValue!),
+            category: categoryValue!,
+            isChecked: false),
       );
 
       ScaffoldMessenger.of(context).clearSnackBars();

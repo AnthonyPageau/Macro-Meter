@@ -68,6 +68,7 @@ class _AlimentState extends State<AlimentScreen> {
         category: AlimentCategory.values.byName(
           alimentData["category"],
         ),
+        isChecked: alimentData["isChecked"],
       );
     }).toList();
 
