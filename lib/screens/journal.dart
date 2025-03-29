@@ -11,6 +11,7 @@ import 'package:macro_meter/models/aliment.dart';
 import 'package:macro_meter/models/journal.dart';
 import 'package:macro_meter/screens/plans.dart';
 import 'package:macro_meter/widgets/meals/meal_list.dart';
+import 'package:macro_meter/widgets/journal/complete_journal_alert_dialog.dart';
 
 class JournalScreen extends StatefulWidget {
   const JournalScreen({required this.user, super.key});
@@ -136,6 +137,7 @@ class _JournalScreenState extends State<JournalScreen> {
       "targetProteines": plan.totalProteines(),
       "targetFats": plan.totalFats(),
       "targetCarbs": plan.totalCarbs(),
+      "isComplete": false
     });
 
     DocumentReference planRef = await FirebaseFirestore.instance
@@ -285,6 +287,14 @@ class _JournalScreenState extends State<JournalScreen> {
     _audioPlayer.play(AssetSource("sounds/complete_sound.mp3"));
   }
 
+  bool _isDiabled() {
+    if (journal == null || journal!.isComplete) {
+      return true;
+    }
+
+    return false;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -358,9 +368,20 @@ class _JournalScreenState extends State<JournalScreen> {
                     ],
                   ),
                   IconButton(
-                    onPressed: () {
-                      _playSound();
-                    },
+                    onPressed: _isDiabled()
+                        ? null
+                        : () {
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => CompleteJournalAlertDialog(
+                                user: widget.user,
+                                journal: journal!,
+                                onCompleteJournal: (journal) {
+                                  setState(() {});
+                                },
+                              ),
+                            );
+                          },
                     icon: Icon(
                       Icons.check,
                       color: Colors.white,
