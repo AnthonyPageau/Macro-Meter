@@ -63,6 +63,14 @@ class _AlimentItemState extends State<AlimentItem> {
     }
   }
 
+  bool _isDiabled() {
+    if (widget.journal == null || widget.journal!.isComplete) {
+      return true;
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -75,21 +83,23 @@ class _AlimentItemState extends State<AlimentItem> {
           ),
         ),
         IconButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (ctx) => DeleteAlimentAlertDialog(
-                user: widget.user,
-                aliment: widget.aliment,
-                meal: widget.meal,
-                plan: widget.plan,
-                journal: widget.journal,
-                onDeleteALiment: (deletedAliment) {
-                  widget.onDeleteALiment(deletedAliment);
+          onPressed: _isDiabled()
+              ? null
+              : () {
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => DeleteAlimentAlertDialog(
+                      user: widget.user,
+                      aliment: widget.aliment,
+                      meal: widget.meal,
+                      plan: widget.plan,
+                      journal: widget.journal,
+                      onDeleteALiment: (deletedAliment) {
+                        widget.onDeleteALiment(deletedAliment);
+                      },
+                    ),
+                  );
                 },
-              ),
-            );
-          },
           icon: Icon(Icons.delete_forever_outlined),
           iconSize: 30,
         ),
@@ -108,24 +118,26 @@ class _AlimentItemState extends State<AlimentItem> {
                   border: Border.all(color: Colors.grey, width: 2),
                 ),
                 child: InkWell(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (ctx) => EditQuantityAlertDialog(
-                        aliment: widget.aliment,
-                        user: widget.user,
-                        meal: widget.meal,
-                        plan: widget.plan,
-                        journal: widget.journal,
-                        onModifyQuantity: (aliment) {
-                          setState(() {
-                            widget.aliment = aliment;
-                            widget.onModifyQuantity(aliment);
-                          });
+                  onTap: _isDiabled()
+                      ? null
+                      : () {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => EditQuantityAlertDialog(
+                              aliment: widget.aliment,
+                              user: widget.user,
+                              meal: widget.meal,
+                              plan: widget.plan,
+                              journal: widget.journal,
+                              onModifyQuantity: (aliment) {
+                                setState(() {
+                                  widget.aliment = aliment;
+                                  widget.onModifyQuantity(aliment);
+                                });
+                              },
+                            ),
+                          );
                         },
-                      ),
-                    );
-                  },
                   child: Center(
                     child: Text(
                       widget.aliment.quantity.toString(),
@@ -155,11 +167,13 @@ class _AlimentItemState extends State<AlimentItem> {
         if (widget.journal != null) ...[
           Checkbox(
             value: widget.aliment.isChecked,
-            onChanged: (bool? value) {
-              setState(() {
-                updateIsChecked();
-              });
-            },
+            onChanged: _isDiabled()
+                ? null
+                : (bool? value) {
+                    setState(() {
+                      updateIsChecked();
+                    });
+                  },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),

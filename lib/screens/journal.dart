@@ -368,26 +368,31 @@ class _JournalScreenState extends State<JournalScreen> {
                     ],
                   ),
                   IconButton(
-                    onPressed: _isDiabled()
-                        ? null
-                        : () {
-                            showDialog(
-                              context: context,
-                              builder: (ctx) => CompleteJournalAlertDialog(
-                                user: widget.user,
-                                journal: journal!,
-                                onCompleteJournal: (journal) {
-                                  setState(() {});
-                                },
-                              ),
-                            );
-                          },
-                    icon: Icon(
-                      Icons.check,
-                      color: Colors.white,
-                      size: 30,
-                    ),
-                  ),
+                      onPressed: _isDiabled()
+                          ? null
+                          : () {
+                              showDialog(
+                                context: context,
+                                builder: (ctx) => CompleteJournalAlertDialog(
+                                  user: widget.user,
+                                  journal: journal!,
+                                  onCompleteJournal: (journal) {
+                                    setState(() {});
+                                  },
+                                ),
+                              );
+                            },
+                      icon: _isDiabled()
+                          ? Icon(
+                              Icons.check_box_outlined,
+                              color: kColorScheme.primaryContainer,
+                              size: 30,
+                            )
+                          : Icon(
+                              Icons.check,
+                              color: Colors.white,
+                              size: 30,
+                            )),
                 ],
               ),
             ),

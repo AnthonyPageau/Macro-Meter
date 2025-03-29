@@ -246,6 +246,14 @@ class _MealItemState extends State<MealItem> {
     }
   }
 
+  bool _isDiabled() {
+    if (widget.journal == null || widget.journal!.isComplete) {
+      return true;
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -304,14 +312,16 @@ class _MealItemState extends State<MealItem> {
                                     fontWeight: FontWeight.bold),
                               ),
                         IconButton(
-                          onPressed: () {
-                            setState(() {
-                              if (_isEditingName) {
-                                _updateMealName();
-                              }
-                              _isEditingName = !_isEditingName;
-                            });
-                          },
+                          onPressed: _isDiabled()
+                              ? null
+                              : () {
+                                  setState(() {
+                                    if (_isEditingName) {
+                                      _updateMealName();
+                                    }
+                                    _isEditingName = !_isEditingName;
+                                  });
+                                },
                           icon: Icon(
                             _isEditingName ? Icons.save : Icons.edit,
                             color: Colors.white,
@@ -319,20 +329,22 @@ class _MealItemState extends State<MealItem> {
                         ),
                         const Spacer(),
                         IconButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) => DeleteMealAlertDialog(
-                                  user: widget.user,
-                                  meal: widget.meal,
-                                  plan: widget.plan,
-                                  journal: widget.journal,
-                                  onDeleteMeal: (deletedMeal) {
-                                    widget.onDeleteMeal(deletedMeal);
+                            onPressed: _isDiabled()
+                                ? null
+                                : () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (ctx) => DeleteMealAlertDialog(
+                                        user: widget.user,
+                                        meal: widget.meal,
+                                        plan: widget.plan,
+                                        journal: widget.journal,
+                                        onDeleteMeal: (deletedMeal) {
+                                          widget.onDeleteMeal(deletedMeal);
+                                        },
+                                      ),
+                                    );
                                   },
-                                ),
-                              );
-                            },
                             icon: const Icon(
                               Icons.close,
                               color: Colors.white,
@@ -355,11 +367,13 @@ class _MealItemState extends State<MealItem> {
                               ),
                               Checkbox(
                                 value: _isChecked,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    updateIsChecked();
-                                  });
-                                },
+                                onChanged: _isDiabled()
+                                    ? null
+                                    : (bool? value) {
+                                        setState(() {
+                                          updateIsChecked();
+                                        });
+                                      },
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
@@ -482,20 +496,22 @@ class _MealItemState extends State<MealItem> {
                       ),
                       alignment: Alignment.centerLeft,
                       child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (ctx) => AlimentScreen(
-                                  user: widget.user,
-                                  fromPage: "PlanEdit",
-                                  onAddAliment: (newAliment) {
-                                    _addAliment(newAliment);
-                                  },
-                                  meal: widget.meal,
-                                ),
-                              ),
-                            );
-                          },
+                          onPressed: _isDiabled()
+                              ? null
+                              : () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (ctx) => AlimentScreen(
+                                        user: widget.user,
+                                        fromPage: "PlanEdit",
+                                        onAddAliment: (newAliment) {
+                                          _addAliment(newAliment);
+                                        },
+                                        meal: widget.meal,
+                                      ),
+                                    ),
+                                  );
+                                },
                           child: Text("+ Ajouter aliment"))),
                 ],
               ),
