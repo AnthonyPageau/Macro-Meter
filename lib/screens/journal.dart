@@ -378,6 +378,7 @@ class _JournalScreenState extends State<JournalScreen> {
                                   journal: journal!,
                                   onCompleteJournal: (journal) {
                                     setState(() {});
+                                    _playSound();
                                   },
                                 ),
                               );

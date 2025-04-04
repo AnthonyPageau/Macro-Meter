@@ -25,11 +25,21 @@ class AlimentScreen extends StatefulWidget {
 }
 
 class _AlimentState extends State<AlimentScreen> {
-  dynamic aliments;
+  List<Aliment> fetchedAliments = [];
+  List<Aliment> searchedAliments = [];
+  bool isSearching = false;
+  TextEditingController searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     fetchUserAlimentData();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   void addAliment(Aliment newAliment) {
@@ -73,7 +83,8 @@ class _AlimentState extends State<AlimentScreen> {
     }).toList();
 
     setState(() {
-      aliments = alimentList;
+      fetchedAliments = alimentList;
+      searchedAliments = alimentList;
     });
   }
 
@@ -82,26 +93,52 @@ class _AlimentState extends State<AlimentScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          "Aliments",
-          style: TextStyle(fontSize: 36),
-        ),
-        flexibleSpace: Center(
-          child: Padding(
-            padding: EdgeInsets.only(right: 56),
-            child: const Text(
-              "Aliments",
-              style: TextStyle(fontSize: 36),
-            ),
-          ),
-        ),
+        title: isSearching
+            ? TextField(
+                controller: searchController,
+                autofocus: true,
+                style: TextStyle(fontSize: 24, color: Colors.white),
+                decoration: InputDecoration(
+                  hintText: "Rechercher...",
+                  hintStyle: TextStyle(color: Colors.white),
+                  border: InputBorder.none,
+                ),
+                onChanged: (query) {
+                  setState(
+                    () {
+                      if (query.isEmpty) {
+                        fetchUserAlimentData();
+                      } else {
+                        searchedAliments = fetchedAliments
+                            .where((aliment) => aliment.name
+                                .toLowerCase()
+                                .contains(query.toLowerCase()))
+                            .toList();
+                      }
+                    },
+                  );
+                },
+              )
+            : const Text(
+                "Aliments",
+                style: TextStyle(fontSize: 36),
+              ),
         actions: [
           IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.search,
-                size: 40,
-              )),
+            onPressed: () {
+              setState(() {
+                isSearching = !isSearching;
+                if (!isSearching) {
+                  searchController.clear();
+                  fetchUserAlimentData();
+                }
+              });
+            },
+            icon: Icon(
+              isSearching ? Icons.close : Icons.search,
+              size: 40,
+            ),
+          ),
           IconButton(
             onPressed: () {
               showDialog(
@@ -109,11 +146,11 @@ class _AlimentState extends State<AlimentScreen> {
                 builder: (ctx) => AlimentCreate(
                     onAddAliment: (newAliment) {
                       setState(() {
-                        aliments.add(newAliment);
+                        searchedAliments.add(newAliment);
                       });
                     },
                     user: widget.user,
-                    aliments: aliments),
+                    aliments: searchedAliments),
               );
             },
             icon: const Icon(
@@ -134,19 +171,19 @@ class _AlimentState extends State<AlimentScreen> {
             end: Alignment.topLeft,
           ),
         ),
-        child: aliments == null
+        child: searchedAliments.isEmpty
             ? const Center(child: CircularProgressIndicator())
             : Column(
                 children: [
                   Expanded(
                     child: widget.fromPage == "Home"
                         ? AlimentList(
-                            aliments: aliments,
+                            aliments: searchedAliments,
                             user: widget.user,
                             fromPage: widget.fromPage,
                           )
                         : AlimentList(
-                            aliments: aliments,
+                            aliments: searchedAliments,
                             user: widget.user,
                             fromPage: widget.fromPage,
                             onAddAliment: (newAliment) {

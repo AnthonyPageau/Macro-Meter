@@ -55,7 +55,7 @@ class _CompleteJournalAlertDialogState
           },
         ),
         ElevatedButton(
-          child: Text("Modifer"),
+          child: Text("Compléter"),
           onPressed: () {
             _submit();
           },

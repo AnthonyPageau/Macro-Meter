@@ -23,17 +23,9 @@ class AlimentList extends StatefulWidget {
 }
 
 class _AlimentListState extends State<AlimentList> {
-  late List<Aliment> aliments;
-
-  @override
-  void initState() {
-    super.initState();
-    aliments = widget.aliments;
-  }
-
   void deleteAliment(Aliment aliment) {
     setState(() {
-      aliments.remove(aliment);
+      widget.aliments.remove(aliment);
     });
 
     var doc = FirebaseFirestore.instance
@@ -48,10 +40,10 @@ class _AlimentListState extends State<AlimentList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: aliments.length,
+      itemCount: widget.aliments.length,
       itemBuilder: (ctx, index) => Dismissible(
         key: ValueKey(
-          aliments[index],
+          widget.aliments[index],
         ),
         background: Container(
           color: Theme.of(context).colorScheme.error,
@@ -61,7 +53,7 @@ class _AlimentListState extends State<AlimentList> {
         ),
         direction: DismissDirection.endToStart,
         onDismissed: (direction) {
-          deleteAliment(aliments[index]);
+          deleteAliment(widget.aliments[index]);
         },
         confirmDismiss: (direction) async {
           return await showDialog(
@@ -83,19 +75,19 @@ class _AlimentListState extends State<AlimentList> {
         },
         child: widget.fromPage == "Home"
             ? AlimentItem(
-                aliment: aliments[index],
+                aliment: widget.aliments[index],
                 user: widget.user,
                 fromPage: widget.fromPage,
-                aliments: aliments,
+                aliments: widget.aliments,
               )
             : AlimentItem(
-                aliment: aliments[index],
+                aliment: widget.aliments[index],
                 user: widget.user,
                 fromPage: widget.fromPage,
                 onAddAliment: (newAliment) {
                   widget.onAddAliment!(newAliment);
                 },
-                aliments: aliments,
+                aliments: widget.aliments,
               ),
       ),
     );

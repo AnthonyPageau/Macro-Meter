@@ -63,7 +63,8 @@ class _AlimentCreateState extends State<AlimentCreate> {
         "carbs": carbsValue,
         "category": categoryValue!.name,
         "unit": unitValue!.name,
-        "quantity": quantityValue
+        "quantity": quantityValue,
+        "isChecked": false
       });
 
       widget.onAddAliment(
