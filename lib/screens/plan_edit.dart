@@ -89,6 +89,7 @@ class _PlanEditState extends State<PlanEdit> {
                 meals: widget.plan.meals,
                 user: widget.user,
                 plan: widget.plan,
+                fromPage: "PlanEdit",
                 onAddMeal: (newMeal) {
                   setState(() {
                     widget.plan.meals.add(newMeal);

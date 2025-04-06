@@ -299,6 +299,7 @@ class _JournalScreenState extends State<JournalScreen> {
   void initState() {
     super.initState();
     fetchUserJournalData();
+    displayDate(DateTime.now());
   }
 
   @override

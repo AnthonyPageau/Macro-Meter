@@ -15,6 +15,7 @@ class MealItem extends StatefulWidget {
       required this.user,
       required this.plan,
       this.journal,
+      this.fromPage,
       required this.onAddMeal,
       required this.onAddAliment,
       required this.onDeleteALiment,
@@ -28,6 +29,7 @@ class MealItem extends StatefulWidget {
   final User user;
   final Plan plan;
   Journal? journal;
+  final String? fromPage;
   final void Function(Meal newMeal) onAddMeal;
   final void Function(Aliment newAliment) onAddAliment;
   final void Function(Aliment deletedAliment) onDeleteALiment;
@@ -44,8 +46,8 @@ class MealItem extends StatefulWidget {
 
 class _MealItemState extends State<MealItem> {
   bool _isEditingName = false;
-  late TextEditingController _controller;
   bool _isChecked = false;
+  late TextEditingController _controller;
   @override
   void initState() {
     super.initState();
@@ -247,6 +249,9 @@ class _MealItemState extends State<MealItem> {
   }
 
   bool _isDiabled() {
+    if (widget.fromPage == "PlanEdit") {
+      return false;
+    }
     if (widget.journal == null || widget.journal!.isComplete) {
       return true;
     }
@@ -416,6 +421,7 @@ class _MealItemState extends State<MealItem> {
                             plan: widget.plan,
                             meal: widget.meal,
                             journal: widget.journal,
+                            fromPage: widget.fromPage,
                             onDeleteALiment: (deletedAliment) {
                               setState(() {
                                 widget.onDeleteALiment(deletedAliment);

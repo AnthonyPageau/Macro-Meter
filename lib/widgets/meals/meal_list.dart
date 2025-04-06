@@ -14,6 +14,7 @@ class MealList extends StatelessWidget {
       required this.user,
       required this.plan,
       this.journal,
+      this.fromPage,
       required this.onAddMeal,
       required this.onAddAliment,
       required this.onDeleteALiment,
@@ -26,6 +27,7 @@ class MealList extends StatelessWidget {
   final User user;
   final Plan plan;
   final Journal? journal;
+  final String? fromPage;
   final void Function(Meal newMeal) onAddMeal;
   final void Function(Aliment newAliment) onAddAliment;
   final void Function(Aliment deletedAliment) onDeleteALiment;
@@ -72,6 +74,7 @@ class MealList extends StatelessWidget {
                 user: user,
                 plan: plan,
                 journal: journal,
+                fromPage: fromPage,
                 onAddMeal: (newMeal) {
                   onAddMeal(newMeal);
                 },

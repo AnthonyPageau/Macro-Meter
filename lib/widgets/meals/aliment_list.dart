@@ -14,6 +14,7 @@ class AlimentList extends StatefulWidget {
       required this.meal,
       required this.plan,
       this.journal,
+      this.fromPage,
       required this.onDeleteALiment,
       required this.onModifyQuantity,
       this.onCheckedAliment});
@@ -23,6 +24,7 @@ class AlimentList extends StatefulWidget {
   final Meal meal;
   final Plan plan;
   final Journal? journal;
+  final String? fromPage;
   final void Function(Aliment deletedAliment) onDeleteALiment;
   final void Function(Aliment modifiedAliment) onModifyQuantity;
   final void Function(bool checkedAliment)? onCheckedAliment;
@@ -64,6 +66,7 @@ class _AlimentListState extends State<AlimentList> {
                 meal: widget.meal,
                 plan: widget.plan,
                 journal: widget.journal,
+                fromPage: widget.fromPage,
                 onDeleteALiment: (deletedAliment) {
                   widget.onDeleteALiment(deletedAliment);
                 },
