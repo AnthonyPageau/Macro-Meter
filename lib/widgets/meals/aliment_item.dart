@@ -15,6 +15,7 @@ class AlimentItem extends StatefulWidget {
       required this.plan,
       required this.user,
       this.journal,
+      this.fromPage,
       required this.onDeleteALiment,
       required this.onModifyQuantity,
       this.onCheckedAliment,
@@ -25,6 +26,7 @@ class AlimentItem extends StatefulWidget {
   final Meal meal;
   final Plan plan;
   final Journal? journal;
+  final String? fromPage;
   final void Function(Aliment deletedAliment) onDeleteALiment;
   final void Function(Aliment modifiedAliment) onModifyQuantity;
   final void Function(bool checkedAliment)? onCheckedAliment;
@@ -64,6 +66,9 @@ class _AlimentItemState extends State<AlimentItem> {
   }
 
   bool _isDiabled() {
+    if (widget.fromPage == "PlanEdit") {
+      return false;
+    }
     if (widget.journal == null || widget.journal!.isComplete) {
       return true;
     }
