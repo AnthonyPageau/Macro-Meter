@@ -14,9 +14,10 @@ import 'package:macro_meter/widgets/meals/meal_list.dart';
 import 'package:macro_meter/widgets/journal/complete_journal_alert_dialog.dart';
 
 class JournalScreen extends StatefulWidget {
-  const JournalScreen({required this.user, super.key});
+  JournalScreen({required this.user, required this.journals, super.key});
 
   final User user;
+  List<Journal> journals;
   @override
   State<StatefulWidget> createState() {
     return _JournalScreenState();
@@ -29,100 +30,9 @@ class _JournalScreenState extends State<JournalScreen> {
   Journal? journal;
   Plan? plan;
   List<Meal>? meals;
-  List<Journal> journals = [];
+
   String dateDisplayed = DateFormat('yyyy-MM-dd').format(DateTime.now());
   final AudioPlayer _audioPlayer = AudioPlayer();
-
-  void fetchUserJournalData() async {
-    var journalsCollection = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(widget.user.uid)
-        .collection("journals")
-        .get();
-
-    List<Journal> journalList =
-        await Future.wait(journalsCollection.docs.map((journalDoc) async {
-      var journalData = journalDoc.data();
-      var planCollection = await FirebaseFirestore.instance
-          .collection("users")
-          .doc(widget.user.uid)
-          .collection("journals")
-          .doc(journalDoc.id)
-          .collection("plan")
-          .get();
-      var planDoc = planCollection.docs[0];
-      var planData = planDoc.data();
-      var mealsCollection = await FirebaseFirestore.instance
-          .collection("users")
-          .doc(widget.user.uid)
-          .collection("journals")
-          .doc(journalDoc.id)
-          .collection("plan")
-          .doc(planDoc.id)
-          .collection("meals")
-          .orderBy("createdAt", descending: false)
-          .get();
-
-      List<Meal> mealList =
-          await Future.wait(mealsCollection.docs.map((mealDoc) async {
-        var mealData = mealDoc.data();
-        var alimentCollection = await FirebaseFirestore.instance
-            .collection("users")
-            .doc(widget.user.uid)
-            .collection("journals")
-            .doc(journalDoc.id)
-            .collection("plan")
-            .doc(planDoc.id)
-            .collection("meals")
-            .doc(mealDoc.id)
-            .collection("aliments")
-            .get();
-
-        List<Aliment> alimentList = alimentCollection.docs.map((alimentDoc) {
-          var alimentData = alimentDoc.data();
-          return Aliment(
-            id: alimentDoc.id,
-            name: alimentData["name"],
-            calories: alimentData["calories"],
-            proteines: alimentData["proteines"],
-            carbs: alimentData["carbs"],
-            fats: alimentData["fat"],
-            unit: AlimentUnit.values.byName(alimentData["unit"]),
-            quantity: alimentData["quantity"],
-            category: AlimentCategory.values.byName(
-              alimentData["category"],
-            ),
-            isChecked: alimentData["isChecked"],
-          );
-        }).toList();
-
-        return Meal(
-            id: mealDoc.id,
-            name: mealData["name"],
-            createdAt: mealData["createdAt"],
-            aliments: alimentList);
-      }).toList());
-      Plan plan = Plan(
-          id: planDoc.id,
-          name: planData["name"],
-          date: DateTime.parse(planData["date"] as String),
-          meals: mealList);
-      return Journal(
-        id: journalDoc.id,
-        plan: plan,
-        date: DateTime.parse(journalData['date'] as String),
-        targetCalories: journalData["targetCalories"],
-        targetProteines: journalData["targetProteines"],
-        targetCarbs: journalData["targetCarbs"],
-        targetFats: journalData["targetFats"],
-        isComplete: journalData["isComplete"],
-      );
-    }).toList());
-    if (journalList.isNotEmpty) {
-      journals = journalList;
-      findJournal(DateTime.now());
-    }
-  }
 
   void _createJournal(Plan plan) async {
     Plan journalPlan;
@@ -209,7 +119,7 @@ class _JournalScreenState extends State<JournalScreen> {
         targetCarbs: plan.totalCarbs(),
         targetFats: plan.totalCarbs(),
         isComplete: false);
-    journals.add(journal!);
+    widget.journals.add(journal!);
     meals = journalPlan.meals;
     setState(() {});
   }
@@ -232,8 +142,8 @@ class _JournalScreenState extends State<JournalScreen> {
     Journal? foundJournal;
 
     int index = 0;
-    while (!found && index < journals.length) {
-      var j = journals[index];
+    while (!found && index < widget.journals.length) {
+      var j = widget.journals[index];
       DateTime journalDate = DateTime(j.date.year, j.date.month, j.date.day);
 
       if (journalDate.isAtSameMomentAs(todayStartOfDay)) {
@@ -298,7 +208,7 @@ class _JournalScreenState extends State<JournalScreen> {
   @override
   void initState() {
     super.initState();
-    fetchUserJournalData();
+    findJournal(DateTime.now());
     displayDate(DateTime.now());
   }
 
