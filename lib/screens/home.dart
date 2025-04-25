@@ -12,6 +12,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:macro_meter/widgets/menu.dart';
 import 'package:macro_meter/widgets/statistique/aliment_category_chart.dart';
+import 'package:macro_meter/widgets/statistique/aliment_macro_chart.dart';
+import 'package:macro_meter/widgets/statistique/weekly_chart.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key, required this.user});
@@ -195,20 +197,36 @@ class _HomeState extends State<Home> {
       drawer: Menu(
         onSelectScreen: _setScreen,
       ),
-      body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.black,
-                Color.fromARGB(255, 17, 127, 112),
-              ],
-              begin: Alignment.bottomRight,
-              end: Alignment.topLeft,
+      body: SizedBox.expand(
+        child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.black,
+                  Color.fromARGB(255, 17, 127, 112),
+                ],
+                begin: Alignment.bottomRight,
+                end: Alignment.topLeft,
+              ),
             ),
-          ),
-          child: journals.isEmpty
-              ? const Center(child: CircularProgressIndicator())
-              : AlimentCategoryChart(journals: journals)),
+            child: journals.isEmpty
+                ? const Center(child: CircularProgressIndicator())
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 24,
+                        ),
+                        AlimentCategoryChart(journals: journals),
+                        SizedBox(
+                          height: 24,
+                        ),
+                        AlimentMacroChart(journals: journals),
+                        WeeklyChart(journals: journals)
+                      ],
+                    ),
+                  )),
+      ),
     );
   }
 }

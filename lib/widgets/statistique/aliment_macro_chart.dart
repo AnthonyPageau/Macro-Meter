@@ -5,28 +5,24 @@ import 'package:macro_meter/models/meal.dart';
 import 'package:macro_meter/main.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class AlimentCategoryChart extends StatefulWidget {
-  const AlimentCategoryChart({required this.journals, super.key});
+class AlimentMacroChart extends StatefulWidget {
+  const AlimentMacroChart({required this.journals, super.key});
 
   final List<Journal> journals;
 
   @override
-  State<StatefulWidget> createState() => _AlimentCategoryChartState();
+  State<StatefulWidget> createState() => _AlimentMacroChartState();
 }
 
-class _AlimentCategoryChartState extends State<AlimentCategoryChart> {
+class _AlimentMacroChartState extends State<AlimentMacroChart> {
   num proteines = 0;
-  num dairy = 0;
-  num cereal = 0;
-  num fruitsAndVegetable = 0;
-  num other = 0;
+  num fats = 0;
+  num carbs = 0;
   double proteinesPercentage = 0;
-  double dairyPercentage = 0;
-  double cerealPercentage = 0;
-  double fruitsAndVegetablePercentage = 0;
-  double otherPercentage = 0;
+  double fatsPercentage = 0;
+  double carbsPercentage = 0;
   num total = 0;
   int touchedIndex = 0;
 
@@ -34,54 +30,32 @@ class _AlimentCategoryChartState extends State<AlimentCategoryChart> {
     for (Journal journal in widget.journals) {
       for (Meal meal in journal.plan.meals) {
         for (Aliment aliment in meal.aliments) {
-          switch (aliment.category) {
-            case AlimentCategory.protein:
-              proteines += aliment.calories;
-              total += aliment.calories;
-              break;
-            case AlimentCategory.cereal:
-              cereal += aliment.calories;
-              total += aliment.calories;
-              break;
-            case AlimentCategory.dairy:
-              dairy += aliment.calories;
-              total += aliment.calories;
-              break;
-            case AlimentCategory.fruitsAndVegetable:
-              fruitsAndVegetable += aliment.calories;
-              total += aliment.calories;
-              break;
-            case AlimentCategory.other:
-              other += aliment.calories;
-              total += aliment.calories;
-              break;
-          }
+          proteines += aliment.proteines;
+          fats += aliment.fats;
+          carbs += aliment.carbs;
+          total += aliment.proteines;
+          total += aliment.carbs;
+          total += aliment.fats;
         }
       }
     }
     proteinesPercentage = proteines / total * 100;
-    cerealPercentage = cereal / total * 100;
-    dairyPercentage = dairy / total * 100;
-    fruitsAndVegetablePercentage = fruitsAndVegetable / total * 100;
-    otherPercentage = other / total * 100;
+    fatsPercentage = fats / total * 100;
+    carbsPercentage = carbs / total * 100;
   }
 
   void resetValues() {
     proteines = 0;
-    dairy = 0;
-    cereal = 0;
-    fruitsAndVegetable = 0;
-    other = 0;
+    fats = 0;
+    carbs = 0;
     proteinesPercentage = 0;
-    dairyPercentage = 0;
-    cerealPercentage = 0;
-    fruitsAndVegetablePercentage = 0;
-    otherPercentage = 0;
+    fatsPercentage = 0;
+    carbsPercentage = 0;
     total = 0;
   }
 
   @override
-  void didUpdateWidget(AlimentCategoryChart oldWidget) {
+  void didUpdateWidget(AlimentMacroChart oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.journals != widget.journals) {
       setState(() {
@@ -104,7 +78,7 @@ class _AlimentCategoryChartState extends State<AlimentCategoryChart> {
     return Column(
       children: [
         Text(
-          "Catégories d'aliments \n consommés",
+          "Valeurs nutritives \n consommées",
           style: TextStyle(fontSize: 26, color: kColorScheme.primaryContainer),
           textAlign: TextAlign.center,
         ),
@@ -142,7 +116,7 @@ class _AlimentCategoryChartState extends State<AlimentCategoryChart> {
   }
 
   List<PieChartSectionData> showingSections() {
-    return List.generate(5, (i) {
+    return List.generate(3, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 20.0 : 16.0;
       final radius = isTouched ? 110.0 : 100.0;
@@ -163,17 +137,17 @@ class _AlimentCategoryChartState extends State<AlimentCategoryChart> {
               shadows: shadows,
             ),
             badgeWidget: _Badge(
-              Icon(categoryIcons[AlimentCategory.protein]),
+              Icon(FontAwesomeIcons.drumstickBite),
               size: widgetSize,
-              borderColor: AppColors.contentColorBlack,
+              borderColor: const Color.fromARGB(255, 4, 2, 2),
             ),
             badgePositionPercentageOffset: .98,
           );
         case 1:
           return PieChartSectionData(
-            color: AppColors.contentColorYellow,
-            value: cerealPercentage,
-            title: "${cerealPercentage.toStringAsFixed(0)}%",
+            color: const Color.fromRGBO(255, 195, 0, 1),
+            value: carbsPercentage,
+            title: "${carbsPercentage.toStringAsFixed(0)}%",
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -182,7 +156,7 @@ class _AlimentCategoryChartState extends State<AlimentCategoryChart> {
               shadows: shadows,
             ),
             badgeWidget: _Badge(
-              Icon(categoryIcons[AlimentCategory.cereal]),
+              Icon((FontAwesomeIcons.seedling)),
               size: widgetSize,
               borderColor: AppColors.contentColorBlack,
             ),
@@ -191,8 +165,8 @@ class _AlimentCategoryChartState extends State<AlimentCategoryChart> {
         case 2:
           return PieChartSectionData(
             color: AppColors.contentColorPurple,
-            value: dairyPercentage,
-            title: "${dairyPercentage.toStringAsFixed(0)}%",
+            value: fatsPercentage,
+            title: "${fatsPercentage.toStringAsFixed(0)}%",
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -201,45 +175,7 @@ class _AlimentCategoryChartState extends State<AlimentCategoryChart> {
               shadows: shadows,
             ),
             badgeWidget: _Badge(
-              Icon(categoryIcons[AlimentCategory.dairy]),
-              size: widgetSize,
-              borderColor: AppColors.contentColorBlack,
-            ),
-            badgePositionPercentageOffset: .98,
-          );
-        case 3:
-          return PieChartSectionData(
-            color: AppColors.contentColorGreen,
-            value: fruitsAndVegetablePercentage,
-            title: "${fruitsAndVegetablePercentage.toStringAsFixed(0)}%",
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: const Color(0xffffffff),
-              shadows: shadows,
-            ),
-            badgeWidget: _Badge(
-              Icon(categoryIcons[AlimentCategory.fruitsAndVegetable]),
-              size: widgetSize,
-              borderColor: AppColors.contentColorBlack,
-            ),
-            badgePositionPercentageOffset: .98,
-          );
-        case 4:
-          return PieChartSectionData(
-            color: AppColors.contentColorRed,
-            value: otherPercentage,
-            title: "${otherPercentage.toStringAsFixed(0)}%",
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: const Color(0xffffffff),
-              shadows: shadows,
-            ),
-            badgeWidget: _Badge(
-              Icon(categoryIcons[AlimentCategory.other]),
+              Icon((FontAwesomeIcons.bottleDroplet)),
               size: widgetSize,
               borderColor: AppColors.contentColorBlack,
             ),
@@ -254,11 +190,11 @@ class _AlimentCategoryChartState extends State<AlimentCategoryChart> {
 
 class _Badge extends StatelessWidget {
   const _Badge(
-    this.icon, {
+    this.svgAsset, {
     required this.size,
     required this.borderColor,
   });
-  final Icon icon;
+  final Icon svgAsset;
   final double size;
   final Color borderColor;
 
@@ -284,7 +220,7 @@ class _Badge extends StatelessWidget {
         ],
       ),
       padding: EdgeInsets.all(size * .15),
-      child: Center(child: icon),
+      child: Center(child: svgAsset),
     );
   }
 }
