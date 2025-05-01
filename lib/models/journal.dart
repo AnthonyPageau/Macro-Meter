@@ -40,8 +40,11 @@ class Journal {
   bool get isComplete => _isComplete;
 
   set id(String value) {
-    if (value.isNotEmpty) {
-      _id = value;
+    final trimmed = value.trim();
+    if (trimmed.isNotEmpty) {
+      _id = trimmed;
+    } else {
+      throw ArgumentError("L'ID ne peut pas être vide.");
     }
   }
 
@@ -56,24 +59,32 @@ class Journal {
   set targetCalories(num value) {
     if (value >= 0) {
       _targetCalories = value;
+    } else {
+      throw ArgumentError("Les calories cibles doivent être positives.");
     }
   }
 
   set targetProteines(num value) {
     if (value >= 0) {
       _targetProteines = value;
+    } else {
+      throw ArgumentError("Les protéines cibles doivent être positives.");
     }
   }
 
   set targetFats(num value) {
     if (value >= 0) {
       _targetFats = value;
+    } else {
+      throw ArgumentError("Les lipides cibles doivent être positifs.");
     }
   }
 
   set targetCarbs(num value) {
     if (value >= 0) {
       _targetCarbs = value;
+    } else {
+      throw ArgumentError("Les glucides cibles doivent être positifs.");
     }
   }
 

@@ -58,44 +58,64 @@ class Aliment {
   bool get isChecked => _isChecked;
 
   set id(String value) {
-    if (value.isNotEmpty) {
-      _id = value;
+    final trimmed = value.trim();
+    if (trimmed.isNotEmpty) {
+      _id = trimmed;
+    } else {
+      throw ArgumentError("L'ID ne peut pas être vide.");
     }
   }
 
   set name(String value) {
-    if (value.isNotEmpty) {
-      _name = value;
+    final trimmed = value.trim();
+    if (trimmed.isNotEmpty) {
+      _name = trimmed;
+    } else {
+      throw ArgumentError("Le nom ne peut pas être vide.");
     }
   }
 
   set calories(int value) {
     if (value >= 0) {
       _calories = value;
+    } else {
+      throw ArgumentError(
+          "Les calories doivent être supérieures ou égales à zéro.");
     }
   }
 
   set proteines(num value) {
     if (value >= 0) {
       _proteines = value;
+    } else {
+      throw ArgumentError(
+          "Les protéines doivent être supérieures ou égales à zéro.");
     }
   }
 
   set carbs(num value) {
     if (value >= 0) {
       _carbs = value;
+    } else {
+      throw ArgumentError(
+          "Les glucides doivent être supérieurs ou égaux à zéro.");
     }
   }
 
   set fats(num value) {
     if (value >= 0) {
       _fats = value;
+    } else {
+      throw ArgumentError(
+          "Les lipides doivent être supérieurs ou égaux à zéro.");
     }
   }
 
   set quantity(num value) {
     if (value >= 0) {
       _quantity = value;
+    } else {
+      throw ArgumentError("La quantité doit être supérieure ou égale à zéro.");
     }
   }
 

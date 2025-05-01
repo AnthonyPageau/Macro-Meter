@@ -22,14 +22,20 @@ class Plan {
   List<Meal> get meals => _meals;
 
   set id(String value) {
-    if (value.isNotEmpty) {
-      _id = value;
+    final trimmed = value.trim();
+    if (trimmed.isNotEmpty) {
+      _id = trimmed;
+    } else {
+      throw ArgumentError("L'ID ne peut pas être vide.");
     }
   }
 
   set name(String value) {
-    if (value.isNotEmpty) {
-      _name = value;
+    final trimmed = value.trim();
+    if (trimmed.isNotEmpty) {
+      _name = trimmed;
+    } else {
+      throw ArgumentError("Le nom ne peut pas être vide.");
     }
   }
 
@@ -38,7 +44,7 @@ class Plan {
   }
 
   set meals(List<Meal> value) {
-    _meals = value;
+    _meals = List<Meal>.from(value);
   }
 
   num totalCalories() {
