@@ -45,7 +45,6 @@ class WeeklyChartState extends State<WeeklyChart> {
   int fridayCount = 0;
   int saturdayCount = 0;
   int sundayCount = 0;
-  bool isPlaying = false;
 
   void calculate() {
     for (Journal journal in widget.journals) {
@@ -85,7 +84,6 @@ class WeeklyChartState extends State<WeeklyChart> {
   }
 
   void resetValues() {
-    touchedIndex = -1;
     mondayAverage = 0;
     thuesdayAverage = 0;
     wednesdayAverage = 0;
@@ -115,7 +113,7 @@ class WeeklyChartState extends State<WeeklyChart> {
     if (oldWidget.journals != widget.journals) {
       setState(() {
         resetValues();
-        calculate;
+        calculate();
       });
     }
   }

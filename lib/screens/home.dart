@@ -184,15 +184,6 @@ class _HomeState extends State<Home> {
           "Macro-Meter",
           style: TextStyle(fontSize: 36),
         ),
-        flexibleSpace: Center(
-          child: Padding(
-            padding: EdgeInsets.only(right: 56),
-            child: const Text(
-              "Macro-Meter",
-              style: TextStyle(fontSize: 36),
-            ),
-          ),
-        ),
       ),
       drawer: Menu(
         onSelectScreen: _setScreen,

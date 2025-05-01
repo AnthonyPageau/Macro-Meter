@@ -82,9 +82,12 @@ class _AlimentState extends State<AlimentScreen> {
       );
     }).toList();
 
+    alimentList
+        .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+
     setState(() {
       fetchedAliments = alimentList;
-      searchedAliments = alimentList;
+      searchedAliments = fetchedAliments;
     });
   }
 
@@ -104,19 +107,15 @@ class _AlimentState extends State<AlimentScreen> {
                   border: InputBorder.none,
                 ),
                 onChanged: (query) {
-                  setState(
-                    () {
-                      if (query.isEmpty) {
-                        fetchUserAlimentData();
-                      } else {
-                        searchedAliments = fetchedAliments
+                  setState(() {
+                    searchedAliments = query.isEmpty
+                        ? List.from(fetchedAliments)
+                        : fetchedAliments
                             .where((aliment) => aliment.name
                                 .toLowerCase()
                                 .contains(query.toLowerCase()))
                             .toList();
-                      }
-                    },
-                  );
+                  });
                 },
               )
             : const Text(

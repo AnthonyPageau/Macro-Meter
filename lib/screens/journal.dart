@@ -117,7 +117,7 @@ class _JournalScreenState extends State<JournalScreen> {
         targetCalories: plan.totalCalories(),
         targetProteines: plan.totalProteines(),
         targetCarbs: plan.totalCarbs(),
-        targetFats: plan.totalCarbs(),
+        targetFats: plan.totalFats(),
         isComplete: false);
     widget.journals.add(journal!);
     meals = journalPlan.meals;
