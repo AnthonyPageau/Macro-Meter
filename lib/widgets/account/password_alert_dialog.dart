@@ -19,6 +19,7 @@ class PasswordAlertDialog extends StatefulWidget {
 }
 
 class PasswordAlertDialogState extends State<PasswordAlertDialog> {
+  /// Permet de modifier le mot de passe
   void _submit() async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(

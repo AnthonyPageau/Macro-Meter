@@ -25,6 +25,7 @@ class _PlanCreateState extends State<PlanCreate> {
   String? planName;
   final form = GlobalKey<FormState>();
 
+  /// Permet de créer un plan
   void _submit() async {
     try {
       final isValid = form.currentState!.validate();

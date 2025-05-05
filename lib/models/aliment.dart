@@ -150,6 +150,7 @@ class Aliment {
     }
   }
 
+  /// Met à jour les informations d'un aliment par rapport à la quantité
   void updateValues(num updatedQuantity) {
     num ratio = updatedQuantity / quantity;
 

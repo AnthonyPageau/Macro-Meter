@@ -57,6 +57,7 @@ class _AlimentState extends State<AlimentScreen> {
     }
   }
 
+  /// Retourne les aliments de l'utilisateur connecté
   void fetchUserAlimentData() async {
     var collection = await FirebaseFirestore.instance
         .collection("users")

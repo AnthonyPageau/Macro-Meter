@@ -17,6 +17,7 @@ class PlanList extends StatelessWidget {
   final String fromPage;
   final void Function(Plan choosePlan)? onChoosePlan;
 
+  /// Permet de supprimer un plan
   void deletePlan(Plan plan) async {
     var docRef = FirebaseFirestore.instance
         .collection("users")

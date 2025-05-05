@@ -60,6 +60,7 @@ class _MealItemState extends State<MealItem> {
     super.dispose();
   }
 
+  /// Permet d'ajouter un repas
   void addMeal() async {
     try {
       String refId;

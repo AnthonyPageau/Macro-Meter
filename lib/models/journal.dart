@@ -92,6 +92,7 @@ class Journal {
     _isComplete = value;
   }
 
+  /// Calcule le total calorie d'un journal
   num totalCalories() {
     num total = 0;
     for (Meal meal in plan.meals) {
@@ -104,6 +105,7 @@ class Journal {
     return double.parse(total.toStringAsFixed(2));
   }
 
+  /// Calcule le totale protéine d'un journal
   num totalProteines() {
     num total = 0;
     for (Meal meal in plan.meals) {
@@ -116,6 +118,7 @@ class Journal {
     return double.parse(total.toStringAsFixed(2));
   }
 
+  /// Calcule le totale des glucides d'un journal
   num totalCarbs() {
     num total = 0;
     for (Meal meal in plan.meals) {
@@ -128,6 +131,7 @@ class Journal {
     return double.parse(total.toStringAsFixed(2));
   }
 
+  /// Calcule le totale des lipides d'un journal
   num totalFats() {
     num total = 0;
     for (Meal meal in plan.meals) {
@@ -140,24 +144,28 @@ class Journal {
     return double.parse(total.toStringAsFixed(2));
   }
 
+  /// Calcule les calories restantes à manger
   num remaningCalories() {
     num remaining = targetCalories - totalCalories();
     remaining = remaining < 0 ? 0 : remaining;
     return double.parse(remaining.toStringAsFixed(2));
   }
 
+  /// Calcule les protéines restantes à manger
   num remaningProteines() {
     num remaining = targetProteines - totalProteines();
     remaining = remaining < 0 ? 0 : remaining;
     return double.parse(remaining.toStringAsFixed(2));
   }
 
+  /// Calcule les glucides restantes à manger
   num remaningCarbs() {
     num remaining = targetCarbs - totalCarbs();
     remaining = remaining < 0 ? 0 : remaining;
     return double.parse(remaining.toStringAsFixed(2));
   }
 
+  /// Calcule les lipides restantes à manger
   num remaningFats() {
     num remaining = targetFats - totalFats();
     remaining = remaining < 0 ? 0 : remaining;

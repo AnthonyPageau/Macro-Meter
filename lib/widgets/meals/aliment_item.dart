@@ -38,6 +38,7 @@ class AlimentItem extends StatefulWidget {
 }
 
 class _AlimentItemState extends State<AlimentItem> {
+  /// Permet de cocher les aliments d'un repas
   void updateIsChecked() async {
     try {
       bool isChecked = !widget.aliment.isChecked;
@@ -65,6 +66,7 @@ class _AlimentItemState extends State<AlimentItem> {
     }
   }
 
+  /// Permet de désactivé les fonctionnalités de la page
   bool _isDiabled() {
     if (widget.fromPage == "PlanEdit") {
       return false;

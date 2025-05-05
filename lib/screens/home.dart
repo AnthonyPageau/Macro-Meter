@@ -4,6 +4,8 @@ import 'package:macro_meter/screens/account.dart';
 import 'package:macro_meter/screens/aliment.dart';
 import 'package:macro_meter/screens/journal.dart';
 import 'package:macro_meter/screens/plans.dart';
+import 'package:macro_meter/screens/video.dart';
+
 import 'package:macro_meter/models/aliment.dart';
 import 'package:macro_meter/models/journal.dart';
 import 'package:macro_meter/models/meal.dart';
@@ -28,6 +30,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<Journal> journals = [];
+
   void _setScreen(String identifier) {
     switch (identifier) {
       case "Compte":
@@ -72,11 +75,19 @@ class _HomeState extends State<Home> {
             .then((_) {
           fetchUserJournalData();
         });
+      case "Guide":
+        Navigator.of(context).pop();
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (ctx) => const Video(),
+          ),
+        );
       default:
         Navigator.of(context).pop();
     }
   }
 
+  /// Permet d'aller chercher tous les journaux d'un utilisateur
   void fetchUserJournalData() async {
     var journalsCollection = await FirebaseFirestore.instance
         .collection("users")

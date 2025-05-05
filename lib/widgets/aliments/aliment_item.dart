@@ -36,6 +36,7 @@ class _AlimentItemState extends State<AlimentItem> {
     aliment = widget.aliment;
   }
 
+  /// Permet de modifier un aliment
   void _modifyAliment(Aliment modifiedAliment) {
     setState(() {
       aliment = modifiedAliment;

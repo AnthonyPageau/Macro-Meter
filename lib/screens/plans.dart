@@ -33,6 +33,7 @@ class _PlanScreenState extends State<PlanScreen> {
     fetchUserPlanData();
   }
 
+  /// Retourne les plans de l'utilisateur connecté
   void fetchUserPlanData() async {
     var plansCollection = await FirebaseFirestore.instance
         .collection("users")
@@ -102,6 +103,7 @@ class _PlanScreenState extends State<PlanScreen> {
     });
   }
 
+  /// Permet de choisir un plan à partir de la page Journal
   void _choosePlan(Plan choosePlan) {
     if (choosePlan.meals.isNotEmpty) {
       widget.onChoosePlan!(choosePlan);
@@ -124,15 +126,6 @@ class _PlanScreenState extends State<PlanScreen> {
         title: const Text(
           "Plans",
           style: TextStyle(fontSize: 36),
-        ),
-        flexibleSpace: Center(
-          child: Padding(
-            padding: EdgeInsets.only(right: 56),
-            child: const Text(
-              "Plans",
-              style: TextStyle(fontSize: 36),
-            ),
-          ),
         ),
         actions: [
           IconButton(

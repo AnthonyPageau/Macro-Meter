@@ -40,6 +40,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   File? _selectedAvatar;
   bool _isAvatarChosen = true;
 
+  /// Permet d'ajouter les aliments à l'utilisateur à partir du fichiser JSON
   Future<void> loadJsonData(dynamic userCredentials) async {
     String jsonString = await rootBundle.loadString('assets/aliments.json');
 
@@ -64,6 +65,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
     }
   }
 
+  /// Permet de créer ou connecter l'utilisateur
   void _submit() async {
     final isValid = _form.currentState!.validate();
 
@@ -275,7 +277,9 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                                               child: buildSexeField(
                                                   _enteredSexe, (value) {
                                                 setState(() {
-                                                  _enteredSexe = value!;
+                                                  if (value != null) {
+                                                    _enteredSexe = value;
+                                                  }
                                                 });
                                               }),
                                             ),
@@ -327,7 +331,9 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                                               child: buildObjectiveField(
                                                   _enteredObjectif, (value) {
                                                 setState(() {
-                                                  _enteredObjectif = value!;
+                                                  if (value != null) {
+                                                    _enteredObjectif = value;
+                                                  }
                                                 });
                                               }),
                                             ),

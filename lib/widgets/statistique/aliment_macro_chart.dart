@@ -26,6 +26,7 @@ class _AlimentMacroChartState extends State<AlimentMacroChart> {
   num total = 0;
   int touchedIndex = 0;
 
+  /// Calcule les valeurs pour le graphique
   void calculate() {
     for (Journal journal in widget.journals) {
       for (Meal meal in journal.plan.meals) {
@@ -44,6 +45,7 @@ class _AlimentMacroChartState extends State<AlimentMacroChart> {
     carbsPercentage = carbs / total * 100;
   }
 
+  /// Réinitialise les données
   void resetValues() {
     proteines = 0;
     fats = 0;

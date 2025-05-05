@@ -34,6 +34,7 @@ class _JournalScreenState extends State<JournalScreen> {
   String dateDisplayed = DateFormat('yyyy-MM-dd').format(DateTime.now());
   final AudioPlayer _audioPlayer = AudioPlayer();
 
+  /// Permet de créer un journal
   void _createJournal(Plan plan) async {
     Plan journalPlan;
     List<Meal> meals = [];
@@ -124,6 +125,7 @@ class _JournalScreenState extends State<JournalScreen> {
     setState(() {});
   }
 
+  /// Permet de changer de journée à partir des flèches
   void _onArrowClick(bool isNext) {
     setState(() {
       if (isNext) {
@@ -136,6 +138,7 @@ class _JournalScreenState extends State<JournalScreen> {
     });
   }
 
+  /// Permet de trouver un journal
   void findJournal(DateTime date) {
     DateTime todayStartOfDay = DateTime(date.year, date.month, date.day);
     bool found = false;
@@ -159,6 +162,7 @@ class _JournalScreenState extends State<JournalScreen> {
     });
   }
 
+  /// Permet d'afficher la date du journal
   void displayDate(DateTime newDate) {
     if (DateFormat('yyyy-MM-dd').format(newDate) ==
         DateFormat('yyyy-MM-dd').format(DateTime.now())) {
@@ -176,6 +180,7 @@ class _JournalScreenState extends State<JournalScreen> {
     }
   }
 
+  /// Permet de choisir une date à partir d'un calendrier
   Future<void> _selectDate() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,

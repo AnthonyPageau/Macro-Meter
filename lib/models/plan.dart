@@ -47,6 +47,7 @@ class Plan {
     _meals = List<Meal>.from(value);
   }
 
+  /// Calule le total calorique d'un plan
   num totalCalories() {
     num total = 0;
     for (Meal meal in meals) {
@@ -56,6 +57,7 @@ class Plan {
     return double.parse(total.toStringAsFixed(2));
   }
 
+  /// Calcule le total des protéines d'un plan
   num totalProteines() {
     num total = 0;
     for (Meal meal in meals) {
@@ -65,6 +67,7 @@ class Plan {
     return double.parse(total.toStringAsFixed(2));
   }
 
+  /// Calcule le total des glucides d'un plan
   num totalCarbs() {
     num total = 0;
     for (Meal meal in meals) {
@@ -74,6 +77,7 @@ class Plan {
     return double.parse(total.toStringAsFixed(2));
   }
 
+  /// Calcule le total des lipides d'un plan
   num totalFats() {
     num total = 0;
     for (Meal meal in meals) {

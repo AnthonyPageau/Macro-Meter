@@ -46,13 +46,14 @@ class WeeklyChartState extends State<WeeklyChart> {
   int saturdayCount = 0;
   int sundayCount = 0;
 
+  /// Calcule les valeurs pour le graphique
   void calculate() {
     for (Journal journal in widget.journals) {
       switch (DateFormat.EEEE().format(journal.date)) {
         case "Monday":
           mondayTotal += journal.totalCalories();
           mondayCount++;
-        case "Thuesday":
+        case "Tuesday":
           thuesdayTotal += journal.totalCalories();
           thuesdayCount++;
         case "Wednesday":
@@ -83,6 +84,7 @@ class WeeklyChartState extends State<WeeklyChart> {
     sundayAverage = saturdayTotal == 0 ? 0 : sundayTotal / sundayCount;
   }
 
+  /// Réinitialise les données
   void resetValues() {
     mondayAverage = 0;
     thuesdayAverage = 0;
@@ -231,7 +233,7 @@ class WeeklyChartState extends State<WeeklyChart> {
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
           getTooltipColor: (_) => Colors.blueGrey,
-          tooltipHorizontalAlignment: FLHorizontalAlignment.left,
+          tooltipHorizontalAlignment: FLHorizontalAlignment.center,
           tooltipMargin: -10,
           getTooltipItem: (group, groupIndex, rod, rodIndex) {
             String weekDay;

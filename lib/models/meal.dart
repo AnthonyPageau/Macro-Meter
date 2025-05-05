@@ -52,6 +52,7 @@ class Meal {
     }
   }
 
+  /// Calculer le total calorique d'un repas
   num totalCalories() {
     num total = 0;
     for (Aliment aliment in aliments) {
@@ -61,6 +62,7 @@ class Meal {
     return double.parse(total.toStringAsFixed(2));
   }
 
+  /// Calculer le total des protéines d'un repas
   num totalProteines() {
     num total = 0;
     for (Aliment aliment in aliments) {
@@ -70,6 +72,7 @@ class Meal {
     return double.parse(total.toStringAsFixed(2));
   }
 
+  /// Calculer le total des glucides d'un repas
   num totalCarbs() {
     num total = 0;
     for (Aliment aliment in aliments) {
@@ -79,6 +82,7 @@ class Meal {
     return double.parse(total.toStringAsFixed(2));
   }
 
+  /// Calculer le total des lipides d'un repas
   num totalFats() {
     num total = 0;
     for (Aliment aliment in aliments) {

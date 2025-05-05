@@ -22,6 +22,7 @@ class CompleteJournalAlertDialog extends StatefulWidget {
 
 class _CompleteJournalAlertDialogState
     extends State<CompleteJournalAlertDialog> {
+  /// Permet de compléter un journal
   void _submit() async {
     try {
       FirebaseFirestore.instance

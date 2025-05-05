@@ -17,6 +17,7 @@ class PlanEdit extends StatefulWidget {
 }
 
 class _PlanEditState extends State<PlanEdit> {
+  /// Permet d'ajouter un repas
   void addMeal() async {
     try {
       Timestamp createdAt = Timestamp.now();

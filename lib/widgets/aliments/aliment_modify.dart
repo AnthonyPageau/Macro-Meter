@@ -30,6 +30,7 @@ class _AlimentModifyState extends State<AlimentModify> {
 
   final form = GlobalKey<FormState>();
 
+  /// Permet de modifier un aliment
   void _submit() async {
     try {
       final isValid = form.currentState!.validate();

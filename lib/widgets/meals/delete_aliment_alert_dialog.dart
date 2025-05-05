@@ -31,9 +31,10 @@ class DeleteAlimentAlertDialog extends StatefulWidget {
 }
 
 class _DeleteAlimentAlertDialogState extends State<DeleteAlimentAlertDialog> {
+  /// Permet de supprimer un aoiment
   void deleteAliment() async {
     try {
-      var doc;
+      dynamic doc;
 
       if (widget.journal != null) {
         doc = FirebaseFirestore.instance

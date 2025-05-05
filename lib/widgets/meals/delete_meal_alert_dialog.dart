@@ -28,6 +28,7 @@ class DeleteMealAlertDialog extends StatefulWidget {
 }
 
 class _DeleteMealAlertDialogState extends State<DeleteMealAlertDialog> {
+  /// Permet de supprimer un repas
   void deleteMeal() async {
     try {
       CollectionReference collection;

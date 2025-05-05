@@ -44,6 +44,7 @@ dependencies:
   fl_chart: ^0.70.2
   flutter_svg: ^2.0.17
   font_awesome_flutter: ^10.8.0
+  video_player: ^2.9.5
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +73,7 @@ flutter:
     - assets/images/logo.png
     - assets/aliments.json
     - assets/sounds/complete_sound.mp3
+    - assets/videos/guide.mp4
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

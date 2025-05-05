@@ -47,6 +47,7 @@ class _AccountState extends State<Account> {
     fetchUserData();
   }
 
+  /// Retourne les données de l'utilisateur connecté
   void fetchUserData() async {
     var doc = await FirebaseFirestore.instance
         .collection("users")
@@ -67,6 +68,7 @@ class _AccountState extends State<Account> {
     });
   }
 
+  /// Modifie les informations de l'utilisateur connecté
   void _submit() async {
     final isValid = _form.currentState!.validate();
 
@@ -115,6 +117,7 @@ class _AccountState extends State<Account> {
     }
   }
 
+  /// Supprime l'utilisateur connecté
   Future<void> deleteCurrentUser() async {
     try {
       final user = FirebaseAuth.instance.currentUser;

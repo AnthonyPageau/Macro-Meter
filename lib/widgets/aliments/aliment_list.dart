@@ -23,6 +23,7 @@ class AlimentList extends StatefulWidget {
 }
 
 class _AlimentListState extends State<AlimentList> {
+  /// Permet de supprimer un aliment
   void deleteAliment(Aliment aliment) {
     setState(() {
       widget.aliments.remove(aliment);

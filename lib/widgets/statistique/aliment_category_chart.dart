@@ -5,7 +5,6 @@ import 'package:macro_meter/models/meal.dart';
 import 'package:macro_meter/main.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class AlimentCategoryChart extends StatefulWidget {
   const AlimentCategoryChart({required this.journals, super.key});
@@ -30,6 +29,7 @@ class _AlimentCategoryChartState extends State<AlimentCategoryChart> {
   num total = 0;
   int touchedIndex = 0;
 
+  /// Calcule les valeurs pour le graphique
   void calculate() {
     for (Journal journal in widget.journals) {
       for (Meal meal in journal.plan.meals) {
@@ -66,6 +66,7 @@ class _AlimentCategoryChartState extends State<AlimentCategoryChart> {
     otherPercentage = other / total * 100;
   }
 
+  /// Réinitialise les données
   void resetValues() {
     proteines = 0;
     dairy = 0;

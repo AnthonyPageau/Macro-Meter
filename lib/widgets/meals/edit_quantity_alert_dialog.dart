@@ -34,6 +34,7 @@ class _EditQuantityAlertDialogState extends State<EditQuantityAlertDialog> {
 
   late num quanity;
 
+  /// Permet de modifier la quantité d'un aliment
   void _submit() async {
     try {
       widget.aliment.updateValues(quanity);

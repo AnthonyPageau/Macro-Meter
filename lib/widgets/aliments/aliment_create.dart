@@ -33,6 +33,7 @@ class _AlimentCreateState extends State<AlimentCreate> {
 
   final form = GlobalKey<FormState>();
 
+  /// Permet de créer un aliment
   void _submit() async {
     try {
       final isValid = form.currentState!.validate();
