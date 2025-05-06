@@ -8,12 +8,14 @@ import 'package:macro_meter/models/plan.dart';
 class PlanItem extends StatefulWidget {
   PlanItem(
       {required this.plan,
+      required this.plans,
       required this.user,
       required this.fromPage,
       this.onChoosePlan,
       super.key});
 
   final Plan plan;
+  final List<Plan> plans;
   final User user;
   final String fromPage;
   void Function(Plan chosePlan)? onChoosePlan;
@@ -58,6 +60,7 @@ class _AlimentItemState extends State<PlanItem> {
                     builder: (ctx) => PlanEdit(
                       user: widget.user,
                       plan: plan,
+                      plans: widget.plans,
                     ),
                   ),
                 );

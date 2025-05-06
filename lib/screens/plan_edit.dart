@@ -4,10 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:macro_meter/models/plan.dart';
 import 'package:macro_meter/models/meal.dart';
 import 'package:macro_meter/widgets/meals/meal_list.dart';
+import 'package:macro_meter/main.dart';
 
 class PlanEdit extends StatefulWidget {
-  PlanEdit({required this.plan, required this.user, super.key});
+  PlanEdit(
+      {required this.plan, required this.user, required this.plans, super.key});
   Plan plan;
+  List<Plan> plans;
   final User user;
 
   @override
@@ -17,6 +20,21 @@ class PlanEdit extends StatefulWidget {
 }
 
 class _PlanEditState extends State<PlanEdit> {
+  bool _isEditingName = false;
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.plan.name);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   /// Permet d'ajouter un repas
   void addMeal() async {
     try {
@@ -50,16 +68,77 @@ class _PlanEditState extends State<PlanEdit> {
     }
   }
 
+  void _updatePlanName() {
+    try {
+      if (widget.plans.any((p) =>
+          p.name.toUpperCase() == _controller.text.toUpperCase() &&
+          p.id != widget.plan.id)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Le plan existe déjà"),
+          ),
+        );
+        return;
+      }
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.user.uid)
+          .collection("plans")
+          .doc(widget.plan.id)
+          .update({
+        'name': _controller.text,
+      });
+      widget.plan.name = _controller.text;
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.code),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          widget.plan.name,
-          style: TextStyle(fontSize: 36),
-        ),
-      ),
+          centerTitle: true,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _isEditingName
+                  ? Expanded(
+                      child: TextField(
+                        controller: _controller,
+                        style: TextStyle(
+                            fontSize: 36, color: kColorScheme.primaryContainer),
+                        decoration: InputDecoration(
+                          border: UnderlineInputBorder(),
+                        ),
+                      ),
+                    )
+                  : Text(
+                      widget.plan.name,
+                      style: TextStyle(fontSize: 36),
+                    ),
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    if (_isEditingName) {
+                      _updatePlanName();
+                    }
+                    _isEditingName = !_isEditingName;
+                  });
+                },
+                icon: Icon(
+                  _isEditingName ? Icons.save : Icons.edit,
+                  color: kColorScheme.primaryContainer,
+                  size: 36,
+                ),
+              )
+            ],
+          )),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(

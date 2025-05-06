@@ -78,6 +78,7 @@ class PlanList extends StatelessWidget {
         child: fromPage == "Journal"
             ? PlanItem(
                 plan: plans[index],
+                plans: plans,
                 user: user,
                 fromPage: fromPage,
                 onChoosePlan: (chosePlan) {
@@ -86,6 +87,7 @@ class PlanList extends StatelessWidget {
               )
             : PlanItem(
                 plan: plans[index],
+                plans: plans,
                 user: user,
                 fromPage: fromPage,
               ),
