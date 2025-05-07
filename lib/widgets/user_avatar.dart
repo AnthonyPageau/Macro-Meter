@@ -24,11 +24,17 @@ class _UserAvatarState extends State<UserAvatar> {
   File? _avatarFile;
 
   void _addAvatar() async {
-    final avatar = await ImagePicker().pickImage(
-      source: ImageSource.camera,
-      imageQuality: 50,
-      maxWidth: 150,
-    );
+    dynamic avatar;
+
+    if (Platform.isAndroid || Platform.isIOS) {
+      avatar = await ImagePicker().pickImage(
+        source: ImageSource.camera,
+        imageQuality: 50,
+        maxWidth: 150,
+      );
+    } else {
+      avatar = await ImagePicker().pickImage(source: ImageSource.gallery);
+    }
 
     if (avatar == null) {
       return;

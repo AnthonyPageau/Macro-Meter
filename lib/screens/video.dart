@@ -1,3 +1,4 @@
+import 'dart:io' show Platform, File;
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -15,12 +16,19 @@ class _VideoState extends State<Video> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset('assets/videos/guide.mp4')
-      ..initialize().then((_) {
-        setState(() {
-          _isInitialized = true;
-        });
+    if (Platform.isWindows) {
+      _controller = VideoPlayerController.file(
+        File('videos/guide.mp4'),
+      );
+    } else {
+      _controller = VideoPlayerController.asset('assets/videos/guide.mp4');
+    }
+
+    _controller.initialize().then((_) {
+      setState(() {
+        _isInitialized = true;
       });
+    });
   }
 
   @override
