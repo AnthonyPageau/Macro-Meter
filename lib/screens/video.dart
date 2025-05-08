@@ -18,7 +18,7 @@ class _VideoState extends State<Video> {
     super.initState();
     if (Platform.isWindows) {
       _controller = VideoPlayerController.file(
-        File('videos/guide.mp4'),
+        File('assets/videos/guide.mp4'),
       );
     } else {
       _controller = VideoPlayerController.asset('assets/videos/guide.mp4');

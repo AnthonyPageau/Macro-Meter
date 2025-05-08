@@ -57,9 +57,12 @@ class _JournalScreenState extends State<JournalScreen> {
         .collection("plan")
         .add({"name": plan.name, "date": date.toString()});
     journalPlan = Plan(id: planRef.id, name: plan.name, date: date);
+
+    List<Future> mealFutures = [];
+
     for (Meal meal in plan.meals) {
       List<Aliment> aliments = [];
-      DocumentReference mealRef = await FirebaseFirestore.instance
+      Future<DocumentReference> mealRefFuture = FirebaseFirestore.instance
           .collection("users")
           .doc(widget.user.uid)
           .collection("journals")
@@ -68,56 +71,70 @@ class _JournalScreenState extends State<JournalScreen> {
           .doc(planRef.id)
           .collection("meals")
           .add({"name": meal.name, "createdAt": meal.createdAt});
-      meals.add(Meal(
+
+      mealFutures.add(mealRefFuture.then((mealRef) async {
+        meals.add(Meal(
           id: mealRef.id,
           name: meal.name,
           createdAt: meal.createdAt,
-          aliments: aliments));
-      for (Aliment aliment in meal.aliments) {
-        DocumentReference alimentRef = await FirebaseFirestore.instance
-            .collection("users")
-            .doc(widget.user.uid)
-            .collection("journals")
-            .doc(journalRef.id)
-            .collection("plan")
-            .doc(planRef.id)
-            .collection("meals")
-            .doc(mealRef.id)
-            .collection("aliments")
-            .add({
-          "name": aliment.name,
-          "calories": aliment.calories,
-          "proteines": aliment.proteines,
-          "fat": aliment.fats,
-          "carbs": aliment.carbs,
-          "category": aliment.category.name,
-          "unit": aliment.unit.name,
-          "quantity": aliment.quantity,
-          "isChecked": false
-        });
-        aliments.add(Aliment(
-            id: alimentRef.id,
-            name: aliment.name,
-            calories: aliment.calories,
-            proteines: aliment.proteines,
-            fats: aliment.fats,
-            carbs: aliment.carbs,
-            category: aliment.category,
-            unit: aliment.unit,
-            quantity: aliment.quantity,
-            isChecked: aliment.isChecked));
-      }
+          aliments: aliments,
+        ));
+
+        List<Future> alimentFutures = [];
+        for (Aliment aliment in meal.aliments) {
+          alimentFutures.add(FirebaseFirestore.instance
+              .collection("users")
+              .doc(widget.user.uid)
+              .collection("journals")
+              .doc(journalRef.id)
+              .collection("plan")
+              .doc(planRef.id)
+              .collection("meals")
+              .doc(mealRef.id)
+              .collection("aliments")
+              .add({
+            "name": aliment.name,
+            "calories": aliment.calories,
+            "proteines": aliment.proteines,
+            "fat": aliment.fats,
+            "carbs": aliment.carbs,
+            "category": aliment.category.name,
+            "unit": aliment.unit.name,
+            "quantity": aliment.quantity,
+            "isChecked": false
+          }).then((alimentRef) {
+            aliments.add(Aliment(
+              id: alimentRef.id,
+              name: aliment.name,
+              calories: aliment.calories,
+              proteines: aliment.proteines,
+              fats: aliment.fats,
+              carbs: aliment.carbs,
+              category: aliment.category,
+              unit: aliment.unit,
+              quantity: aliment.quantity,
+              isChecked: aliment.isChecked,
+            ));
+          }));
+        }
+
+        await Future.wait(alimentFutures);
+      }));
     }
+
+    await Future.wait(mealFutures);
+
     journalPlan.meals = meals;
     journal = Journal(
-        id: journalRef.id,
-        date: date,
-        plan: journalPlan,
-        targetCalories: plan.totalCalories(),
-        targetProteines: plan.totalProteines(),
-        targetCarbs: plan.totalCarbs(),
-        targetFats: plan.totalFats(),
-        isComplete: false);
+      id: journalRef.id,
+      date: date,
+      plan: journalPlan,
+      targetCalories: plan.totalCalories(),
+      targetProteines: plan.totalProteines(),
+      targetCarbs: plan.totalCarbs(),
+      targetFats: plan.totalFats(),
+      isComplete: false,
+    );
     widget.journals.add(journal!);
     meals = journalPlan.meals;
     setState(() {});

@@ -21,34 +21,22 @@ Création et gestion de profils utilisateurs
 Création de plans alimentaires personnalisés
 Enregistrement des repas et des aliments consommés
 Calcul automatique des macronutriments ingérés
-Visualisation des statistiques quotidiennes et hebdomadaires
+Visualisation des statistiques des macronutriments ingérés
 
 
 ## Degré de complétion
 
-Le projet est complété à environ *[xx]%* selon les objectifs fixés.
-
-## Si incomplet, aspects restants à compléter
-
-Par rapport au document de planification initial, il reste à compléter :
-
-[Ex. Intégration de l'authentification]
-[Ex. Connexion au serveur de production]
-[Ex. Finalisation du responsive design]
-
+Le projet est complété à 100%
 
 ## Bogues persistants
-
-[Ex. Bug d'affichage sur mobile]
-[Ex. Crash lors de la suppression d'un élément]
-[Ex. Problèmes de synchronisation de données]
+  - Vidéo explicative ne fonctionne pas avec l'exécutable
 
 
 ## Possibles améliorations
 
-[Ex. Ajout d’un mode sombre]
-[Ex. Optimisation du temps de chargement]
-[Ex. Mise en place de tests unitaires]
+  - Ajouter plus de statistiques
+  - Proposer des plans préconçus en fonction des objectifs
+  - Agrandir la banque d'aliments de base
 
 
 ## Procédure d'installation client
@@ -117,4 +105,4 @@ Pendant l'installation :
 ### 2. Installer les packages manquant:
   - Dans la command line du dossier du projet:
     - flutter packages get
-    - 2.flutter packages upgrade
+    - flutter packages upgrade
