@@ -60,48 +60,61 @@ Par rapport au document de planification initial, il reste à compléter :
 
 ## Procédure d'installation pour les développeurs
 
+## 🛠️ Prérequis
+
 ### 1. Installer Git
-  [Git](https://gitforwindows.org/)
+Télécharger et installer [Git](https://gitforwindows.org/).
 
-### 2. Flutter sur le site officiel
-  Installer le fichier compresser de [FLutter](https://docs.flutter.dev/get-started/install/windows/mobile)
+### 2. Télécharger Flutter
+Télécharger l'archive depuis le site officiel :  
+[Flutter - Installation Windows](https://docs.flutter.dev/get-started/install/windows/mobile)
 
-### 3. Extraire le fichier Zip
-  Extraire le fichier zip et placer le dossier dans un chemin exemple: C:\src\flutter
+### 3. Extraire Flutter
+Extraire le fichier `.zip` et placer le dossier dans un chemin **sans espaces ni caractères spéciaux**, par exemple :  
+`C:\src\flutter`
 
-### 4. Modfier PATH
-  Ajouter aux variables d'utilisateur dans Path le chemin bin de flutter exemple: C:\src\flutter\bin 
+### 4. Ajouter Flutter au PATH
+Ajouter le chemin suivant aux **variables d'environnement utilisateur** :  
+`C:\src\flutter\bin`
 
-### 5. Testter Flutter
-  Ouvrir la command line et entrer flutter doctor
+### 5. Tester Flutter
+Ouvrir une ligne de commande et exécuter : 
+flutter doctor
 
-### 6. Installer Android Studio
-  [Android Studio](https://developer.android.com/studio?gad_source=1&gclid=CjwKCAiAiOa9BhBqEiwABCdG81YEH2M0RaX77oQU2IVSGThOubhfEkn_6Q3HDqlTyT_Tj775iCpc8xoCCNAQAvD_BwE&gclsrc=aw.ds&hl=fr) Suivre les étapes d'installations avec la options par défaut
-  Choisir Type d'insallation Custom
-  S'assurer que Android SDK soit sélectionner
-  S'assurer qu'une plateform SDK soit sélectionner
-  S'assurer que Performance soit sélectionner
-  S'assurer que Android Virtual Device soit sélectionner
-  S'assurer que le chemin de SDK n'est pas de caractères spéciaux et ni d'espaces
+## 💻 Installer Android Studio
 
-### 7. Configuer Android Studio
-  Dans More actions, sélectioner SDK Manager
-  Dans Languages and Frameworks, dans l'onglet Android SDK, s'assurer que la dernière version stable soit sélectionné
-  Dans le même onglet, aller dans SDK Tools, s'assurer que Build-Tools Command-line Tools et Platform-Tools soient sélectionnés
-  Retourner dans More Actions, sélectionner Virtual Device Manager vous pouvez créer un émulateur du téléphone de votre choix
+### 6. Installation
+Télécharger et installer [Android Studio](https://developer.android.com/studio?hl=fr).  
+Pendant l'installation :
+- Choisir **Custom Installation**
+- Vérifier que les options suivantes sont cochées :
+  - Android SDK
+  - Une version de plateforme SDK
+  - Performance (Intel HAXM ou autre)
+  - Android Virtual Device (AVD)
+- ⚠️ Assurez-vous que le **chemin d'installation du SDK ne contient ni espaces ni caractères spéciaux**
+
+### 7. Configuration d’Android Studio
+1. Aller dans **More Actions > SDK Manager**  
+   - Onglet **SDK Platforms** : vérifier que la dernière version stable est sélectionnée  
+   - Onglet **SDK Tools** : cocher :
+     - Android SDK Build-Tools  
+     - Command-line Tools  
+     - Platform-Tools  
+2. Aller dans **More Actions > Virtual Device Manager**  
+   - Créez un nouvel émulateur Android de votre choix
 
 ## Installation du projet
 
 ### 1. Cloner le projet
 
-  Cloner le repository sur votre machine en utilisant Git :
+  - Cloner le repository sur votre machine en utilisant Git :
 
-  git clone https://github.com/AnthonyPageau/Macro-Meter.git
+  - git clone https://github.com/AnthonyPageau/Macro-Meter.git
 
-  cd macro-meter
+  - cd macro-meter
 
 ### 2. Installer les packages manquant:
   Dans la command line du dossier du projet:
-    1.flutter packages get
-    
-    2.flutter packages upgrade
+    - 1.flutter packages get
+    - 2.flutter packages upgrade
