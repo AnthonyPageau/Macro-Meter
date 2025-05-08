@@ -11,6 +11,7 @@ import 'package:macro_meter/models/journal.dart';
 import 'package:macro_meter/models/meal.dart';
 import 'package:macro_meter/models/plan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:macro_meter/main.dart';
 
 import 'package:macro_meter/widgets/menu.dart';
 import 'package:macro_meter/widgets/statistique/aliment_category_chart.dart';
@@ -212,7 +213,22 @@ class _HomeState extends State<Home> {
               ),
             ),
             child: journals.isEmpty
-                ? const Center(child: CircularProgressIndicator())
+                ? Column(children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Icon(
+                      Icons.bar_chart,
+                      color: kColorScheme.primaryContainer,
+                      size: 80,
+                    ),
+                    Text(
+                      "Vous n'avez pas encore enregistrer\nde journals pour avoir\ndes statistiques",
+                      style: TextStyle(
+                          color: kColorScheme.primaryContainer, fontSize: 20),
+                      textAlign: TextAlign.center,
+                    )
+                  ])
                 : SingleChildScrollView(
                     child: Column(
                       children: [

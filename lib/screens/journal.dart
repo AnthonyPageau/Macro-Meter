@@ -354,7 +354,7 @@ class _JournalScreenState extends State<JournalScreen> {
                           size: 80,
                         ),
                         Text(
-                          "Vous n'avez pas encore enregistrer\nde nourrite pour cette journée",
+                          "Vous n'avez pas encore enregistrer\nde nourriture pour cette journée",
                           style: TextStyle(
                               color: kColorScheme.primaryContainer,
                               fontSize: 20),

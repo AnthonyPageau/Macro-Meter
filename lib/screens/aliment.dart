@@ -4,6 +4,7 @@ import 'package:macro_meter/models/meal.dart';
 import 'package:macro_meter/widgets/aliments/aliment_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:macro_meter/widgets/aliments/aliment_create.dart';
+import 'package:macro_meter/main.dart';
 
 class AlimentScreen extends StatefulWidget {
   const AlimentScreen(
@@ -172,7 +173,27 @@ class _AlimentState extends State<AlimentScreen> {
           ),
         ),
         child: searchedAliments.isEmpty
-            ? const Center(child: CircularProgressIndicator())
+            ? Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.search_off_outlined,
+                      color: kColorScheme.primaryContainer,
+                      size: 80,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      "Aucun aliment trouvé",
+                      style: TextStyle(
+                        color: kColorScheme.primaryContainer,
+                        fontSize: 20,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              )
             : Column(
                 children: [
                   Expanded(
