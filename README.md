@@ -53,9 +53,9 @@ Par rapport au document de planification initial, il reste à compléter :
 
 ## Procédure d'installation client
 
-  Visitez [Méthode d'installation](https://github.com/AnthonyPageau/Macro-Meter/releases/tag/Release).
-  Télécharger le fichier macro_meter.exe
-  Excécuter le fichier téléchargé
+  - Visitez [Méthode d'installation](https://github.com/AnthonyPageau/Macro-Meter/releases/tag/Release).
+  - Télécharger le fichier macro_meter.exe
+  - Excécuter le fichier téléchargé
 
 
 ## Procédure d'installation pour les développeurs
