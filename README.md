@@ -115,6 +115,6 @@ Pendant l'installation :
   - cd macro-meter
 
 ### 2. Installer les packages manquant:
-  Dans la command line du dossier du projet:
-    - 1.flutter packages get
+  - Dans la command line du dossier du projet:
+    - flutter packages get
     - 2.flutter packages upgrade
