@@ -16,9 +16,7 @@ class Account extends StatefulWidget {
   final dynamic user;
 
   @override
-  State<StatefulWidget> createState() {
-    return _AccountState();
-  }
+  State<StatefulWidget> createState() => _AccountState();
 }
 
 class _AccountState extends State<Account> {

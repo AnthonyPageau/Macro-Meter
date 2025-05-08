@@ -21,9 +21,7 @@ class PlanItem extends StatefulWidget {
   final void Function(Plan chosePlan)? onChoosePlan;
 
   @override
-  State<PlanItem> createState() {
-    return _AlimentItemState();
-  }
+  State<PlanItem> createState() => _AlimentItemState();
 }
 
 class _AlimentItemState extends State<PlanItem> {

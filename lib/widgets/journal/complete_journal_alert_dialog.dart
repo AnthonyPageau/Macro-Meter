@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:macro_meter/models/journal.dart';
+import 'package:macro_meter/models/meal.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CompleteJournalAlertDialog extends StatefulWidget {
@@ -15,9 +16,7 @@ class CompleteJournalAlertDialog extends StatefulWidget {
   final void Function(Journal journal) onCompleteJournal;
 
   @override
-  State<StatefulWidget> createState() {
-    return _CompleteJournalAlertDialogState();
-  }
+  State<StatefulWidget> createState() => _CompleteJournalAlertDialogState();
 }
 
 class _CompleteJournalAlertDialogState
@@ -25,6 +24,18 @@ class _CompleteJournalAlertDialogState
   /// Permet de compléter un journal
   void _submit() async {
     try {
+      for (Meal meal in widget.journal.plan.meals) {
+        if (meal.aliments.isEmpty) {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Aucun repas ne peut être vide"),
+            ),
+          );
+          return;
+        }
+      }
       FirebaseFirestore.instance
           .collection("users")
           .doc(widget.user.uid)

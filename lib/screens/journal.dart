@@ -19,9 +19,7 @@ class JournalScreen extends StatefulWidget {
   final User user;
   final List<Journal> journals;
   @override
-  State<StatefulWidget> createState() {
-    return _JournalScreenState();
-  }
+  State<StatefulWidget> createState() => _JournalScreenState();
 }
 
 class _JournalScreenState extends State<JournalScreen> {

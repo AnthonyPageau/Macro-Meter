@@ -14,9 +14,7 @@ class PlanEdit extends StatefulWidget {
   final User user;
 
   @override
-  State<StatefulWidget> createState() {
-    return _PlanEditState();
-  }
+  State<StatefulWidget> createState() => _PlanEditState();
 }
 
 class _PlanEditState extends State<PlanEdit> {

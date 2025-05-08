@@ -19,9 +19,7 @@ class PlanScreen extends StatefulWidget {
   final void Function(Plan choosePlan)? onChoosePlan;
 
   @override
-  State<StatefulWidget> createState() {
-    return _PlanScreenState();
-  }
+  State<StatefulWidget> createState() => _PlanScreenState();
 }
 
 class _PlanScreenState extends State<PlanScreen> {

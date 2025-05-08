@@ -24,9 +24,7 @@ class Home extends StatefulWidget {
   final User user;
 
   @override
-  State<StatefulWidget> createState() {
-    return _HomeState();
-  }
+  State<StatefulWidget> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {

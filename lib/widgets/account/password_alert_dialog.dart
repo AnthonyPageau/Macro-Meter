@@ -9,9 +9,7 @@ class PasswordAlertDialog extends StatefulWidget {
   final User user;
 
   @override
-  State<StatefulWidget> createState() {
-    return PasswordAlertDialogState();
-  }
+  State<StatefulWidget> createState() => PasswordAlertDialogState();
 }
 
 class PasswordAlertDialogState extends State<PasswordAlertDialog> {

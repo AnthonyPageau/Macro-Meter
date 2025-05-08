@@ -30,9 +30,7 @@ class AlimentList extends StatefulWidget {
   final void Function(bool checkedAliment)? onCheckedAliment;
 
   @override
-  State<StatefulWidget> createState() {
-    return _AlimentListState();
-  }
+  State<StatefulWidget> createState() => _AlimentListState();
 }
 
 class _AlimentListState extends State<AlimentList> {

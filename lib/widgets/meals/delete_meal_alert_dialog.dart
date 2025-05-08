@@ -22,9 +22,7 @@ class DeleteMealAlertDialog extends StatefulWidget {
   final void Function(Meal deletedMeal) onDeleteMeal;
 
   @override
-  State<StatefulWidget> createState() {
-    return _DeleteMealAlertDialogState();
-  }
+  State<StatefulWidget> createState() => _DeleteMealAlertDialogState();
 }
 
 class _DeleteMealAlertDialogState extends State<DeleteMealAlertDialog> {

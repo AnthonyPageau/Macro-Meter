@@ -7,9 +7,7 @@ class PlanEditFooter extends StatefulWidget {
   final Plan plan;
 
   @override
-  State<StatefulWidget> createState() {
-    return _PlanEditFooterState();
-  }
+  State<StatefulWidget> createState() => _PlanEditFooterState();
 }
 
 class _PlanEditFooterState extends State<PlanEditFooter> {

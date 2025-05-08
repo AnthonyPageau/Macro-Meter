@@ -16,9 +16,7 @@ class PlanCreate extends StatefulWidget {
   final void Function(Plan newPlan) onAddPlan;
 
   @override
-  State<StatefulWidget> createState() {
-    return _PlanCreateState();
-  }
+  State<StatefulWidget> createState() => _PlanCreateState();
 }
 
 class _PlanCreateState extends State<PlanCreate> {

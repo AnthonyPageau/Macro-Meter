@@ -15,9 +15,7 @@ class UserAvatar extends StatefulWidget {
   final String? avatarUrl;
 
   @override
-  State<StatefulWidget> createState() {
-    return _UserAvatarState();
-  }
+  State<StatefulWidget> createState() => _UserAvatarState();
 }
 
 class _UserAvatarState extends State<UserAvatar> {

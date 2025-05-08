@@ -18,9 +18,7 @@ class AlimentModify extends StatefulWidget {
   final void Function(Aliment modifiedAliment) onModifyAliment;
 
   @override
-  State<StatefulWidget> createState() {
-    return _AlimentModifyState();
-  }
+  State<StatefulWidget> createState() => _AlimentModifyState();
 }
 
 class _AlimentModifyState extends State<AlimentModify> {

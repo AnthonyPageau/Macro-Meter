@@ -20,9 +20,7 @@ class AlimentScreen extends StatefulWidget {
   final void Function(Aliment newAliment)? onAddAliment;
 
   @override
-  State<StatefulWidget> createState() {
-    return _AlimentState();
-  }
+  State<StatefulWidget> createState() => _AlimentState();
 }
 
 class _AlimentState extends State<AlimentScreen> {
@@ -148,6 +146,9 @@ class _AlimentState extends State<AlimentScreen> {
                     onAddAliment: (newAliment) {
                       setState(() {
                         searchedAliments.add(newAliment);
+                        searchedAliments.sort((a, b) => a.name
+                            .toLowerCase()
+                            .compareTo(b.name.toLowerCase()));
                       });
                     },
                     user: widget.user,

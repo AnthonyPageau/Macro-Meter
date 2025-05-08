@@ -15,9 +15,7 @@ class AuthenticationScreen extends StatefulWidget {
   const AuthenticationScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() {
-    return _AuthenticationScreenState();
-  }
+  State<StatefulWidget> createState() => _AuthenticationScreenState();
 }
 
 class _AuthenticationScreenState extends State<AuthenticationScreen> {

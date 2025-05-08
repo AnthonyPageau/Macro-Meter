@@ -24,9 +24,7 @@ class EditQuantityAlertDialog extends StatefulWidget {
   final void Function(Aliment aliment) onModifyQuantity;
 
   @override
-  State<StatefulWidget> createState() {
-    return _EditQuantityAlertDialogState();
-  }
+  State<StatefulWidget> createState() => _EditQuantityAlertDialogState();
 }
 
 class _EditQuantityAlertDialogState extends State<EditQuantityAlertDialog> {

@@ -22,9 +22,7 @@ class AlimentItem extends StatefulWidget {
   final void Function(Aliment newAliment)? onAddAliment;
 
   @override
-  State<AlimentItem> createState() {
-    return _AlimentItemState();
-  }
+  State<AlimentItem> createState() => _AlimentItemState();
 }
 
 class _AlimentItemState extends State<AlimentItem> {
