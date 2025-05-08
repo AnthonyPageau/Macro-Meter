@@ -106,3 +106,8 @@ Pendant l'installation :
   - Dans la command line du dossier du projet:
     - flutter packages get
     - flutter packages upgrade
+   
+### 3. Connextion à Macro-Meter
+  - Vous pouvez utilisé ce compte ou bien vous en créer un directement:
+    - Courriel: admin@admin.com
+    - Mot de passe: 123456
