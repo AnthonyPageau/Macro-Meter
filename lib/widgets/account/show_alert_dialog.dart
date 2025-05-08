@@ -30,6 +30,7 @@ class ShowAlertDialog extends StatelessWidget {
         form.currentState!.save();
         onPassword(_password);
         action();
+        Navigator.of(context).pop();
       },
     );
 

@@ -140,11 +140,7 @@ class _AccountState extends State<Account> {
         await user.delete();
 
         Navigator.of(context).pop();
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (ctx) => AuthenticationScreen(),
-          ),
-        );
+        FirebaseAuth.instance.signOut();
       }
     } catch (e) {
       ScaffoldMessenger.of(context).clearSnackBars();
