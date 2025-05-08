@@ -9,19 +9,20 @@ import 'package:macro_meter/widgets/meals/delete_aliment_alert_dialog.dart';
 import 'package:macro_meter/widgets/meals/edit_quantity_alert_dialog.dart';
 
 class AlimentItem extends StatefulWidget {
-  AlimentItem(
-      {required this.aliment,
-      required this.meal,
-      required this.plan,
-      required this.user,
-      this.journal,
-      this.fromPage,
-      required this.onDeleteALiment,
-      required this.onModifyQuantity,
-      this.onCheckedAliment,
-      super.key});
+  const AlimentItem({
+    required this.aliment,
+    required this.meal,
+    required this.plan,
+    required this.user,
+    this.journal,
+    this.fromPage,
+    required this.onDeleteALiment,
+    required this.onModifyQuantity,
+    this.onCheckedAliment,
+    super.key,
+  });
 
-  Aliment aliment;
+  final Aliment aliment;
   final User user;
   final Meal meal;
   final Plan plan;
@@ -32,16 +33,22 @@ class AlimentItem extends StatefulWidget {
   final void Function(bool checkedAliment)? onCheckedAliment;
 
   @override
-  State<StatefulWidget> createState() {
-    return _AlimentItemState();
-  }
+  State<AlimentItem> createState() => _AlimentItemState();
 }
 
 class _AlimentItemState extends State<AlimentItem> {
+  late Aliment _aliment;
+
+  @override
+  void initState() {
+    super.initState();
+    _aliment = widget.aliment;
+  }
+
   /// Permet de cocher les aliments d'un repas
   void updateIsChecked() async {
     try {
-      bool isChecked = !widget.aliment.isChecked;
+      bool isChecked = !_aliment.isChecked;
       await FirebaseFirestore.instance
           .collection("users")
           .doc(widget.user.uid)
@@ -52,16 +59,19 @@ class _AlimentItemState extends State<AlimentItem> {
           .collection("meals")
           .doc(widget.meal.id)
           .collection("aliments")
-          .doc(widget.aliment.id)
+          .doc(_aliment.id)
           .update({"isChecked": isChecked});
-      widget.aliment.isChecked = isChecked;
-      widget.onCheckedAliment!(isChecked);
+
+      setState(() {
+        _aliment.isChecked = isChecked;
+      });
+
+      widget.onCheckedAliment?.call(isChecked);
     } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.code),
-        ),
+        SnackBar(content: Text(e.code)),
       );
     }
   }
@@ -138,7 +148,7 @@ class _AlimentItemState extends State<AlimentItem> {
                               journal: widget.journal,
                               onModifyQuantity: (aliment) {
                                 setState(() {
-                                  widget.aliment = aliment;
+                                  _aliment = aliment;
                                   widget.onModifyQuantity(aliment);
                                 });
                               },

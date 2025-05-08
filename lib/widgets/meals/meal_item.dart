@@ -10,7 +10,7 @@ import 'package:macro_meter/screens/aliment.dart';
 import 'package:macro_meter/widgets/meals/delete_meal_alert_dialog.dart';
 
 class MealItem extends StatefulWidget {
-  MealItem(
+  const MealItem(
       {required this.meal,
       required this.user,
       required this.plan,
@@ -28,7 +28,7 @@ class MealItem extends StatefulWidget {
   final Meal meal;
   final User user;
   final Plan plan;
-  Journal? journal;
+  final Journal? journal;
   final String? fromPage;
   final void Function(Meal newMeal) onAddMeal;
   final void Function(Aliment newAliment) onAddAliment;
@@ -100,6 +100,7 @@ class _MealItemState extends State<MealItem> {
         ),
       );
     } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -163,6 +164,7 @@ class _MealItemState extends State<MealItem> {
       setState(() {});
       widget.onAddAliment(addedAliment);
     } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -240,6 +242,7 @@ class _MealItemState extends State<MealItem> {
       }
       widget.onCheckedMeal!(_isChecked);
     } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

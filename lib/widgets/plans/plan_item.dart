@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:macro_meter/models/plan.dart';
 
 class PlanItem extends StatefulWidget {
-  PlanItem(
+  const PlanItem(
       {required this.plan,
       required this.plans,
       required this.user,
@@ -18,7 +18,7 @@ class PlanItem extends StatefulWidget {
   final List<Plan> plans;
   final User user;
   final String fromPage;
-  void Function(Plan chosePlan)? onChoosePlan;
+  final void Function(Plan chosePlan)? onChoosePlan;
 
   @override
   State<PlanItem> createState() {

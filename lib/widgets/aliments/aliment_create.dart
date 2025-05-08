@@ -81,7 +81,7 @@ class _AlimentCreateState extends State<AlimentCreate> {
             category: categoryValue!,
             isChecked: false),
       );
-
+      if (!mounted) return;
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

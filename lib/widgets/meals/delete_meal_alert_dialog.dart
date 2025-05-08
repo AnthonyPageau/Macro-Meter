@@ -32,7 +32,7 @@ class _DeleteMealAlertDialogState extends State<DeleteMealAlertDialog> {
   void deleteMeal() async {
     try {
       CollectionReference collection;
-      var docMeal;
+      dynamic docMeal;
       if (widget.journal != null) {
         docMeal = FirebaseFirestore.instance
             .collection("users")
@@ -80,6 +80,7 @@ class _DeleteMealAlertDialogState extends State<DeleteMealAlertDialog> {
 
       docMeal.delete();
       widget.onDeleteMeal(widget.meal);
+      if (!mounted) return;
       Navigator.pop(context);
     } on FirebaseAuthException catch (error) {
       ScaffoldMessenger.of(context).clearSnackBars();

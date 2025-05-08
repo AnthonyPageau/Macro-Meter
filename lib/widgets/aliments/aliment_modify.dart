@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:macro_meter/widgets/form_fields.dart';
 
 class AlimentModify extends StatefulWidget {
-  AlimentModify(
+  const AlimentModify(
       {required this.user,
       required this.aliment,
       required this.onModifyAliment,
@@ -13,8 +13,8 @@ class AlimentModify extends StatefulWidget {
       super.key});
 
   final User user;
-  Aliment aliment;
-  List<Aliment> aliments;
+  final Aliment aliment;
+  final List<Aliment> aliments;
   final void Function(Aliment modifiedAliment) onModifyAliment;
 
   @override
@@ -58,7 +58,7 @@ class _AlimentModifyState extends State<AlimentModify> {
       });
 
       widget.onModifyAliment(widget.aliment);
-
+      if (!mounted) return;
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

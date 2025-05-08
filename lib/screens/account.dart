@@ -5,7 +5,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:macro_meter/screens/authentication.dart';
 import 'package:macro_meter/widgets/account/show_alert_dialog.dart';
 import 'package:macro_meter/widgets/account/password_alert_dialog.dart';
 import 'package:macro_meter/widgets/user_avatar.dart';
@@ -37,7 +36,7 @@ class _AccountState extends State<Account> {
   String? _updatedSexe;
   String? _updatedCalories;
 
-  var _password;
+  dynamic _password;
 
   File? _selectedAvatar;
 
@@ -101,6 +100,8 @@ class _AccountState extends State<Account> {
 
       if (_selectedAvatar != null) await storageRef.putFile(_selectedAvatar!);
 
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -139,6 +140,7 @@ class _AccountState extends State<Account> {
         await storageRef.delete();
         await user.delete();
 
+        if (!mounted) return;
         Navigator.of(context).pop();
         FirebaseAuth.instance.signOut();
       }

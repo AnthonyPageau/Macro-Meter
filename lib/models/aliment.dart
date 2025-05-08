@@ -52,8 +52,9 @@ class Aliment {
   num get proteines => _proteines;
   num get carbs => _carbs;
   num get fats => _fats;
-  AlimentUnit get unit => _unit;
   num get quantity => _quantity;
+
+  AlimentUnit get unit => _unit;
   AlimentCategory get category => _category;
   bool get isChecked => _isChecked;
 
@@ -120,10 +121,16 @@ class Aliment {
   }
 
   set unit(AlimentUnit value) {
+    if (!AlimentUnit.values.contains(value)) {
+      throw ArgumentError("Unité invalide.");
+    }
     _unit = value;
   }
 
   set category(AlimentCategory value) {
+    if (!AlimentCategory.values.contains(value)) {
+      throw ArgumentError("Catégorie invalide");
+    }
     _category = value;
   }
 

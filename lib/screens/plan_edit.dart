@@ -7,10 +7,10 @@ import 'package:macro_meter/widgets/meals/meal_list.dart';
 import 'package:macro_meter/main.dart';
 
 class PlanEdit extends StatefulWidget {
-  PlanEdit(
+  const PlanEdit(
       {required this.plan, required this.user, required this.plans, super.key});
-  Plan plan;
-  List<Plan> plans;
+  final Plan plan;
+  final List<Plan> plans;
   final User user;
 
   @override
@@ -59,6 +59,7 @@ class _PlanEditState extends State<PlanEdit> {
       );
       setState(() {});
     } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

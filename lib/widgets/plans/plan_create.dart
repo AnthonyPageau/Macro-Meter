@@ -43,7 +43,7 @@ class _PlanCreateState extends State<PlanCreate> {
 
       widget.onAddPlan(
           Plan(id: docRef.id, name: planName!, date: DateTime.now()));
-
+      if (!mounted) return;
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

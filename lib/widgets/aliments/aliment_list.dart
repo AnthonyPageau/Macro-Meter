@@ -4,7 +4,7 @@ import 'package:macro_meter/models/aliment.dart';
 import 'package:macro_meter/widgets/aliments/aliment_item.dart';
 
 class AlimentList extends StatefulWidget {
-  AlimentList(
+  const AlimentList(
       {super.key,
       required this.aliments,
       required this.user,
@@ -14,7 +14,7 @@ class AlimentList extends StatefulWidget {
   final List<Aliment> aliments;
   final dynamic user;
   final String fromPage;
-  void Function(Aliment newAliment)? onAddAliment;
+  final void Function(Aliment newAliment)? onAddAliment;
 
   @override
   State<StatefulWidget> createState() {

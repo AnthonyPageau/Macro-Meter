@@ -51,6 +51,7 @@ Widget buildSexeField(String? value, Function(String?) onChanged) {
       if (value == null) {
         return "Vous devez choisir une option";
       }
+      return null;
     },
     items: <String>["Homme", "Femme", "Autres"].map((String value) {
       return DropdownMenuItem<String>(
@@ -91,6 +92,7 @@ Widget buildObjectiveField(String? value, Function(String?) onChanged) {
       if (value == null) {
         return "Vous devez choisir une option";
       }
+      return null;
     },
     items: <String>['Maintient', 'Perte de poids', 'Prise de poids']
         .map((String value) {
@@ -237,6 +239,7 @@ Widget buildCategoryField(
       if (value == null) {
         return "Vous devez choisir une valeur";
       }
+      return null;
     },
     items: AlimentCategory.values.map((AlimentCategory type) {
       return DropdownMenuItem<AlimentCategory>(
@@ -271,6 +274,7 @@ Widget buildUnitField(AlimentUnit? value, Function(AlimentUnit?) onChanged) {
       if (value == null) {
         return "Vous devez choisir une option";
       }
+      return null;
     },
     items: AlimentUnit.values.map((AlimentUnit type) {
       return DropdownMenuItem<AlimentUnit>(

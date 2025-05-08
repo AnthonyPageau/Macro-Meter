@@ -14,10 +14,10 @@ import 'package:macro_meter/widgets/meals/meal_list.dart';
 import 'package:macro_meter/widgets/journal/complete_journal_alert_dialog.dart';
 
 class JournalScreen extends StatefulWidget {
-  JournalScreen({required this.user, required this.journals, super.key});
+  const JournalScreen({required this.user, required this.journals, super.key});
 
   final User user;
-  List<Journal> journals;
+  final List<Journal> journals;
   @override
   State<StatefulWidget> createState() {
     return _JournalScreenState();

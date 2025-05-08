@@ -115,6 +115,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
         await loadJsonData(userCredentials);
       }
     } on FirebaseAuthException catch (error) {
+      if (!mounted) return;
       if (error.code == "email-already-in-use") {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(

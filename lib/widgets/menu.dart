@@ -28,68 +28,66 @@ class Menu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Drawer(
-        width: 230,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              DrawerHeader(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.black,
-                      Color.fromARGB(255, 17, 127, 112),
-                    ],
-                    begin: Alignment.bottomRight,
-                    end: Alignment.topLeft,
-                  ),
+    return Drawer(
+      width: 230,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            DrawerHeader(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.black,
+                    Color.fromARGB(255, 17, 127, 112),
+                  ],
+                  begin: Alignment.bottomRight,
+                  end: Alignment.topLeft,
                 ),
-                child: Center(child: Image.asset("assets/images/logo.png")),
               ),
-              ListBody(
-                children: [
-                  buildMenuItem(
-                    context,
-                    icon: Icons.home,
-                    title: "Accueil",
-                    onTap: () => onSelectScreen("Accueil"),
-                  ),
-                  buildMenuItem(
-                    context,
-                    icon: Icons.calendar_month,
-                    title: "Journal",
-                    onTap: () => onSelectScreen("Journal"),
-                  ),
-                  buildMenuItem(
-                    context,
-                    icon: Icons.person,
-                    title: "Compte",
-                    onTap: () => onSelectScreen("Compte"),
-                  ),
-                  buildMenuItem(context,
-                      icon: Icons.my_library_books_sharp,
-                      title: "Plans",
-                      onTap: () => onSelectScreen("Plans")),
-                  buildMenuItem(context,
-                      icon: Icons.food_bank,
-                      title: "Aliments",
-                      onTap: () => onSelectScreen("Aliment")),
-                  buildMenuItem(context,
-                      icon: Icons.play_circle_fill,
-                      title: "Guide",
-                      onTap: () => onSelectScreen("Guide")),
-                  buildMenuItem(
-                    context,
-                    icon: Icons.logout,
-                    title: "Déconnexion",
-                    onTap: () => FirebaseAuth.instance.signOut(),
-                  ),
-                ],
-              ),
-            ],
-          ),
+              child: Center(child: Image.asset("assets/images/logo.png")),
+            ),
+            ListBody(
+              children: [
+                buildMenuItem(
+                  context,
+                  icon: Icons.home,
+                  title: "Accueil",
+                  onTap: () => onSelectScreen("Accueil"),
+                ),
+                buildMenuItem(
+                  context,
+                  icon: Icons.calendar_month,
+                  title: "Journal",
+                  onTap: () => onSelectScreen("Journal"),
+                ),
+                buildMenuItem(
+                  context,
+                  icon: Icons.person,
+                  title: "Compte",
+                  onTap: () => onSelectScreen("Compte"),
+                ),
+                buildMenuItem(context,
+                    icon: Icons.my_library_books_sharp,
+                    title: "Plans",
+                    onTap: () => onSelectScreen("Plans")),
+                buildMenuItem(context,
+                    icon: Icons.food_bank,
+                    title: "Aliments",
+                    onTap: () => onSelectScreen("Aliment")),
+                buildMenuItem(context,
+                    icon: Icons.play_circle_fill,
+                    title: "Guide",
+                    onTap: () => onSelectScreen("Guide")),
+                buildMenuItem(
+                  context,
+                  icon: Icons.logout,
+                  title: "Déconnexion",
+                  onTap: () => FirebaseAuth.instance.signOut(),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

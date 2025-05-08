@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ShowAlertDialog extends StatelessWidget {
-  ShowAlertDialog({
+  const ShowAlertDialog({
     super.key,
     required this.titre,
     required this.action,
@@ -12,10 +12,10 @@ class ShowAlertDialog extends StatelessWidget {
   final Function action;
   final void Function(String password) onPassword;
 
-  var _password;
-
   @override
   Widget build(BuildContext context) {
+    String password = "";
+
     final form = GlobalKey<FormState>();
 
     Widget cancelButton = ElevatedButton(
@@ -28,7 +28,7 @@ class ShowAlertDialog extends StatelessWidget {
       child: Text("Supprimer"),
       onPressed: () {
         form.currentState!.save();
-        onPassword(_password);
+        onPassword(password);
         action();
         Navigator.of(context).pop();
       },
@@ -42,7 +42,7 @@ class ShowAlertDialog extends StatelessWidget {
           obscureText: true,
           decoration: InputDecoration(labelText: "Confirmer mot de passe :"),
           onSaved: (value) {
-            _password = value!;
+            password = value!;
           },
         ),
       ),

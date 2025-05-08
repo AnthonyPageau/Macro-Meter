@@ -2,15 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class PasswordAlertDialog extends StatefulWidget {
-  PasswordAlertDialog({
+  const PasswordAlertDialog({
     required this.user,
     super.key,
   });
-  User user;
-  dynamic _oldPassword;
-  dynamic _newPassword;
-  dynamic _verifyNewPassword;
-  bool _wrongPassword = false;
+  final User user;
 
   @override
   State<StatefulWidget> createState() {
@@ -19,23 +15,36 @@ class PasswordAlertDialog extends StatefulWidget {
 }
 
 class PasswordAlertDialogState extends State<PasswordAlertDialog> {
+  String _oldPassword = '';
+  String _newPassword = '';
+  String _verifyNewPassword = '';
+  bool _wrongPassword = false;
+
   /// Permet de modifier le mot de passe
   void _submit() async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: widget.user.email!, password: widget._oldPassword);
+        email: widget.user.email!,
+        password: _oldPassword,
+      );
+
+      if (!mounted) return;
 
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Mot de passe modifié!"),
         ),
       );
+
       Navigator.of(context).pop();
-      widget.user.updatePassword(widget._newPassword);
-    } on FirebaseAuthException catch (error) {
+
+      widget.user.updatePassword(_newPassword);
+    } on FirebaseAuthException catch (_) {
+      if (!mounted) return;
+
       setState(() {
-        widget._wrongPassword = true;
+        _wrongPassword = true;
       });
     }
   }
@@ -74,10 +83,10 @@ class PasswordAlertDialogState extends State<PasswordAlertDialog> {
               obscureText: true,
               decoration: InputDecoration(labelText: "Ancien mot de passe :"),
               onSaved: (value) {
-                widget._oldPassword = value!;
+                _oldPassword = value!;
               },
             ),
-            if (widget._wrongPassword)
+            if (_wrongPassword)
               const Padding(
                 padding: EdgeInsets.only(top: 8.0),
                 child: Align(
@@ -100,10 +109,10 @@ class PasswordAlertDialogState extends State<PasswordAlertDialog> {
                 return null;
               },
               onSaved: (value) {
-                widget._newPassword = value!;
+                _newPassword = value!;
               },
               onChanged: (value) {
-                widget._verifyNewPassword = value;
+                _verifyNewPassword = value;
               },
             ),
             TextFormField(
@@ -111,13 +120,13 @@ class PasswordAlertDialogState extends State<PasswordAlertDialog> {
               decoration:
                   InputDecoration(labelText: "Confirmer mot de passe :"),
               validator: (value) {
-                if (value != widget._verifyNewPassword) {
+                if (value != _verifyNewPassword) {
                   return "Les mots de passe doivent être identique";
                 }
                 return null;
               },
               onSaved: (value) {
-                widget._newPassword = value!;
+                _newPassword = value!;
               },
             ),
           ],
